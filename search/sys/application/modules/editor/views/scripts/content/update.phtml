@@ -41,9 +41,9 @@
               </td>
             </tr>
             <tr>
-              <td>画像</td>
+              <td>ファイル</td>
               <td>
-                <p><button type="button" class="btn btn-default" id="uploadBtn">画像をアップロード</button></p>
+                <p><button type="button" class="btn btn-default" id="uploadBtn">ファイルをアップロード</button></p>
                 <span id="preview">
                   <?php if($this->data['thumb']):?>
                     <img src="<?=BASEURL?><?=$this->data['thumb']?>" style="width:120px;height:auto;">
@@ -59,7 +59,7 @@
       <div style="display:none;">
         <iframe name="upload"></iframe>
         <form action="<?=BASEURL?>/editor/content/upload" method="post" enctype="multipart/form-data" target="upload" id="imageupload">
-          <input type="file" name="userfile" id="userfile" />
+          <input type="file" name="userfile" id="userfile" accept=".pdf,.xls,.xlsx,image/jpeg,image/png,image/gif,.jpg,.jpeg" />
           <input type="hidden" name="id" value="<?=$this->data['id']?>">
         </form>
       </div>

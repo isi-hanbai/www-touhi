@@ -255,7 +255,13 @@ class Editor_ContentController extends Common_EditorController {
 
 
 			$f_name = explode(".",$_FILES['userfile']["name"])[0];
-			if(preg_match("/.gif/i",$_FILES['userfile']["name"])){
+			if(preg_match("/.pdf/i",$_FILES['userfile']["name"])){
+				$filename = $this->_user->id."_".date("YmdHis").".pdf";
+			}elseif(preg_match("/.xlsx/i",$_FILES['userfile']["name"])){
+				$filename = $this->_user->id."_".date("YmdHis").".xlsx";
+			}elseif(preg_match("/.xls/i",$_FILES['userfile']["name"])){
+				$filename = $this->_user->id."_".date("YmdHis").".xls";
+			}elseif(preg_match("/.gif/i",$_FILES['userfile']["name"])){
 				$in = imagecreatefromgif($path); // 元画像ファイル読み込み
 				$filename = $this->_user->id."_".date("YmdHis").".gif";
 			}elseif(preg_match("/.jpg/i",$_FILES['userfile']["name"]) || preg_match("/.jpeg/i",$_FILES['userfile']["name"])){
@@ -266,8 +272,17 @@ class Editor_ContentController extends Common_EditorController {
 				$in = imagecreatefrompng($path); // 元画像ファイル読み込み
 				$filename = $this->_user->id."_".date("YmdHis").".png";
 			}else{
-				//jpg,gif,png以外のファイルは受付しない
+				//jpg,gif,png,pdf,xls,xlsx以外のファイルは受付しない
 				$this->view->error = "FileTypeError";
+			}
+			if(isset($filename) && !isset($in)){
+				if(move_uploaded_file($path, IMG_DIR.$filename)){
+					unlink($path);
+					$upload_dir2 = '/img/';
+					$this->view->filename = $upload_dir2.$filename;
+					$this->view->success = true;
+				}
+				return;
 			}
 			$max = 1920;
 			//$in = imagecreatefromjpeg($path); // 元画像ファイル読み込み
@@ -294,7 +309,7 @@ class Editor_ContentController extends Common_EditorController {
 			$out = imagecreatetruecolor($new_width , $new_height);
 			//プレースホルダを作成した画像にコピーして
 			imagecopyresampled($out, $in,0,0,0,0, $new_width, $new_height, $width, $height);
-			if($exif_data["Orientation"] == 6){
+			if(isset($exif_data["Orientation"]) && $exif_data["Orientation"] == 6){
 				$out = imagerotate($out,270, 0);
 			}
 
