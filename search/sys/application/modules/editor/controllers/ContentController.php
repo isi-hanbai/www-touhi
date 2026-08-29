@@ -63,11 +63,14 @@ class Editor_ContentController extends Common_EditorController {
 		if(!empty($whereArr)){
 			$where =  " WHERE ".implode(" and ",$whereArr);
 		}
-		$sql = "SELECT *,
+		$sql = "SELECT c.*,
+						cc.name AS category_name,
 						(
 							SELECT COUNT(*) FROM `content`{$where}
 						) AS c
-						FROM `content`{$where}";
+						FROM `content` c
+						LEFT JOIN `content_category` cc ON cc.id = c.category
+						{$where}";
 		//検索クエリを作成
 		//ORDER句を生成
 		$sql.= " ORDER BY id DESC";
