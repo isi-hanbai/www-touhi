@@ -1,0 +1,282 @@
+<!--割引・特別料金設定フォーム-->
+<section class="row">
+    <div class="col-xs-12">
+      <div class="x_panel">
+        <div class="x_title">
+        	<!--タイトルをH２で定義する"-->
+          <h2>割引・特別料金設定フォーム</h2>
+        	<!--タイトルをH２で定義する"-->
+          <ul class="nav navbar-right panel_toolbox">
+            <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+            <li><a class="close-link"><i class="fa fa-close"></i></a>
+            </li>
+          </ul>
+          <div class="clearfix"></div>
+        </div>
+        <div class="x_content">
+		<!--中身-->
+    <?php if($this->Msg):?>
+    <!--メッセージ表示部-->
+    <div class="alert alert-success">
+    	<?=$this->Msg?>
+    </div>
+    <?php endif;?>
+    
+    
+    <!--設定項目表示部-->
+    <form action="<?=BASEURL?>/merchant/settings/discount/" method="post">
+    	<h4>割引設定</h4>
+    	<p>※ここで設定する割引は、管理画面の注文登録画面および見積もり画面にて割引を行うことができます。</p>
+        <table class="table table-striped table-responcive">
+            <tbody>
+                <tr>
+                    <th>割引を使用する</th>
+                    <td>
+                        <select name="discountUse" class="form-control">
+                            <?php foreach(array(0=>"使用する",1=>"使用しない") as $k=>$v):?>
+                            <?php if($k == $this->data['discountUse']):?>
+                                <option value="<?=$k?>" selected><?=$v?></option>
+                            <?php else:?>
+                                <option value="<?=$k?>"><?=$v?></option>
+                            <?php endif;?>
+                            <?php endforeach;?>
+                        </select>
+                    </td>
+                </tr>
+                
+                <!--tr>
+                    <th>送料無料設定</th>
+                    <td>
+                        <select name="shippingDiscountUse" class="form-control">
+                            <?php foreach(array(0=>"使用する",1=>"使用しない") as $k=>$v):?>
+                            <?php if($k == $this->data['shippingDiscountUse']):?>
+                                <option value="<?=$k?>" selected><?=$v?></option>
+                            <?php else:?>
+                                <option value="<?=$k?>"><?=$v?></option>
+                            <?php endif;?>
+                            <?php endforeach;?>
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <th>送料無料設定下限金額</th>
+                    <td><input type="text" class="form-control" name="shippingDiscountAmount" value="<?=$this->data['shippingDiscountAmount']?>">
+                    </td>
+                </tr-->
+            </tbody>
+        </table>
+<!--
+    	<h4>特別料金設定</h4>
+        
+        <table class="table table-striped table-responcive">
+            <tbody>
+                <tr>
+                    <th>特別料金1の使用</th>
+                    <td>
+                        <select name="specialCost1Use">
+                            <?php foreach(array(0=>"使用する",1=>"使用しない") as $k=>$v):?>
+                            <?php if($k == $this->data['specialCost1Use']):?>
+                                <option value="<?=$k?>" selected><?=$v?></option>
+                            <?php else:?>
+                                <option value="<?=$k?>"><?=$v?></option>
+                            <?php endif;?>
+                            <?php endforeach;?>
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <th>特別料金1の名称</th>
+                    <td><input type="text" name="specialCost1Name" value="<?=$this->data['specialCost1Name']?>">
+                    </td>
+                </tr>
+                <tr>
+                    <th>特別料金1の計算方法</th>
+                    <td>
+                        <select name="specialCost1Use">
+                            <?php foreach(array(0=>"加算",1=>"減算") as $k=>$v):?>
+                            <?php if($k == $this->data['specialCost1Use']):?>
+                                <option value="<?=$k?>" selected><?=$v?></option>
+                            <?php else:?>
+                                <option value="<?=$k?>"><?=$v?></option>
+                            <?php endif;?>
+                            <?php endforeach;?>
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <th>特別料金2の使用</th>
+                    <td>
+                        <select name="specialCost2Use">
+                            <?php foreach(array(0=>"使用する",1=>"使用しない") as $k=>$v):?>
+                            <?php if($k == $this->data['specialCost2Use']):?>
+                                <option value="<?=$k?>" selected><?=$v?></option>
+                            <?php else:?>
+                                <option value="<?=$k?>"><?=$v?></option>
+                            <?php endif;?>
+                            <?php endforeach;?>
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <th>特別料金2の名称</th>
+                    <td><input type="text" name="specialCost2Name" value="<?=$this->data['specialCost2Name']?>">
+                    </td>
+                </tr>
+                <tr>
+                    <th>特別料金2の計算方法</th>
+                    <td>
+                        <select name="specialCost2Use">
+                            <?php foreach(array(0=>"加算",1=>"減算") as $k=>$v):?>
+                            <?php if($k == $this->data['specialCost2Use']):?>
+                                <option value="<?=$k?>" selected><?=$v?></option>
+                            <?php else:?>
+                                <option value="<?=$k?>"><?=$v?></option>
+                            <?php endif;?>
+                            <?php endforeach;?>
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <th>特別料金3の使用</th>
+                    <td>
+                        <select name="specialCost3Use">
+                            <?php foreach(array(0=>"使用する",1=>"使用しない") as $k=>$v):?>
+                            <?php if($k == $this->data['specialCost3Use']):?>
+                                <option value="<?=$k?>" selected><?=$v?></option>
+                            <?php else:?>
+                                <option value="<?=$k?>"><?=$v?></option>
+                            <?php endif;?>
+                            <?php endforeach;?>
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <th>特別料金3の名称</th>
+                    <td><input type="text" name="specialCost3Name" value="<?=$this->data['specialCost3Name']?>">
+                    </td>
+                </tr>
+                <tr>
+                    <th>特別料金3の計算方法</th>
+                    <td>
+                        <select name="specialCost3Use">
+                            <?php foreach(array(0=>"加算",1=>"減算") as $k=>$v):?>
+                            <?php if($k == $this->data['specialCost3Use']):?>
+                                <option value="<?=$k?>" selected><?=$v?></option>
+                            <?php else:?>
+                                <option value="<?=$k?>"><?=$v?></option>
+                            <?php endif;?>
+                            <?php endforeach;?>
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <th>特別料金4の使用</th>
+                    <td>
+                        <select name="specialCost4Use">
+                            <?php foreach(array(0=>"使用する",1=>"使用しない") as $k=>$v):?>
+                            <?php if($k == $this->data['specialCost4Use']):?>
+                                <option value="<?=$k?>" selected><?=$v?></option>
+                            <?php else:?>
+                                <option value="<?=$k?>"><?=$v?></option>
+                            <?php endif;?>
+                            <?php endforeach;?>
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <th>特別料金4の名称</th>
+                    <td><input type="text" name="specialCost4Name" value="<?=$this->data['specialCost4Name']?>">
+                    </td>
+                </tr>
+                <tr>
+                    <th>特別料金4の計算方法</th>
+                    <td>
+                        <select name="specialCost4Use">
+                            <?php foreach(array(0=>"加算",1=>"減算") as $k=>$v):?>
+                            <?php if($k == $this->data['specialCost4Use']):?>
+                                <option value="<?=$k?>" selected><?=$v?></option>
+                            <?php else:?>
+                                <option value="<?=$k?>"><?=$v?></option>
+                            <?php endif;?>
+                            <?php endforeach;?>
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <th>特別料金5の使用</th>
+                    <td>
+                        <select name="specialCost5Use">
+                            <?php foreach(array(0=>"使用する",1=>"使用しない") as $k=>$v):?>
+                            <?php if($k == $this->data['specialCost5Use']):?>
+                                <option value="<?=$k?>" selected><?=$v?></option>
+                            <?php else:?>
+                                <option value="<?=$k?>"><?=$v?></option>
+                            <?php endif;?>
+                            <?php endforeach;?>
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <th>特別料金5の名称</th>
+                    <td><input type="text" name="specialCost5Name" value="<?=$this->data['specialCost5Name']?>">
+                    </td>
+                </tr>
+                <tr>
+                    <th>特別料金5の計算方法</th>
+                    <td>
+                        <select name="specialCost5Use">
+                            <?php foreach(array(0=>"加算",1=>"減算") as $k=>$v):?>
+                            <?php if($k == $this->data['specialCost5Use']):?>
+                                <option value="<?=$k?>" selected><?=$v?></option>
+                            <?php else:?>
+                                <option value="<?=$k?>"><?=$v?></option>
+                            <?php endif;?>
+                            <?php endforeach;?>
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <th>特別料金6の使用</th>
+                    <td>
+                        <select name="specialCost6Use">
+                            <?php foreach(array(0=>"使用する",1=>"使用しない") as $k=>$v):?>
+                            <?php if($k == $this->data['specialCost6Use']):?>
+                                <option value="<?=$k?>" selected><?=$v?></option>
+                            <?php else:?>
+                                <option value="<?=$k?>"><?=$v?></option>
+                            <?php endif;?>
+                            <?php endforeach;?>
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <th>特別料金6の名称</th>
+                    <td><input type="text" name="specialCost6Name" value="<?=$this->data['specialCost6Name']?>">
+                    </td>
+                </tr>
+                <tr>
+                    <th>特別料金6の計算方法</th>
+                    <td>
+                        <select name="specialCost6Use">
+                            <?php foreach(array(0=>"加算",1=>"減算") as $k=>$v):?>
+                            <?php if($k == $this->data['specialCost6Use']):?>
+                                <option value="<?=$k?>" selected><?=$v?></option>
+                            <?php else:?>
+                                <option value="<?=$k?>"><?=$v?></option>
+                            <?php endif;?>
+                            <?php endforeach;?>
+                        </select>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+-->
+        <div class="form-actions">
+            <button type="submit" class="btn btn-large btn-block btn-primary">編集</button>
+        </div>
+    </form>
+  		<!--中身-->
+        </div>
+      </div>
+    </div>
+</section>

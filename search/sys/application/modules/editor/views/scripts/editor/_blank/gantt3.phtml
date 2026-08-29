@@ -1,0 +1,387 @@
+<style>
+td {
+  padding-bottom: 0 !important;
+}
+#fixedTableArea {
+  width: 100%;
+  height: 395px;
+  border:solid 1px #666;
+}
+#topLeftArea {
+  float: left;
+  width: 100px;
+  overflow: hidden;
+}
+#topRightArea {
+  overflow: hidden;
+}
+#bottomLeftArea {
+  width:100px;
+  float: left;
+  height: 360px;
+  overflow: hidden;
+  clear: both;
+}
+#bottomRightArea {
+  height: 360px;
+  overflow: auto;
+}
+#bottomRightArea::-webkit-scrollbar {
+  display: none;
+}
+#topRightArea .fixedTable td {
+height:40px;
+line-height:40px;
+font-size: 12px;
+}
+.fixedTable {
+  border-collapse: collapse;
+}
+.fixedTable td {
+  border: 1px solid #888;
+  white-space: nowrap;
+  min-width:40px;
+  height:40px;
+  line-height:40px;
+  position:relative;
+  text-align: center;
+}
+.timeZone{
+  /*position: absolute;*/
+  top:0;
+  left:0;
+  z-index: 100;
+}
+.timeZone span{
+  background: rgba(0,0,255,0.6);
+  width:40px;
+  height:40px;
+  display: inline-block;
+  /*float:left;*/
+  color:white;
+}
+.timeZone span.kadou{
+  background: rgba(0,0,255,0.6);
+  width:40px;
+  height:40px;
+  display: inline-block;
+  /*float:left;*/
+  color:white;
+}
+.timeZone span.setup{
+  background: rgba(0,0,255,0.3);
+  width:40px;
+  height:40px;
+  display: inline-block;
+  /*float:left;*/
+  color:rgba(0,0,0,0);
+}
+.tlWrap{
+  border-top: 1px solid #888;
+  border-right: 1px solid #888;
+  padding:0;
+  margin-bottom: 0;
+  overflow: hidden;
+}
+.tlRow{
+  margin-bottom: 0;
+  white-space: nowrap;
+}
+.tlRow div{
+  border-bottom: 1px solid #888;
+  border-left: 1px solid #888;
+  width:40px;
+  height:41px;
+  line-height:40px;
+  position:relative;
+  text-align: center;
+  float: left;
+}
+.holyday{
+  color:red;
+  background-color: #fcc;
+}
+.pagination>li.holyday>a {
+  position: relative;
+  float: left;
+  padding: 6px 12px;
+  margin-left: -1px;
+  line-height: 1.42857143;
+    color:red;
+  text-decoration: none;
+  background-color: #fcc;
+  border: 1px solid #ddd;
+}
+.monthNavigator div,.monthNavigator h3{
+  line-height: 40px;
+  margin: 0;
+  padding: 0;
+}
+</style>
+<!---p class="form-inline">
+  <select class="form-control" id="changeTimeRange">
+    <option value="1">10分間隔</option>
+    <option value="2">15分間隔</option>
+    <option value="3">30分間隔</option>
+    <option value="4">1時間間隔</option>
+  </select>
+</p-->
+<p><a href="<?=BASEURL?>/editor/sougi/detail?id=<?=$this->project['id']?>" class="btn btn-warning"><i class="fa fa-reply-all"></i> <?=$this->project['projectName']?>へ戻る</a></p>
+
+<?php
+//月末日を算出
+$last_daty = mktime(0,0,0,$this->month+1,0,$this->year);
+//来月
+$n_year = date("Y",mktime(0,0,0,$this->month+1,1,$this->year));
+$n_month = date("m",mktime(0,0,0,$this->month+1,1,$this->year));
+//前月
+$l_year = date("Y",mktime(0,0,0,$this->month-1,1,$this->year));
+$l_month = date("m",mktime(0,0,0,$this->month-1,1,$this->year));
+?>
+<nav class="clearfix monthNavigator">
+<div class="pull-left">
+  <a href="<?=BASEURL?>/editor/sougi/gantt3/?year=<?=$l_year?>&amp;month=<?=$l_month?>&amp;id=<?=$this->id?>" aria-label="Prev">
+  <span aria-hidden="true"><?=$l_year?>年<?=$l_month?>月</span>
+  </a>
+</div>
+<div class="pull-right">
+  <a href="<?=BASEURL?>/editor/sougi/gantt3/?year=<?=$n_year?>&amp;month=<?=$n_month?>&amp;id=<?=$this->id?>" aria-label="Next">
+  <span aria-hidden="true"><?=$n_year?>年<?=$n_month?>月</span>
+</a>
+</div>
+<h3 class="text-center"><?=$this->year?>年<?=$this->month?>月</h3>
+</nav>
+<div id="fixedTableArea">
+  <div id="topLeftArea">
+    <table id="topLeftTable" class="fixedTable">
+      <tbody>
+        <tr>
+          <td class="product">製品</td>
+          <td class="process">工程</td>
+          <td class="quantity">数</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <div id="topRightArea">
+    <table id="topRightTable" class="fixedTable">
+      <tbody id="hourTabel"></tbody>
+    </table>
+  </div>
+  <div id="bottomLeftArea">
+    <table id="bottomLeftTable" class="fixedTable">
+      <tbody id="item"></tbody>
+    </table>
+  </div>
+  <div id="bottomRightArea">
+    <div class="tlWrap" id="tlWrap">
+    </div>
+  </div>
+</div>
+<link rel="stylesheet" type="text/css" href="<?=BASEURL?>/theme2/js/jquery-ui/jquery-ui.min.css">
+<script src="<?=BASEURL?>/theme2/js/jquery-ui/jquery-ui.min.js"></script>
+<script src="<?=BASEURL?>/js/jquery-ui-touch-punch-master/jquery.ui.touch-punch.min.js"></script>
+<script>
+var json;
+var data;
+$(function(){
+  $.post("<?=BASEURL?>/api/sougi/gantt2",{id:getArr()['id']},function(data2){
+    var json2 = JSON.parse(data2);
+    json = json2[0];
+    data = json2[1];
+    ganttchart();
+  });
+});
+$("#changeTimeRange").on("change",function(){
+  json['timeSetting'] = $(this).val();
+  ganttchart();
+});
+function ganttchart(){
+  var yobi= new Array("","日","月","火","水","木","金","土");
+  if(getArr()['year'] ==undefined || getArr()['year'] ==false || getArr()['year'] ==null){
+    if(getArr()['month'] ==undefined || getArr()['month'] ==false || getArr()['month'] ==null){
+      var hiduke=new Date(json['startY'],json['startM']*1-1,1);
+      var year = hiduke.getFullYear();
+      var month = hiduke.getMonth();
+    }else{
+      var hiduke2=new Date(json['startY'],json['startM']*1-1,1);
+      var p_year = hiduke2.getFullYear();
+      var hiduke = new Date(p_year,getArr()['month']*1-1,1);
+      var year = hiduke.getFullYear();
+      var month = hiduke.getMonth();
+    }
+  }else{
+    if(getArr()['month'] ==undefined || getArr()['month'] ==false || getArr()['month'] ==null){
+      var hiduke2=new Date(json['startY'],json['startM']*1-1,1);
+      var p_month = hiduke2.getMonth();
+      var hiduke=new Date(getArr()['year'],p_month,1);
+      var year = hiduke.getFullYear();
+      var month = hiduke.getMonth();
+    }else{
+      var hiduke = new Date(getArr()['year'],getArr()['month']*1-1,1);
+      var year = hiduke.getFullYear();
+      var month = hiduke.getMonth();
+    }
+  }
+  //該当月の月末日
+  var lastDayOfMonth = new Date(year,month+1,0).getDate();
+  //console.log(new Date(year,month,0).getFullYear()+"/"+(new Date(year,month,0).getMonth()+1)+"/"+new Date(year,month,0).getDate());
+  //日テーブル
+  var str = "";
+  str+= "<tr>";
+  console.log(month);
+  for(var i=0;i<lastDayOfMonth;i++){
+    var you = new Date(year,month,i+1).getDay();
+    str+= "<td";
+    for(var j=0;j<json['holyday'].length;j++){
+      if(json['holyday'][j] == you+1){
+        str+= ' class="holyday"';
+      }
+    }
+    str+= '>';
+
+    str+= (i+1)+'('+yobi[you+1]+')';
+    str+= '</td>';
+  }
+  $("#hourTabel").html(str);
+  // 工程項目テーブル
+  var str3 = '';
+  for(var j=0;j<Object.keys(data).length;j++){
+    str3 += '<tr>';
+    str3 += '<td class="product">'+data[j]['id']+'</td>';
+    str3 += '<td class="process">'+data[j]['name']+'</td>';
+    str3 += '<td class="quantity">'+data[j]['totalQuantity']+data[j]['unit']+'</td>';
+    str3 += '</tr>';
+  }
+  $("#item").html(str3);
+  //工程タイムラインテーブル
+  var str2 = '';
+  for(var j=0;j<Object.keys(data).length;j++){
+    str2+= '<div class="tlRow clearfix">';
+    for(var i=0;i<lastDayOfMonth;i++){
+      var you = new Date(year,month,i+1).getDay();
+      str2+= "<div";
+      for(var m=0;m<json['holyday'].length;m++){
+        if(json['holyday'][m] == you+1){
+          str2+= ' class="holyday"';
+        }
+      }
+      var date = year+"-"+zeroPadding(month+1,2)+"-"+zeroPadding(i+1,2);
+      str2+= ' data-year="'+year+'" data-month="'+(month+1)+'" data-day="'+i+1+'" class="tl" data-id="'+data[j]['id']+'" data-date="'+date+'">';
+      //工程の負荷時間を挿入
+      for(var l = 0;l<Object.keys(data[j]['hasTimeZone']).length;l++){
+        var date = getArr()['year']+"-"+zeroPadding((getArr()['month']*1),2)+"-"+zeroPadding((getArr()['day']*1),2);
+        var timeZone = data[j]['hasTimeZone'][l];
+        if(timeZone['startDate'] == year+"-"+zeroPadding(month+1,2)+"-"+zeroPadding(i+1,2)){
+          str2+= '<div class="timeZone clearfix';
+          if(j == 0){
+            str2+= ' current';
+          }
+          str2+= '" data-id="'+timeZone['id']+'">';
+          if(timeZone['setupDay']*1 >0){
+            var setupC = Math.ceil(timeZone['setupDay']);
+            for(var m=0;m<setupC;m++){
+              str2+= "<span class=\"setup\">0</span>";
+            }
+          }
+          var totalLength = timeZone['powerDay']*timeZone['quantity']*timeZone['v'];
+          var c = totalLength;
+          var ss = 0;
+          var cc = 0;
+          for(var m=0;m<c;m++){
+            var s = (timeZone['quantity']/c)+ss;
+            var ss = parseFloat("0."+(String(s)).split(".")[1]);
+            var sss = Math.floor(s);
+            if(m+1 == Math.ceil(c)){
+              if(cc+sss > timeZone['quantity']){
+                sss = timeZone['quantity']-cc;
+              }
+            }
+            cc = cc+sss;
+            str2+= '<span class="kadou">'+ sss +'</span>';
+          }
+          str2+= '</div>';
+        }
+      }
+
+
+      str2+= '</div>';
+    }
+    str2+= '</div>';
+  }
+  $("#tlWrap").html(str2);
+  var tw2 = $("#topRightTable").width();
+
+  //スクロールと幅の設定
+  $('#bottomRightArea').scroll(function(e) {
+      $('#bottomLeftArea').scrollTop($(this).scrollTop()); // 左下のDIVのスクロール位置を更新
+      $('#topRightArea').scrollLeft($(this).scrollLeft()); // 右上のDIVのスクロール位置を更新
+  });
+  var productCellWidth = $("#item .product").width();
+  $("#topLeftTable .product").css("width",productCellWidth+2);
+  var processCellWidth = $("#item .process").width();
+  $("#topLeftTable .process").css("width",processCellWidth+4);
+  var quantityCellWidth = $("#item .quantity").width();
+  $("#topLeftTable .quantity").css("width",quantityCellWidth+4);
+  var tw =$("#bottomLeftTable").width();
+  $("#bottomLeftArea").css("width",tw);
+  $("#topLeftArea").css("width",tw);
+  $(".tlWrap").css("width",tw2);
+  $(".tl").data("id",$(this).offsetLeft);
+
+  //ドラッグされる要素
+	$(".timeZone").draggable({
+    axis:"x",
+    snap:".tl",
+    containment:"#tlWrap",
+    revert: "invalid",
+    opacity:0.8,
+    scrollSpeed:100,
+		start : function (event , ui){
+      $("#bottomRightArea").css("overflow","hidden");
+		} ,
+		// ドラッグ終了時に呼ばれる
+		stop : function (event , ui){
+      $("#bottomRightArea").css("overflow","auto");
+		}
+  });
+  //ドロップされる要素
+  $(".tl").droppable({
+    drop: function(event, ui) {
+      for(var i=0;i<data.length;i++){
+        if(data[i]['id'] == $(this).data("id")){
+          for(var j=0;j<Object.keys(data[i]['hasTimeZone']).length;j++){
+            if(data[i]['hasTimeZone'][j]['id'] == ui.draggable[0].getAttribute("data-id")){
+              data[i]['hasTimeZone'][j]['startDate']=$(this).data("date");
+              //POST
+            }
+          }
+        }
+      }
+      if($(ui.draggable[0]).hasClass("current")){
+        //alert();
+        $.post("<?=BASEURL?>/api/sougi/projectupdate",{startDate:$(this).data("date"),id:json['project']},function(data){
+          location.reload();
+        });
+      }else{
+        ganttchart();
+      }
+    }
+  });
+}
+function getArr(){
+  var vars = {};
+  var param = location.search.substring(1).split('&');
+  for(var i = 0; i < param.length; i++) {
+      var keySearch = param[i].search(/=/);
+      var key = '';
+      if(keySearch != -1) key = param[i].slice(0, keySearch);
+      var val = param[i].slice(param[i].indexOf('=', 0) + 1);
+      if(key != '') vars[key] = decodeURI(val);
+  }
+  return vars;
+}
+function zeroPadding(num,length){
+    return ('0000000000' + num).slice(-length);
+}
+</script>

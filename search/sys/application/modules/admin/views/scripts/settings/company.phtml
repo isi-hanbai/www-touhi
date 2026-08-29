@@ -1,0 +1,165 @@
+
+<?php if($this->Msg):?>
+	<!--メッセージ表示部-->
+	<div class="alert alert-success">
+		<?=$this->Msg?>
+	</div>
+<?php endif;?>
+<form action="<?=BASEURL?>/admin/settings/company/" method="post" name="edit">
+<section>
+      <div class="x_panel">
+        <div class="x_title">
+          <h2>会社設定</h2>
+          <div class="clearfix"></div>
+        </div>
+        <div class="x_content">
+		<!--中身-->
+        <div class="data-table">
+            <table class="table table-striped table-responcive">
+                <tbody>
+                    <tr>
+                        <th style="width:25%;">会社名</th>
+                        <td><input type="text" name="company" value="<?=$this->data['company']?>" class="form-control"></td>
+                    </tr>
+                    <tr>
+                        <th>電話番号</th>
+                        <td><input type="text" name="tel" value="<?=$this->data['tel']?>" class="form-control"></td>
+                    </tr>
+                    <tr>
+                        <th>Fax番号</th>
+                        <td><input type="text" name="fax" value="<?=$this->data['fax']?>" class="form-control"></td>
+                    </tr>
+                    <tr>
+                        <th>郵便番号</th>
+                        <td><input type="text" name="zip" value="<?=$this->data['zip']?>" class="form-control"></td>
+                    </tr>
+                    <tr>
+                        <th>住所</th>
+                        <td>
+                            <select name="pref" class="form-control">
+                             <option value="">都道府県を選択してください</option>
+                                <?php foreach($this->pref as $v):?>
+                                <?php if($v['id']==$this->data['pref']):?>
+                                    <option value="<?=$v['id']?>" selected><?=$v['name']?></option>
+                                <?php else:?>
+                                    <option value="<?=$v['id']?>"><?=$v['name']?></option>
+                                <?php endif;?>
+                              <?php endforeach;?>   
+                         </select>
+                            <input type="text" name="addr" value="<?=$this->data['addr']?>" placeholder="市区町村番地" class="form-control">
+                            <input type="text" name="addr2" value="<?=$this->data['addr2']?>" placeholder="ビル・マンション名、号室など" class="form-control">
+                   		</td>
+                    </tr>
+                    <tr>
+                        <th>メール</th>
+                        <td><input type="text" name="mail" value="<?=$this->data['mail']?>" class="form-control"></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+		<!--中身-->
+        </div>
+      </div>
+</section>
+<section>
+	<div class="x_panel">
+		<div class="x_title">
+			<h2>帳票設定</h2>
+			<div class="clearfix"></div>
+		</div>
+		<div class="x_content">
+			<!--中身-->
+			<div class="data-table">
+				<table class="table table-striped table-responcive">
+					<tbody>
+						<tr>
+							<th style="width:25%;">見積書</th>
+							<td><textarea name="estimateFooter" rows="5" class="form-control"><?=$this->data['estimateFooter']?></textarea></td>
+						</tr>
+						<tr>
+							<th>請求書</th>
+							<td><textarea name="demandFooter" rows="5" class="form-control"><?=$this->data['demandFooter']?></textarea></td>
+						</tr>
+						<tr>
+							<th>印鑑</th>
+							<td>
+							<span id="preview">
+							<?php if($this->data['stamp']):?>
+							<img src="<?=BASEURL?><?=$this->data['stamp']?>" style="width:120px;height:auto;">
+							<?php endif;?>
+							</span>
+							<input type="text" name="stamp" value="<?=$this->data['stamp']?>" class="form-control">
+							</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+			<!--中身-->
+		</div>
+	</div>
+</section>
+<section>
+	<div class="x_panel">
+		<div class="x_title">
+			<h2>銀行口座</h2>
+			<div class="clearfix"></div>
+		</div>
+		<div class="x_content">
+			<!--中身-->
+			<div class="data-table">
+				<table class="table table-striped table-responcive">
+					<tbody>
+						<tr>
+							<th style="width:25%;">銀行名</th>
+							<td><input type="text" name="AcountBank" class="form-control" value="<?=$this->data['AcountBank']?>"></td>
+						</tr>
+						<tr>
+							<th style="width:25%;">支店名</th>
+							<td><input type="text" name="AcountBranch" class="form-control" value="<?=$this->data['AcountBranch']?>"></td>
+						</tr>
+						<tr>
+							<th style="width:25%;">口座種別</th>
+							<td>
+								<select class="form-control" name="AcountKind">
+									<option value="普通">普通</option>
+									<option value="当座">当座</option>
+								</select>
+							</td>
+						</tr>
+						<tr>
+							<th style="width:25%;">口座名義</th>
+							<td><input type="text" name="AcountName" class="form-control" value="<?=$this->data['AcountName']?>"></td>
+						</tr>
+						<tr>
+							<th style="width:25%;">口座番号</th>
+							<td><input type="text" name="AcountNumber" class="form-control" value="<?=$this->data['AcountNumber']?>"></td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+			<!--中身-->
+		</div>
+	</div>
+</section>
+</form>
+<form action="<?=BASEURL?>/admin/settings/upload" method="post" enctype="multipart/form-data" target="upload" id="imageupload">
+     印鑑画像アップロード：<input type="file" name="userfile" id="userfile" />
+</form>
+<iframe name="upload" style="display:none;"></iframe>
+
+<div class="form-actions">
+    <button type="button" class="btn btn-large btn-block btn-primary" id="submit">編集</button>
+</div>
+<script>
+$(function(){
+	$("#submit").click(function(){
+		$("[name='edit']").submit();
+	});
+	$("#userfile").change(function(){
+		$("#imageupload").submit();
+	});
+	$("#userfile2").change(function(){
+		$("#imageupload2").submit();
+	});
+});
+</script>

@@ -1,0 +1,45 @@
+<!--商品情報編集フォーム-->
+<section>
+  <div class="x_panel">
+    <div class="x_title">
+      <h2>コンテンツカテゴリ編集</h2>
+      <div class="clearfix"></div>
+    </div>
+    <div class="x_content">
+      <!--中身-->
+      <form action="<?=BASEURL?>/editor/content/categoryupdatefinish/" method="post" id="form">
+        <table class="table table-striped table-responcive">
+          <tbody>
+            <tr>
+              <th>カテゴリ名<span id="l-002"></span></th>
+              <td><input type="text" name="name" value="<?=$this->data['name']?>" id="f-002" class=" required form-control"></td>
+            </tr>
+          </tbody>
+        </table>
+        <input type="hidden" name="id" value="<?=$this->data["id"]?>">
+      </form>
+
+      <div class="form-actions">
+        <button class="btn btn-large btn-block btn-primary" id="sub">登録</button>
+      </div>
+
+      <!--中身-->
+    </div>
+  </div>
+</section>
+<script src="<?=BASEURL?>/js/help-validation.js"></script>
+<script>
+$(function(){
+	$("#sub").on("click",function(){
+		if(window.confirm("コンテンツカテゴリ編集を行います。内容を変更される場合はキャンセルボタンを押してください。")){
+			$("#form").submit();
+		}
+	});
+	$("#userfile").change(function(){
+		$("#imageupload").submit();
+	});
+	$("#userfile2").change(function(){
+		$("#imageupload2").submit();
+	});
+});
+</script>

@@ -1,0 +1,57 @@
+<!--消費税設定フォーム-->
+<section class="row">
+    <div class="col-xs-12">
+      <div class="x_panel">
+        <div class="x_title">
+        	<!--タイトルをH２で定義する"-->
+          <h2>消費税設定フォーム</h2>
+        	<!--タイトルをH２で定義する"-->
+          <ul class="nav navbar-right panel_toolbox">
+            <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+            <li><a class="close-link"><i class="fa fa-close"></i></a>
+            </li>
+          </ul>
+          <div class="clearfix"></div>
+        </div>
+        <div class="x_content">
+		<!--中身-->
+    <?php if($this->Msg):?>
+    <!--メッセージ表示部-->
+    <div class="alert alert-success">
+    	<?=$this->Msg?>
+    </div>
+    <?php endif;?>
+    <!--設定項目表示部-->
+    <form action="<?=BASEURL?>/editor/settings/tax/" method="post">
+        <table class="table table-striped table-responcive">
+            <tbody>
+                <tr>
+                    <th>消費税率</th>
+                    <td><input type="text" class="form-control" name="ratio" value="<?=$this->data['ratio']?>">
+                    </td>
+                </tr>
+                <tr>
+                    <th>小数点以下の処理</th>
+                    <td>
+            <select name="rule" class="form-control">
+            	<?php foreach(array(0=>"四捨五入",1=>"切り上げ",2=>"切り捨て") as $k=>$v):?>
+                	<?php if($k == $this->data['rule']):?>
+            			<option value="<?=$k?>" selected><?=$v?></option>
+                	<?php else:?>
+            			<option value="<?=$k?>"><?=$v?></option>
+                  <?php endif;?>
+                <?php endforeach;?>
+            </select>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <div class="form-actions">
+            <button type="submit" class="btn btn-large btn-block btn-primary">編集</button>
+        </div>
+    </form>
+  		<!--中身-->
+        </div>
+      </div>
+    </div>
+</section>

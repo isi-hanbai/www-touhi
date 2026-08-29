@@ -1,0 +1,899 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>UltraDate.js</title>
+
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+        <link rel="stylesheet" href="css/jquery.ex-code-prettify.css">
+        <link rel="stylesheet" href="css/demo.css">
+    </head>
+    <body>
+        <div id="content">
+            <section id="getAge">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h1>getAge()</h1>
+                    </div>
+                    <div class="panel-body">
+                        <h2>関数概要</h2>
+                        <p class="lead">
+                            UltraDate.prototype.getAge()
+                        </p>
+                        <ul>
+                            <li>現在のオブジェクトの日付から引数dateまでの満年齢を取得</li>
+                            <li>現在のオブジェクトの日付がうるう年の時は引数dateがうるう年以外は3月1日</li>
+                        </ul>
+                        <ul>
+                            <li>引数：(<em>UltraDate</em>|<em>Date</em>|<em>String</em>|<em>Number</em>&nbsp;date)</li>
+                            <li>戻り値：Number</li>
+                        </ul>
+                    </div>
+                    <div class="panel panel-default doc-args">
+                        <div class="panel-heading">
+                            <h2 class="panel-title">引数</h2>
+                        </div>
+                        <table class="table table-bordered table-responsive">
+                            <tr>
+                                <th>名前</th>
+                                <th>型</th>
+                                <th>説明</th>
+                            </tr>
+                            <tr>
+                                <td>date</td>
+                                <td>UltraDate<br>Date<br>String<br>Number</td>
+                                <td>
+                                    <ul>
+                                        <li>Dateオブジェクトを指定します</li>
+                                        <li>Stringの場合Dateオブジェクトを作成できる文字列</li>
+                                        <li>Numberの場合Dateオブジェクトを作成できる数字</li>
+                                        <li>undefinedの場合は現在の日付</li>
+                                    </ul>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div class="panel panel-default doc-return">
+                        <div class="panel-heading">
+                            <h2 class="panel-title">戻り値</h2>
+                        </div>
+                        <table class="table table-bordered table-responsive">
+                            <tr>
+                                <th>型</th>
+                                <th>説明</th>
+                            </tr>
+                            <tr>
+                                <td>Number</td>
+                                <td>満年齢</td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div class="panel-body">
+                        <h2>サンプル</h2>
+                        <h3>満年齢の取得</h3>
+                        <div class="ex-code-prettify">
+                            <textarea class="code" data-ex-code-prettify-param="{codeType:'script', autoRun:false}">
+// 2000年6月1日からの年齢
+var date = new UltraDate('2000/06/01');
+
+// 今日の満年齢
+console.log(date.getAge());
+// 2010年1月1日
+console.log(date.getAge('2010/01/01'));
+// 2010年7月1日
+console.log(date.getAge('2010/07/01'));
+
+// 2000年2月29日からの年齢
+var date = new UltraDate('2000/02/29');
+
+// 今日の満年齢
+console.log(date.getAge());
+// 2010年1月1日
+console.log(date.getAge('2010/01/01'));
+// 2010年3月1日
+console.log(date.getAge('2010/03/01'));
+                            </textarea>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <section id="getRealMonth">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h1>getRealMonth()</h1>
+                    </div>
+                    <div class="panel-body">
+                        <h2>関数概要</h2>
+                        <p class="lead">
+                            UltraDate.prototype.getRealMonth()
+                        </p>
+                        <ul>
+                            <li>
+                                「Date.getMonth()」では実際の日付から1引かれた数字が返されますが、
+                                「getRealMonth()」では実際の月の数字が返されます
+                            </li>
+                        </ul>
+                        <ul>
+                            <li>引数：なし</li>
+                            <li>戻り値：Number</li>
+                        </ul>
+                    </div>
+                    <div class="panel panel-default doc-return">
+                        <div class="panel-heading">
+                            <h2 class="panel-title">戻り値</h2>
+                        </div>
+                        <table class="table table-bordered table-responsive">
+                            <tr>
+                                <th>型</th>
+                                <th>説明</th>
+                            </tr>
+                            <tr>
+                                <td>Number</td>
+                                <td>実際の月の数字</td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div class="panel-body">
+                        <h2>サンプル</h2>
+                        <h3>実際の月の数字の取得</h3>
+                        <div class="ex-code-prettify">
+                            <textarea class="code" data-ex-code-prettify-param="{codeType:'script', autoRun:false}">
+var date = new UltraDate();
+
+// 元の時間
+console.log(date.format("yyyy年MM月dd日 HH:mm:ss.fff"));
+
+// 取得した数字
+console.log(date.getRealMonth());
+                            </textarea>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <section id="getDayCountsInMonth">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h1>getDayCountsInMonth()</h1>
+                    </div>
+                    <div class="panel-body">
+                        <h2>関数概要</h2>
+                        <p class="lead">
+                            UltraDate.prototype.getDayCountsInMonth()
+                        </p>
+                        <ul>
+                            <li>
+                                現在のUltraDateオブジェクトの曜日がその月の何回目かを取得します
+                            </li>
+                        </ul>
+                        <ul>
+                            <li>引数：なし</li>
+                            <li>戻り値：Number</li>
+                        </ul>
+                    </div>
+                    <div class="panel panel-default doc-return">
+                        <div class="panel-heading">
+                            <h2 class="panel-title">戻り値</h2>
+                        </div>
+                        <table class="table table-bordered table-responsive">
+                            <tr>
+                                <th>型</th>
+                                <th>説明</th>
+                            </tr>
+                            <tr>
+                                <td>Number</td>
+                                <td>現在の曜日がその月の中で何回目かの数字</td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div class="panel-body">
+                        <h2>サンプル</h2>
+                        <h3>現在の曜日がその月の中で何回目かを取得</h3>
+                        <div class="ex-code-prettify">
+                            <textarea class="code" data-ex-code-prettify-param="{codeType:'script', autoRun:false}">
+var date = new UltraDate();
+
+// 元の時間
+console.log(date.format("yyyy年MM月dd日 HH:mm:ss.fff"));
+
+// 取得した数字
+console.log(date.getDayCountsInMonth());
+                            </textarea>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <section id="getISOWeekWithYear">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h1>getISOWeekWithYear()</h1>
+                    </div>
+                    <div class="panel-body">
+                        <h2>関数概要</h2>
+                        <p class="lead">
+                            UltraDate.prototype.getISOWeekWithYear()
+                        </p>
+                        <ul>
+                            <li>
+                                ISO8601形式の週番号（月曜日起点、第1週は4日以上）と年を取得します
+                            </li>
+                        </ul>
+                        <ul>
+                            <li>引数：なし</li>
+                            <li>戻り値：Object</li>
+                        </ul>
+                    </div>
+                    <div class="panel panel-default doc-return">
+                        <div class="panel-heading">
+                            <h2 class="panel-title">戻り値</h2>
+                        </div>
+                        <table class="table table-bordered table-responsive">
+                            <tr>
+                                <th>型</th>
+                                <th>説明</th>
+                            </tr>
+                            <tr>
+                                <td>Object</td>
+                                <td>
+                                    ISO8601形式の週番号と年の入ったオブジェクト
+                                    <pre>
+{
+    year: 週番号の所属する年(Number)
+    week: 週番号(Number)
+}
+                                    </pre>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div class="panel-body">
+                        <h2>サンプル</h2>
+                        <h3>ISO8601形式の週番号と年を取得</h3>
+                        <div class="ex-code-prettify">
+                            <textarea class="code" data-ex-code-prettify-param="{codeType:'script', autoRun:false}">
+var date = new UltraDate();
+
+// 元の時間
+console.log(date.format("yyyy年MM月dd日 HH:mm:ss.fff"));
+
+// 取得した数字
+console.log(date.getISOWeekWithYear());
+                            </textarea>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <section id="getISOWeek">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h1>getISOWeek()</h1>
+                    </div>
+                    <div class="panel-body">
+                        <h2>関数概要</h2>
+                        <p class="lead">
+                            UltraDate.prototype.getISOWeek()
+                        </p>
+                        <ul>
+                            <li>
+                                ISO8601形式の週番号（月曜日起点、第1週は4日以上）を取得します
+                            </li>
+                        </ul>
+                        <ul>
+                            <li>引数：なし</li>
+                            <li>戻り値：Number</li>
+                        </ul>
+                    </div>
+                    <div class="panel panel-default doc-return">
+                        <div class="panel-heading">
+                            <h2 class="panel-title">戻り値</h2>
+                        </div>
+                        <table class="table table-bordered table-responsive">
+                            <tr>
+                                <th>型</th>
+                                <th>説明</th>
+                            </tr>
+                            <tr>
+                                <td>Number</td>
+                                <td>
+                                    ISO8601形式の週番号の数字
+                                    <div class="alert alert-warning margin-top-md margin-bottom-none">
+                                        <ul>
+                                            <li>週番号が前年の週番号となる場合は「0」が返る（1月1日が金曜日、土曜日、日曜日の場合）</li>
+                                            <li>週番号が翌年の週番号となる場合は最終週に「1」を足した値が返る（12月31日が月曜日、火曜日、水曜日）</li>
+                                        </ul>
+                                    </div>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div class="panel-body">
+                        <h2>サンプル</h2>
+                        <h3>ISO8601形式の週番号を取得</h3>
+                        <div class="ex-code-prettify">
+                            <textarea class="code" data-ex-code-prettify-param="{codeType:'script', autoRun:false}">
+var date = new UltraDate();
+
+// 元の時間
+console.log(date.format("yyyy年MM月dd日 HH:mm:ss.fff"));
+
+// 取得した数字
+console.log(date.getISOWeek());
+                            </textarea>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <section id="getUSWeek">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h1>getUSWeek()</h1>
+                    </div>
+                    <div class="panel-body">
+                        <h2>関数概要</h2>
+                        <p class="lead">
+                            UltraDate.prototype.getUSWeek()
+                        </p>
+                        <ul>
+                            <li>
+                                US形式の週番号（日曜日起点、1月1日第一週）を取得します
+                            </li>
+                        </ul>
+                        <ul>
+                            <li>引数：なし</li>
+                            <li>戻り値：Number</li>
+                        </ul>
+                    </div>
+                    <div class="panel panel-default doc-return">
+                        <div class="panel-heading">
+                            <h2 class="panel-title">戻り値</h2>
+                        </div>
+                        <table class="table table-bordered table-responsive">
+                            <tr>
+                                <th>型</th>
+                                <th>説明</th>
+                            </tr>
+                            <tr>
+                                <td>Number</td>
+                                <td>US形式の週番号の数字</td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div class="panel-body">
+                        <h2>サンプル</h2>
+                        <h3>US形式の週番号を取得</h3>
+                        <div class="ex-code-prettify">
+                            <textarea class="code" data-ex-code-prettify-param="{codeType:'script', autoRun:false}">
+var date = new UltraDate();
+
+// 元の時間
+console.log(date.format("yyyy年MM月dd日 HH:mm:ss.fff"));
+
+// 取得した数字
+console.log(date.getUSWeek());
+                            </textarea>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <section id="getISODay">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h1>getISODay()</h1>
+                    </div>
+                    <div class="panel-body">
+                        <h2>関数概要</h2>
+                        <p class="lead">
+                            UltraDate.prototype.getISODay()
+                        </p>
+                        <ul>
+                            <li>
+                                ISO形式の曜日番号（月曜日が 1、日曜日は 7）を取得します
+                            </li>
+                        </ul>
+                        <ul>
+                            <li>引数：なし</li>
+                            <li>戻り値：Number</li>
+                        </ul>
+                    </div>
+                    <div class="panel panel-default doc-return">
+                        <div class="panel-heading">
+                            <h2 class="panel-title">戻り値</h2>
+                        </div>
+                        <table class="table table-bordered table-responsive">
+                            <tr>
+                                <th>型</th>
+                                <th>説明</th>
+                            </tr>
+                            <tr>
+                                <td>Number</td>
+                                <td>ISO形式の曜日番号（月曜日が 1、日曜日は 7）</td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div class="panel-body">
+                        <h2>サンプル</h2>
+                        <h3>ISO形式の曜日番号を取得</h3>
+                        <div class="ex-code-prettify">
+                            <textarea class="code" data-ex-code-prettify-param="{codeType:'script', autoRun:false}">
+var date = new UltraDate("2015/01/04");
+
+// 元の時間
+console.log(date.format("yyyy年MM月dd日 HH:mm:ss.fff"));
+
+// 取得した数字
+console.log("2015/01/04（日曜日）のISO形式の曜日番号は「" + date.getISODay() + "」Jsでは「" + date.getDay() + "」");
+                            </textarea>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <section id="getOrdinalDate">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h1>getOrdinalDate()</h1>
+                    </div>
+                    <div class="panel-body">
+                        <h2>関数概要</h2>
+                        <p class="lead">
+                            UltraDate.prototype.getOrdinalDate()
+                        </p>
+                        <ul>
+                            <li>
+                                年間通算日を取得します
+                            </li>
+                        </ul>
+                        <ul>
+                            <li>引数：なし</li>
+                            <li>戻り値：Number</li>
+                        </ul>
+                    </div>
+                    <div class="panel panel-default doc-return">
+                        <div class="panel-heading">
+                            <h2 class="panel-title">戻り値</h2>
+                        </div>
+                        <table class="table table-bordered table-responsive">
+                            <tr>
+                                <th>型</th>
+                                <th>説明</th>
+                            </tr>
+                            <tr>
+                                <td>Number</td>
+                                <td>年間通算日</td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div class="panel-body">
+                        <h2>サンプル</h2>
+                        <h3>年間通算日を取得</h3>
+                        <div class="ex-code-prettify">
+                            <textarea class="code" data-ex-code-prettify-param="{codeType:'script', autoRun:false}">
+var date = new UltraDate("2015/01/01");
+
+// 元の時間
+console.log(date.format("yyyy年MM月dd日 HH:mm:ss.fff"));
+
+// 取得した数字
+console.log("2015/01/01の年間通算日は「" + date.getOrdinalDate() + "」です");
+
+// 2015年12月31日
+date.setFullYear(date.getFullYear(), 11, 31);
+console.log("2015/12/31の年間通算日は「" + date.getOrdinalDate() + "」です");
+
+// 2016年12月31日（うるう年）
+date.addYear(1);
+console.log("2016/12/31の年間通算日は「" + date.getOrdinalDate() + "」です");
+                            </textarea>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <section id="getLastDate">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h1>getLastDate()</h1>
+                    </div>
+                    <div class="panel-body">
+                        <h2>関数概要</h2>
+                        <p class="lead">
+                            UltraDate.prototype.getLastDate(num)
+                        </p>
+                        <ul>
+                            <li>
+                                引数「num」でオフセットした月の月末の日付を取得します
+                            </li>
+                        </ul>
+                        <ul>
+                            <li>引数：(<em>Number</em>&nbsp;num)</li>
+                            <li>戻り値：Number</li>
+                        </ul>
+                    </div>
+                    <div class="panel panel-default doc-args">
+                        <div class="panel-heading">
+                            <h2 class="panel-title">引数</h2>
+                        </div>
+                        <table class="table table-bordered table-responsive">
+                            <tr>
+                                <th>名前</th>
+                                <th>型</th>
+                                <th>説明</th>
+                            </tr>
+                            <tr>
+                                <td>num</td>
+                                <td>Number</td>
+                                <td>
+                                    <ul>
+                                        <li>オフセットしたい月数の数字を指定します</li>
+                                        <li>正数の時は月を増やす</li>
+                                        <li>負数の時は月を減らす</li>
+                                    </ul>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div class="panel panel-default doc-return">
+                        <div class="panel-heading">
+                            <h2 class="panel-title">戻り値</h2>
+                        </div>
+                        <table class="table table-bordered table-responsive">
+                            <tr>
+                                <th>型</th>
+                                <th>説明</th>
+                            </tr>
+                            <tr>
+                                <td>Number</td>
+                                <td>月末の日付の数字</td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div class="panel-body">
+                        <h2>サンプル</h2>
+                        <h3>月末の日付を取得</h3>
+                        <div class="ex-code-prettify">
+                            <textarea class="code" data-ex-code-prettify-param="{codeType:'script', autoRun:false}">
+var date = new UltraDate();
+
+// 元の時間
+console.log(date.format("yyyy年MM月dd日 HH:mm:ss.fff"));
+
+// 現在の月の月末の数字
+console.log(date.getLastDate());
+
+// 翌月の月末の数字を取得
+console.log(date.getLastDate(1));
+                            </textarea>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <section id="getHolidays">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h1>getHolidays()</h1>
+                    </div>
+                    <div class="panel-body">
+                        <h2>関数概要</h2>
+                        <p class="lead">
+                            UltraDate.getHolidays(year, locale)
+                        </p>
+                        <ul>
+                            <li>
+                                引数「year」で指定された年、引数「locale」で指定されたロケールの祝祭日一覧のオブジェクトを取得します
+                            </li>
+                        </ul>
+                        <ul>
+                            <li>引数：(<em>Number</em>&nbsp;year,&nbsp;<em>String</em>&nbsp;locale)</li>
+                            <li>戻り値：Object</li>
+                        </ul>
+                    </div>
+                    <div class="panel panel-default doc-args">
+                        <div class="panel-heading">
+                            <h2 class="panel-title">引数</h2>
+                        </div>
+                        <table class="table table-bordered table-responsive">
+                            <tr>
+                                <th>名前</th>
+                                <th>型</th>
+                                <th>説明</th>
+                            </tr>
+                            <tr>
+                                <td>year</td>
+                                <td>Number</td>
+                                <td>
+                                    <ul>
+                                        <li>取得する年を数字で指定します</li>
+                                        <li>指定の無い場合は今年となります</li>
+                                    </ul>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>locale</td>
+                                <td>String</td>
+                                <td>
+                                    <ul>
+                                        <li>取得するロケールの文字列を指定します</li>
+                                        <li>指定の無い場合はデフォルトのロケールが使用されます</li>
+                                    </ul>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div class="panel panel-default doc-return">
+                        <div class="panel-heading">
+                            <h2 class="panel-title">戻り値</h2>
+                        </div>
+                        <table class="table table-bordered table-responsive">
+                            <tr>
+                                <th>型</th>
+                                <th>説明</th>
+                            </tr>
+                            <tr>
+                                <td>Object</td>
+                                <td>祝祭日一覧のオブジェクトを返します</td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div class="panel-body">
+                        <h2>サンプル</h2>
+                        <h3>日本の祝祭日の一覧を取得</h3>
+                        <ul>
+                            <li>「UltraDate.ja.js」を読み込んでいるものとする</li>
+                        </ul>
+                        <div class="ex-code-prettify">
+                            <textarea class="code" data-ex-code-prettify-param="{codeType:'script', autoRun:false}">
+// 今年年の祝祭日一覧の取得
+console.log(UltraDate.getHolidays());
+
+// 2016年の祝祭日一覧の取得
+console.log(date.getHolidays(2016));
+                            </textarea>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <section id="getHoliday">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h1>getHoliday()</h1>
+                    </div>
+                    <div class="panel-body">
+                        <h2>関数概要</h2>
+                        <p class="lead">
+                            UltraDate.prototype.getHoliday(locale)
+                        </p>
+                        <ul>
+                            <li>
+                                引数「locale」で指定されたロケールの祝祭日名を取得します
+                            </li>
+                        </ul>
+                        <ul>
+                            <li>引数：(<em>String</em>&nbsp;locale)</li>
+                            <li>戻り値：String</li>
+                        </ul>
+                    </div>
+                    <div class="panel panel-default doc-args">
+                        <div class="panel-heading">
+                            <h2 class="panel-title">引数</h2>
+                        </div>
+                        <table class="table table-bordered table-responsive">
+                            <tr>
+                                <th>名前</th>
+                                <th>型</th>
+                                <th>説明</th>
+                            </tr>
+                            <tr>
+                                <td>locale</td>
+                                <td>String</td>
+                                <td>
+                                    <ul>
+                                        <li>取得するロケールの文字列を指定します</li>
+                                        <li>指定の無い場合はデフォルトのロケールが使用されます</li>
+                                    </ul>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div class="panel panel-default doc-return">
+                        <div class="panel-heading">
+                            <h2 class="panel-title">戻り値</h2>
+                        </div>
+                        <table class="table table-bordered table-responsive">
+                            <tr>
+                                <th>型</th>
+                                <th>説明</th>
+                            </tr>
+                            <tr>
+                                <td>String</td>
+                                <td>
+                                    <ul>
+                                        <li>祝祭名を返します</li>
+                                        <li>祝祭日で無い場合は空の文字列が返されます</li>
+                                    </ul>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div class="panel-body">
+                        <h2>サンプル</h2>
+                        <h3>日本の祝祭日名を取得</h3>
+                        <ul>
+                            <li>「UltraDate.ja.js」を読み込んでいるものとする</li>
+                        </ul>
+                        <div class="ex-code-prettify">
+                            <textarea class="code" data-ex-code-prettify-param="{codeType:'script', autoRun:false}">
+var date = new UltraDate();
+
+// 今日の祝祭日名を取得する
+console.log(date.getHoliday());
+
+// 2015年11月23日の祝日名を取得する
+date.setFullYear(2015, 10, 23);
+console.log(date.getHoliday());
+                            </textarea>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <section id="getISOLastWeekNum">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h1>getISOLastWeekNum()</h1>
+                    </div>
+                    <div class="panel-body">
+                        <h2>関数概要</h2>
+                        <p class="lead">
+                            UltraDate.getISOLastWeekNum(year)
+                        </p>
+                        <ul>
+                            <li>
+                                引数「year」で指定された年のISO形式の最終週番号を取得します
+                            </li>
+                        </ul>
+                        <ul>
+                            <li>引数：(<em>Number</em>&nbsp;year)</li>
+                            <li>戻り値：Number</li>
+                        </ul>
+                    </div>
+                    <div class="panel panel-default doc-args">
+                        <div class="panel-heading">
+                            <h2 class="panel-title">引数</h2>
+                        </div>
+                        <table class="table table-bordered table-responsive">
+                            <tr>
+                                <th>名前</th>
+                                <th>型</th>
+                                <th>説明</th>
+                            </tr>
+                            <tr>
+                                <td>year</td>
+                                <td>Number</td>
+                                <td>
+                                    <ul>
+                                        <li>取得する年の西暦を入力します</li>
+                                        <li>指定の無い場合は今年になります</li>
+                                    </ul>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div class="panel panel-default doc-return">
+                        <div class="panel-heading">
+                            <h2 class="panel-title">戻り値</h2>
+                        </div>
+                        <table class="table table-bordered table-responsive">
+                            <tr>
+                                <th>型</th>
+                                <th>説明</th>
+                            </tr>
+                            <tr>
+                                <td>Number</td>
+                                <td>
+                                    <ul>
+                                        <li>引数「year」で指定した年の最終週の番号を取得します</li>
+                                        <li>12月31日が月曜日、火曜日、水曜日の場合は翌年の週番号になる為、12月31日の必ずしも12月31日の週番号ではありません</li>
+                                        <li>「getISOWeek関数」とは取得の仕方が異なりますのでご注意ください</li>
+                                    </ul>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div class="panel-body">
+                        <h2>サンプル</h2>
+                        <h3>ISO形式の最終週を取得</h3>
+                        <div class="ex-code-prettify">
+                            <textarea class="code" data-ex-code-prettify-param="{codeType:'script', autoRun:false}">
+// 2015年の最終週は「53」
+console.log(UltraDate.getISOLastWeekNum(2015));
+
+// 2016年の最終週は「52」
+console.log(UltraDate.getISOLastWeekNum(2016));
+
+// 2018年の最終週は「52」（12月31日は2019年の第1週なので12月30日の週番号が最終）
+console.log(UltraDate.getISOLastWeekNum(2018));
+                            </textarea>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <section id="getUSLastWeekNum">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h1>getUSLastWeekNum()</h1>
+                    </div>
+                    <div class="panel-body">
+                        <h2>関数概要</h2>
+                        <p class="lead">
+                            UltraDate.getUSLastWeekNum(year)
+                        </p>
+                        <ul>
+                            <li>
+                                引数「year」で指定された年のUS形式の最終週番号を取得します
+                            </li>
+                        </ul>
+                        <ul>
+                            <li>引数：(<em>Number</em>&nbsp;year)</li>
+                            <li>戻り値：Number</li>
+                        </ul>
+                    </div>
+                    <div class="panel panel-default doc-args">
+                        <div class="panel-heading">
+                            <h2 class="panel-title">引数</h2>
+                        </div>
+                        <table class="table table-bordered table-responsive">
+                            <tr>
+                                <th>名前</th>
+                                <th>型</th>
+                                <th>説明</th>
+                            </tr>
+                            <tr>
+                                <td>year</td>
+                                <td>Number</td>
+                                <td>
+                                    <ul>
+                                        <li>取得する年の西暦を入力します</li>
+                                        <li>指定の無い場合は今年になります</li>
+                                    </ul>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div class="panel panel-default doc-return">
+                        <div class="panel-heading">
+                            <h2 class="panel-title">戻り値</h2>
+                        </div>
+                        <table class="table table-bordered table-responsive">
+                            <tr>
+                                <th>型</th>
+                                <th>説明</th>
+                            </tr>
+                            <tr>
+                                <td>Number</td>
+                                <td>
+                                    <ul>
+                                        <li>引数「year」で指定した年の最終週の番号を取得します</li>
+                                    </ul>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div class="panel-body">
+                        <h2>サンプル</h2>
+                        <h3>US形式の最終週を取得</h3>
+                        <div class="ex-code-prettify">
+                            <textarea class="code" data-ex-code-prettify-param="{codeType:'script', autoRun:false}">
+// 2015年の最終週は「53」
+console.log(UltraDate.getUSLastWeekNum(2015));
+
+// 2016年の最終週は「53」
+console.log(UltraDate.getUSLastWeekNum(2016));
+
+// 2028年の最終週は「54」
+console.log(UltraDate.getUSLastWeekNum(2028));
+                            </textarea>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </body>
+</html>

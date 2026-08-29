@@ -1,0 +1,22 @@
+<!--アップロードフォーム-->
+<section>
+<div class="block">
+    <div class="navbar navbar-inner block-header">
+    	<div class="muted pull-left clearfix">会員一括登録フォーム</div>
+    </div>
+    <div class="block-content collapse in">
+        <div class="span12">
+            <form action="<?=BASEURL?>/editor/editor/importfinish" method="post" enctype="multipart/form-data">
+            	 <div class="row-fluid">
+                    <p class="span2">CSVファイル：</p>
+                    <p class="span10"><input type="file" name="file"></p>
+                    <p>※CSVファイルをアップロードすると、CSVファイルをに登録されているデータを追加登録します。（現在登録されているデータはそのまま残ります。）データサンプルは、<a href="<?=BASEURL?>/sample/user.csv">こちら</a></p>
+                </div>
+                <div class="form-actions">
+                    <button class="btn btn-large btn-block btn-primary" id="sub">登録</button>
+                </div>
+            </form>
+    	</div>
+    </div>
+</div>
+</section>

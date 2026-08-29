@@ -1,0 +1,366 @@
+<!--スタッフ情報編集フォーム-->
+<section class="row">
+    <div class="col-xs-12">
+      <div class="x_panel">
+        <div class="x_title">
+        	<!--タイトルをH２で定義する"-->
+          <h2>会員登録フォーム</h2>
+        	<!--タイトルをH２で定義する"-->
+          <ul class="nav navbar-right panel_toolbox">
+            <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+            <li><a class="close-link"><i class="fa fa-close"></i></a>
+            </li>
+          </ul>
+          <div class="clearfix"></div>
+        </div>
+        <div class="x_content">
+		<!--中身-->
+          <div class="data-table">
+            <form action="<?=BASEURL?>/editor/user/registrerfinish/" method="post" id="form">
+              <table class="table table-striped table-responcive">
+                <tbody id="body">
+                  <tr>
+                    <th>施設名</th>
+                    <td class="form-inline">
+                      <input type="text" name="name" value="<?=$this->detail['name']?>" class=" form-control" style="width:20em;">
+                    </td>
+                  </tr>
+                  <tr>
+                    <th style="width:25%;">分類</th>
+                    <td class="form-inline">
+                    <select class="form-control" name="class">
+                      <?php foreach($this->classes as $v){
+                        if($v['id'] == $this->detail['class']){
+                          echo '<option value="'.$v['id'].'" selected>'.$v['name'].'</option>';
+                        }else{
+                          echo '<option value="'.$v['id'].'">'.$v['name'].'</option>';
+                        }
+                      }?>
+                    </select>
+                    </td>
+                  </tr>
+                  <tr>
+                    <th>フリガナ</th>
+                    <td class="form-inline">
+                      <input type="text" name="kana" value="<?=$this->detail['kana']?>" class=" form-control kana" style="width:20em;">
+                    </td>
+                  </tr>
+                  <tr>
+                    <th>メール</th>
+                    <td><input type="text" name="mail" value="<?=$this->detail['mail']?>" id="f-004" class="required form-control email"></td>
+                  </tr>
+                  <tr>
+                    <th>電話番号</th>
+                    <td class="form-inline">
+                      <input type="text" name="tel" value="<?=$this->detail['tel']?>" class=" form-control" style="width:4em;">-
+                      <input type="text" name="tel2" value="<?=$this->detail['tel2']?>" class=" form-control" style="width:4em;">-
+                      <input type="text" name="tel3" value="<?=$this->detail['tel3']?>" class=" form-control" style="width:4em;">
+                    </td>
+                  </tr>
+                  <tr>
+                    <th>FAX番号</th>
+                    <td class="form-inline">
+                      <input type="text" name="mtel" value="<?=$this->detail['mtel']?>" class=" form-control" style="width:4em;">-
+                      <input type="text" name="mtel2" value="<?=$this->detail['mtel2']?>" class=" form-control" style="width:4em;">-
+                      <input type="text" name="mtel3" value="<?=$this->detail['mtel3']?>" class=" form-control" style="width:4em;">
+                    </td>
+                  </tr>
+                  <tr>
+                    <th>住所</th>
+                    <td><p class="form-inline">〒<input type="text" name="zip" value="<?=$this->detail['zip']?>" id="" class=" form-control" style="width:4em;">-
+                    	<input type="text" name="zip2" value="<?=$this->detail['zip2']?>" id="" class=" form-control" style="width:4em;"></p>
+
+                    	<p><select name="pref" class="span3 required form-control">
+                        	<option value="">選択</option>
+                    	<?php foreach($this->pref as $v):?>
+                        <?php if($v['id'] == $this->detail['pref']):?>
+                        	<option value="<?=$v['id']?>" selected><?=$v['name']?></option>
+                        <?php else:?>
+                        	<option value="<?=$v['id']?>"><?=$v['name']?></option>
+                        <?php endif;?>
+                        <?php endforeach;?>
+                        </select></p>
+                        <p><input type="text" name="addr" value="<?=$this->detail['addr']?>" class="form-control"></p>
+                        <p><input type="text" name="addr2" value="<?=$this->detail['addr2']?>" class="form-control"></p>
+                        <input type="hidden" name="demand" value="1" class="form-control">
+                    </td>
+                  </tr>
+                  <tr>
+                    <th>訪問医療</th>
+                    <td>
+                      <label class="form-inline"><input type="checkbox" class="checkbox" value="1" name="houmon"<?php if($this->detail['houmon'] ==1){echo " checked";}?> /> 訪問医療に該当する場合はチェックを入れてください。</label>
+                    </td>
+                  </tr>
+                  <tr>
+                    <th>介護予防事業</th>
+                    <td>
+                      <label class="form-inline"><input type="checkbox" class="checkbox" value="1" name="yobou"<?php if($this->detail['yobou'] ==1){echo " checked";}?> /> 介護予防事業に該当する場合はチェックを入れてください。</label>
+                    </td>
+                  </tr>
+                  <tr>
+                    <th>資料</th>
+                    <td>
+                      <div id="filesize"></div>
+                      <div id="tmp">
+                        <?php foreach($this->detail['tmp'] as $v):?>
+                          <p><img src="<?=$v['icon']?>" style="width:30px;height:auto;"> <?=$v['file']?></p>
+                        <?php endforeach;?>
+                      </div>
+                      <p><button type="button" class="btn btn-default" id="uploadBtn"><i class="fa fa-plus"></i> 添付ファイルを追加</button></p>
+                      <div id="tmpData">
+                        <?php foreach($this->detail['tmp'] as $v):?>
+                          <input type="hidden" name="tmp[]" value="<?=$v['file']?>">
+                        <?php endforeach;?>
+                      </div>
+                    </td>
+                  </tr>
+                  <tr>
+                    <th>パスワード</th>
+                    <td>
+                      <p><input type="password" name="pw" value="<?=$this->detail['pw']?>" class=" form-control"></p>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+              </form>
+            </div>
+            <div class="form-actions">
+              <button class="btn btn-large btn-block btn-primary" id="sub">編集</button>
+            </div>
+			<!--中身-->
+        </div>
+      </div>
+    </div>
+</section>
+<div style="display:none;">
+  <form action="<?=BASEURL?>/editor/user/upload" method="post" enctype="multipart/form-data" target="upload" id="imageupload">
+  	<input type="file" name="userfile" id="userfile">
+  </form>
+  <iframe name="upload"></iframe>
+</div>
+<style>
+textarea.form-control.requid-textarea{
+  line-height: 22px;
+  height: 34px;
+}
+</style>
+<script src="<?=BASEURL?>/js/validation.js"></script>
+<script>
+
+//住所を検索
+jQuery("[name=zip2]").on("blur",function(){
+  var d = $("[name=zip]").val()+$("[name=zip2]").val();
+  var key = $("[name=zip]");
+  $.post("<?=BASEURL?>/api/addr/",{"d":d},function(data){
+    if(data == "NotExsist" || data == "AccessDenied"){
+    }else{
+      var addrs =  JSON.parse(data);
+      $("[name=pref]").val(addrs[0]['pref']);
+      $("[name=addr]").focus();
+      $("[name=addr]").val(addrs[0]['city']+addrs[0]['town']);
+      validEmpty("pref","都道府県");
+      validEmpty("addr","市区町村、番地");
+    }
+  });
+});
+$(function(){
+	//資料アップロード
+	$("#uploadBtn").on("click",function(){
+		$("#userfile").click();
+	});
+	$("#userfile").on("change",function(){
+		$("#imageupload").submit();
+	});
+  
+  //分類に応じた項目を表示
+  if($("[name=class]").val() !=""){
+    getFacilityOfValue();
+  }
+  $("[name=class]").on("change",function(){
+    getFacilityOfValue();
+  });
+});
+function getFacilityOfValue(){
+  //選択された分類に応じて項目を取得
+  var user = getParam().id;
+  $.get("<?=BASEURL?>/api/user/useroffacility/?id="+$("[name=class]").val(),function(data){
+    var json = JSON.parse(data);
+    console.log(json);
+    var str = "<tbody id=\"added\">";
+    for(var i=0;i<json.facility.length;i++){
+      if(json.value.length >0){
+        var vv = json.value[0][json.facility[i].facilty];
+      }else{
+        var vv = "";
+      }
+      str+= '<tr>';
+      str+= '<th>'+json.facility[i].name+'</th>';
+      if(json.facility[i]['sel'] ==1){
+        var ansewer = {0:"未選択",1:"☓",2:"△",3:"○"};
+        str+= '<td>';
+        str+= '<select class="form-control" name="added['+json.facility[i].facilty+']" style="width:7em;">';
+        for(var j =0;j<Object.keys(ansewer).length;j++){
+          if(vv == j){
+            str+= '<option value="'+j+'" selected>'+ansewer[j]+'</option>';
+          }else{
+            str+= '<option value="'+j+'">'+ansewer[j]+'</option>';
+          }
+        }
+        str+= '</select>';
+        str+= '</td>';
+      }else{
+        str+= '<td><textarea class="form-control requid-textarea" name="added['+json.facility[i].facilty+']">'+vv+'</textarea></td>';
+      }
+      str+= '</tr>';
+    }
+    str+= '</tbody>';
+    if($("#added").length >0){
+      $("#added").remove();
+    }
+    $("#body").after(str);
+  });
+}
+var error =new Array;
+$(function(){
+	//バリデーション
+	$("[name=name]").on("blur",function(){
+		validEmpty("name","医療機関名");
+	});
+	$("[name=kana]").on("blur",function(){
+		validEmptyKana("kana","フリガナ");
+	});
+	$("[name=tel]").on("blur",function(){
+		validEmptyAndZero("tel","電話番号");
+	});
+	$("[name=tel2]").on("blur",function(){
+		validEmptyAndZero("tel2","電話番号2");
+	});
+	$("[name=tel3]").on("blur",function(){
+		validEmptyAndTel("tel3","電話番号3","tel","tel2");
+	});
+	$("[name=zip]").on("blur",function(){
+		validEmptyAndZero("zip","郵便番号");
+	});
+	$("[name=zip2]").on("blur",function(){
+		validEmptyAndZip("zip2","郵便番号2","zip");
+	});
+	$("[name=pref]").on("blur",function(){
+		validEmpty("pref","都道府県");
+	});
+	$("[name=addr]").on("blur",function(){
+		validEmpty("addr","市区町村、番地");
+	});
+	$("[name=pw]").on("blur",function(){
+		validEmpty("pw","パスワード");
+	});
+	/*
+	*/
+	$("#sub").on("click",function(){
+		validEmpty("name","医療機関名");
+		validEmptyKana("kana","フリガナ");
+		validEmptyAndZero("tel","電話番号1");
+		validEmptyAndZero("tel2","電話番号2");
+		validEmptyAndTel("tel3","電話番号3","tel","tel2");
+		validEmptyAndZero("zip","郵便番号1");
+		validEmptyAndZip("zip2","郵便番号2","zip");
+		validEmpty("pref","都道府県");
+		validEmpty("addr","市区町村、番地");
+		validEmpty("pw","パスワード");
+		if(error.length >0){
+			var str = "";
+			str+= "入力に誤りがあります。下記の項目を修正して再度ボタンを押してください。\n";
+			for(var i =0;i<error.length;i++){
+				if(error[i] =="nameEmpty"){
+					str+="「医療機関名」を入力してください。\n";
+				}
+				if(error[i] =="nameEmpty"){
+					str+="「フリガナ」を入力してください。\n";
+				}
+				if(error[i] =="kanaNotKana"){
+					str+="「フリガナ」は全角カタカナで入力してください。\n";
+				}
+				if(error[i] =="mailEmpty"){
+					str+="「メールアドレス」を入力してください。\n";
+				}
+				if(error[i] =="mailMailFormat"){
+					str+="「メールアドレス」の形式を正しく入力してください。\n";
+				}
+				if(error[i] =="mailMailSame"){
+					str+="この「メールアドレス」はすでに登録されています。\n";
+				}
+				if(error[i] =="telEmpty"){
+					str+="「電話番号1」を入力してください。\n";
+				}
+				if(error[i] =="telZero"){
+					str+="「電話番号1」はゼロのみの入力は出来ません。\n";
+				}
+				if(error[i] =="tel2Empty"){
+					str+="「電話番号2」を入力してください。\n";
+				}
+				if(error[i] =="telZero"){
+					str+="「電話番号1」はゼロのみの入力は出来ません。\n";
+				}
+				if(error[i] =="tel3Empty"){
+					str+="「電話番号3」を入力してください。\n";
+				}
+				if(error[i] =="tel3NotTel"){
+					str+="電話番号として正しくありません\n";
+				}
+				if(error[i] =="tel3Zero"){
+					str+="「電話番号3」はゼロのみの入力は出来ません。\n";
+				}
+				if(error[i] =="zipEmpty"){
+					str+="「郵便番号１」を入力してください。\n";
+				}
+				if(error[i] =="zipZero"){
+					str+="「郵便番号１」はゼロのみの入力は出来ません。\n";
+				}
+				if(error[i] =="zipNumeric"){
+					str+="「郵便番号1」が半角数字ではありません\n";
+				}
+				if(error[i] =="zip2Empty"){
+					str+="「郵便番号2」を入力してください。\n";
+				}
+				if(error[i] =="zip2NotZip"){
+					str+="「郵便番号2」を入力してください。\n";
+				}
+				if(error[i] =="zip2Numeric"){
+					str+="「郵便番号2」が半角数字ではありません\n";
+				}
+				if(error[i] =="prefEmpty"){
+					str+="「都道府県」を選択してください。\n";
+				}
+				if(error[i] =="addrEmpty"){
+					str+="「市区町村、番地」を入力してください。\n";
+				}
+				if(error[i] =="pwEmpty"){
+					str+="「パスワード」を入力してください。\n";
+				}
+			}
+			alert(str);
+		}else{
+			if(window.confirm("会員登録を行います。内容を変更される場合は「OK」ボタンを押してください。")){
+				$("#form").submit();
+			}
+		}
+	});
+});
+function getParam(){
+  var result = {};
+  if( 1 < window.location.search.length ){
+    // 最初の1文字 (?記号) を除いた文字列を取得する
+    var query = window.location.search.substring( 1 );
+    // クエリの区切り記号 (&) で文字列を配列に分割する
+    var parameters = query.split( '&' );
+    for( var i = 0; i < parameters.length; i++ ){
+      // パラメータ名とパラメータ値に分割する
+      var element = parameters[ i ].split( '=' );
+      var paramName = decodeURIComponent( element[0] );
+      var paramValue = decodeURIComponent( element[1] );
+      // パラメータ名をキーとして連想配列に追加する
+      result[ paramName ] = paramValue;
+    }
+  }
+  return result;
+}
+</script>

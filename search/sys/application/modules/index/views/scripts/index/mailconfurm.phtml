@@ -1,0 +1,122 @@
+<section class="row">
+    <div class="col-xs-12">
+      <div class="x_panel">
+        <div class="x_title">
+        	<!--タイトルをH２で定義する"-->
+          <h2>お問い合わせフォーム</h2>
+        	<!--タイトルをH２で定義する"-->
+          <ul class="nav navbar-right panel_toolbox">
+            <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+            </li>
+          </ul>
+          <div class="clearfix"></div>
+        </div>
+        <div class="x_content">
+		<!--中身-->
+        <p>下記の内容で送信します。内容にお間違えが無いか確認してください。修正される方は、戻るボタンを押して編集してください。ブラウザの戻るボタンを押すと入力した内容が消えてしまう可能性が有ります。</p>
+        	<form action="<?=BASEURL?>/index/index/mailfinish/" method="post">
+            	<div class="data-table">      
+        <table class="table table-striped table-responcive">
+        <tbody>
+            <tr>
+            <th>会社名</th>
+            <td><?=$this->data['company']?>
+			<input type="hidden" name="company" value="<?=$this->data['company']?>" class="form-control" placeholder="日本語・英数字で入力">
+			</td>
+            </tr>
+            <tr>
+            <th>部署/役職</th>
+            <td><?=$this->data['division']?>
+			<input type="hidden" name="division" value="<?=$this->data['division']?>" class="form-control" placeholder="日本語・英数字で入力">
+			</td>
+            </tr>
+            <tr>
+            <th><label for="cus_name" class="required">お名前</label></th>
+            <td><?=$this->data['name']?>
+			<input type="hidden" name="name" value="<?=$this->data['name']?>" class="form-control required" placeholder="日本語・英数字で入力">
+			</td>
+            </tr>
+            <tr>
+            <th><label for="kana" class="required">フリガナ</label></th>
+            <td><?=$this->data['kana']?>
+			<input type="hidden" name="kana" value="<?=$this->data['kana']?>" class="form-control required">
+			</td>
+            </tr>
+            <tr>
+            <th><label for="mail" class="required">メールアドレス</label></th>
+            <td><?=$this->data['mail']?>
+            	<input type="hidden" name="mail" value="<?=$this->data['mail']?>" class="form-control required">
+			</td>
+            </tr>
+            <tr>
+            <th><label for="body" class="required">内容</label></th>
+            <td><?=str_replace("\n","<br>",$this->data['body'])?>
+            	<input type="hidden" name="body" value="<?=$this->data['body']?>" class="form-control required">
+			</td>
+            </tr>
+         </tbody>
+        </table>        
+        </div>
+        <p class="text-center"><button class="btn btn-success btn-lg" id="formSubmit" type="submit">送信</button></p>
+            </form>
+            <form action="<?=BASEURL?>/index/index/mail" method="post">
+            	<input type="hidden" name="company" value="<?=$this->data['company']?>">
+            	<input type="hidden" name="division" value="<?=$this->data['division']?>">
+            	<input type="hidden" name="name" value="<?=$this->data['name']?>">
+            	<input type="hidden" name="kana" value="<?=$this->data['kana']?>">
+            	<input type="hidden" name="mail" value="<?=$this->data['mail']?>">
+            	<input type="hidden" name="body" value="<?=$this->data['body']?>">
+                <p><button type="submit" class="btn btn-danger btn-lg">戻る</button></p>
+            </form>
+       	　<!--中身-->
+        </div>
+      </div>
+    </div>
+</section>
+<section class="row">
+    <div class="col-xs-12">
+      <div class="x_panel">
+        <div class="x_title">
+        	<!--タイトルをH２で定義する"-->
+          <h2>即日発送対応商品</h2>
+        	<!--タイトルをH２で定義する"-->
+          <ul class="nav navbar-right panel_toolbox">
+            <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+            </li>
+          </ul>
+          <div class="clearfix"></div>
+        </div>
+        <div class="x_content">
+		<!--中身-->
+        <div class="row">
+        <?php foreach($this->soku as $vv):?>
+        <div class="col-md-55">
+          <div class="thumbnail">
+            <div class="image view view-first">
+            	<?php if($vv['imagen']):?>
+					<?php if($vv['realtimeFlug'] ==0 && $vv['orderToDeli'] <= 1):?>
+                    <img src="<?=BASEURL."/api/image/?size=400&url=".$vv['imagen']?>" alt="<?=$vv['name']?>" style="width: 100%; display: block;">
+                    <?php else:?>
+                    <img src="<?=BASEURL."/".$vv['imagen']?>" alt="<?=$vv['name']?>" style="width: 100%; display: block;">
+                    <?php endif;?>
+				<?php endif;?>
+              <div class="mask">
+                <p><a href="<?=BASEURL?>/item/detail/?id=<?=$vv['id']?>" style="color:#F5F5F5">【<?=$vv['number']?>】<?=$vv['name']?></a></p>
+                <div class="tools tools-bottom">
+                  <a href="<?=BASEURL?>/item/detail/?id=<?=$vv['id']?>">詳細</a>
+                </div>
+              </div>
+            </div>
+            <div class="caption">
+             <p><?=number_format($vv['price'])?>円</p>
+              <p><?=$vv['name']?></p>
+            </div>
+          </div>
+        </div>
+        <?php endforeach;?>
+        </div>
+       	　<!--中身-->
+        </div>
+      </div>
+    </div>
+</section>

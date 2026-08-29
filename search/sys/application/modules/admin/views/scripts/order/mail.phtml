@@ -1,0 +1,630 @@
+<style>
+.jm_admin_table{
+	margin-bottom:1em;
+}
+.jm_admin_table table{
+	border-top:solid 1px #ccc;
+	border-right:solid 1px #ccc;
+	width:100%;
+}
+.jm_admin_table th{
+	background-color:#727F95;
+	color:white;
+	border-bottom:solid 1px #ccc;
+	border-left:solid 1px #ccc;
+	padding:.3em;
+	font-weight:normal;
+}
+.jm_admin_table td{
+	padding:.3em;
+	padding-bottom:.3em !important;
+	border-bottom:solid 1px #ccc;
+	border-left:solid 1px #ccc;
+}
+.jm_admin_table .btn{
+	padding:.3px 12px;
+}
+@media print{
+	.p_no,.breadcrumb,.nav_menu {
+		display:none;
+	}
+}
+</style>
+<!--受注基本データ-->
+<section class="row">
+    <div class="col-xs-12">
+      <div class="x_panel">
+        <div class="x_content">
+		<!--中身-->
+        <?php if($this->data['GMOstatus'] == "審査中"):?>
+        <div class="alert alert-danger">※後払い与信審査中 <button id="authorization" class="btn btn-primary" data-gmo="<?=$this->data['GMOorder_id']?>">審査結果の確認</button></div>
+        <?php else:?>
+			<?php foreach($this->setting['payment'] as $v):?>
+               <?php if($this->data['payment_method'] == $v['id'] && $v['gmoFlug'] == 3 && $this->data['GMOstatus'] == "OK"):?>
+                <?php if($this->data['GMOshukka']  == "0000-00-00 00:00:00"):?>
+                        <div class="alert alert-danger">【※後払い出荷報告】　出荷報告のキャンセルは、出荷報告を行った当日しか出来ませんのでご注意ください。</div>
+                        <button type="button" id="shukka" class="btn btn-info" data-gmo="<?=$this->data['GMOorder_id']?>">後払い出荷報告</button>
+                <?php else:?>
+                        <div class="alert alert-success">出荷報告済み　日時：<?=$this->data['GMOshukka']?></div>
+                    <?php if(date("Ymd",strtotime($this->data['GMOshukka'])) == date("Ymd")):?>
+                            <button type="button" id="shukkaCansel" class="btn btn-warning" data-gmo="<?=$this->data['GMOorder_id']?>">後払い出荷報告キャンセル</button>
+                    <?php endif;?>
+                <?php endif;?>
+             <?php endif;?>
+          <?php endforeach;?>
+        <?php endif;?>
+        <div class="jm_admin_table">
+        <table>
+        	<tr>
+            	<th>受注日</th>
+                <td><?=date("Y年m月d日",strtotime($this->data['order_date']))?></td>
+            	<th>決済方法</th>
+                <td>
+				<?php foreach($this->setting['payment'] as $v):?>
+                <?php if($this->data['payment_method'] == $v['id']):?>
+				<?=$v['name']?>
+                <?php endif;?>
+                <?php endforeach;?>
+                </td>
+            	<th>GMO決済オーダーID</th>
+                <td><?=$this->data['GMOorder_id']?></td>
+            </tr>
+        	<tr>
+            	<th>配達伝票番号</th>
+                <td>
+                    <form action="<?=BASEURL?>/admin/order/deliveryno" method="post">
+                        <input type="hidden" name="id" value="<?=$this->data['id']?>">
+                        <input type="text" name="delivery_paper_no" id="delivery_paper_no" value="<?=$this->data['delivery_paper_no']?>" class="form-control">
+                        <button type="submit" class="btn btn-success btn-block btn-sm">登録</button>
+                    </form>
+                </td>
+            	<th>帳票の印刷</th>
+                <td>
+                    <form action="<?=BASEURL?>/admin/order/paper" method="post" target="_blank" class="form-inline">
+                        <input type="hidden" name="id" value="<?=$this->data['id']?>">
+                        <select name="kind" class="form-control">
+                           <?php if($this->data['order_kind'] == 1):?>
+                            <option value="7">見積書</option>
+                            <?php else:?>
+                            <!--option value="1">承り書</option>
+                            <option value="2">日通送り状</option>
+                            <option value="3">配達伝票</option>
+                            <option value="4">納品書</option-->
+                            <option value="8">納品書</option>
+                            <option value="5">請求書</option>
+                            <!--option value="6">請求書(印鑑なし)</option-->
+                           <?php endif;?>
+                        </select>
+                        日付：<select name="paperdate" class="form-control">
+                        <?php for($i=-365;$i<365;$i++):?>
+                        <?php if($i==0):?>
+                        <option value="<?=date("Y-m-d",time()+60*60*24*$i)?>" selected><?=date("Y-m-d",time()+60*60*24*$i)?></option>
+                        <?php else:?>
+                        <option value="<?=date("Y-m-d",time()+60*60*24*$i)?>"><?=date("Y-m-d",time()+60*60*24*$i)?></option>
+                        <?php endif;?>
+                        <?php endfor;?>
+                          </select><input type="hidden" name="camp" value="1">
+                        　　<button type="submit" class="btn btn-danger btn-block btn-sm">PDFを作成</button>
+                    </form>
+                </td>
+            	<th>Googleカレンダー登録</th>
+                <td>
+                <select name="taskDate" class="form-control">
+                <?php
+                //Googleカレンダーに登録する部分を作成中
+                //受注管理機能　残タスク　帳票印刷部と受注の複製
+                if($this->data['delivery_date'] != "0000-00-00"){
+                $day = strtotime($this->data['delivery_date']." 00:00:00");
+                }else{
+                $day = time();
+                }
+                for($i=0;$i<7;$i++):?>
+                    <option value="<?=date("Y-m-d",$day+60*60*24*$i)?>"><?=date("Y-m-d",$day+60*60*24*$i)?></option>
+                <?php endfor;?>
+                </select>
+                <a href="javascript:void(0)" id="calender" class="btn btn-warning btn-block btn-sm">Googleカレンダー登録</a>
+                <script>
+						$("#calender").on("click",function(){
+							var date = $("[name=taskDate]").val();
+							var startDate = date.replace(/-/g,"")+"T090030";
+							var endDate = date.replace(/-/g,"")+"T090030";
+							var title = '<?=$this->data['delivery_name'].$this->data['delivery_name2']?>様　配達';
+							var place = "<?=$prefName.$this->data['delivery_addr']?>";
+							var description = $("#description").html();
+							var url ="http://www.google.com/calendar/event?"
+							+"action="+"TEMPLATE"
+							+"&text="+title
+							+"&location="+place
+							+"&dates="+ startDate+"/"+endDate;
+							url = encodeURI(url);
+							//window.location.href =;
+							window.open(url, '_blank');
+						});
+                </script>
+                </td>
+            </tr>
+        </table>
+        </div>
+        <div class="jm_admin_table">
+        <table>
+        	<tr>
+            	<th>受付</th>
+                <td>
+            <?php if($this->data['check_order']):?>
+            <input type="checkbox" name="check_order" value="1" class="step" checked><?=$this->data['check_order']?>
+            <?php else:?>
+            <input type="checkbox" name="check_order" value="1" class="step">
+            <?php endif;?></td>
+            	<th>入金</th>
+                <td>
+            <?php if($this->data['check_payment_end']):?>
+            <input type="checkbox" name="check_payment_end" value="1" class="step" checked><?=$this->data['check_payment_end']?>
+            <?php else:?>
+            <input type="checkbox" name="check_payment_end" value="1" class="step">
+            <?php endif;?></td>
+            	<th>発送</th>
+                <td>
+            <?php if($this->data['check_delivery']):?>
+            <input type="checkbox" name="check_delivery" value="1" class="step" checked><?=$this->data['check_delivery']?>
+            <?php else:?>
+            <input type="checkbox" name="check_delivery" value="1" class="step">
+            <?php endif;?></td>
+            	<th>3日後</th>
+                <td>
+            <?php if($this->data['check_follow_mail']):?>
+            <input type="checkbox" name="check_follow_mail" value="1" class="step" checked><?=$this->data['check_follow_mail']?>
+            <?php else:?>
+            <input type="checkbox" name="check_follow_mail" value="1" class="step">
+            <?php endif;?></td>
+            </tr>
+        	<tr>
+            	<th>1ヶ月後</th>
+                <td>
+            <?php if($this->data['check_3w']):?>
+            <input type="checkbox" name="check_3w" value="1" class="step" checked><?=$this->data['check_3w']?>
+            <?php else:?>
+            <input type="checkbox" name="check_3w" value="1" class="step">
+            <?php endif;?></td>
+            	<th>2ヶ月後</th>
+                <td>
+            <?php if($this->data['check_2m']):?>
+            <input type="checkbox" name="check_2m" value="1" class="step" checked><?=$this->data['check_2m']?>
+            <?php else:?>
+            <input type="checkbox" name="check_2m" value="1" class="step">
+            <?php endif;?></td>
+            	<th>3ヶ月後</th>
+                <td>
+            <?php if($this->data['check_3m']):?>
+            <input type="checkbox" name="check_3m" value="1" class="step" checked><?=$this->data['check_3m']?>
+            <?php else:?>
+            <input type="checkbox" name="check_3m" value="1" class="step">
+            <?php endif;?></td>
+            	<th>6ヶ月後</th>
+                <td>
+            <?php if($this->data['check_6m']):?>
+            <input type="checkbox" name="check_6m" value="1" class="step" checked><?=$this->data['check_6m']?>
+            <?php else:?>
+            <input type="checkbox" name="check_6m" value="1" class="step">
+            <?php endif;?></td>
+            </tr>
+        </table>
+        </div>
+            <div class="row p_no">
+                <div class="col-sm-6">
+                <!--進捗情報を編集-->
+                <button type="button" class="btn btn-large btn-block btn-primary btn-sm" id="step">進捗情報を編集</button>
+                     <form action="<?=BASEURL?>/admin/order/detail?id=<?=$this->data['id']?>" method="post" id="stepForm">
+                        <input type="hidden" name="id" value="<?=$this->data['id']?>">
+                        <input type="hidden" name="step" value="1">
+                    </form>
+                </div>
+                <div class="col-sm-6">
+                    <!--メール送信用-->
+                    <form action="<?=BASEURL?>/admin/order/mail/" method="post">
+                        <input type="hidden" name="id" value="<?=$this->data['id']?>">
+                        <button type="submit" class="btn btn-large btn-block btn-success btn-sm">メールを送付</button>
+                    </form>
+                </div>
+             </div>
+  		<!--中身-->
+        </div>
+      </div>
+    </div>
+</section>
+<!--メール送信部-->
+<section class="row">
+    <div class="col-xs-12">
+      <div class="x_panel">
+        <div class="x_title">
+        	<!--タイトルをH２で定義する"-->
+          <h2>進捗メールを送信</h2>
+        	<!--タイトルをH２で定義する"-->
+          <ul class="nav navbar-right panel_toolbox">
+            <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+            <li><a class="close-link"><i class="fa fa-close"></i></a>
+            </li>
+          </ul>
+          <div class="clearfix"></div>
+        </div>
+        <div class="x_content">
+		<!--中身-->
+        <ul class="nav nav-tabs">
+			<?php if($this->data['check_order']):?>
+          		<li class="disabled"><a data-toggle="tab" style="background:#CFC">受付</a></li>
+            <?php else:?>
+          		<li class="active"><a href="#tab2" data-toggle="tab">受付</a></li>
+            <?php endif;?>
+            <?php if($this->data['check_payment_end']):?>
+          		<li class="disabled"><a data-toggle="tab" style="background:#CFC">入金</a></li>
+            <?php else:?>
+          		<li><a href="#tab3" data-toggle="tab">入金</a></li>
+            <?php endif;?>
+          <!--li class="disabled"><a data-toggle="tab" style="background:#CFC">発送</a></li-->
+            <?php if($this->data['check_delivery']):?>
+          		<li class="disabled"><a data-toggle="tab" style="background:#CFC">発送</a></li>
+            <?php else:?>
+          		<li><a href="#tab4" data-toggle="tab">発送</a></li>
+            <?php endif;?>
+            <?php if($this->data['check_follow_mail']):?>
+          		<li class="disabled"><a data-toggle="tab" style="background:#CFC">3日後</a></li>
+            <?php else:?>
+          		<li><a href="#tab7" data-toggle="tab">3日後</a></li>
+            <?php endif;?>
+            <?php if($this->data['check_3w']):?>
+          		<li class="disabled"><a data-toggle="tab" style="background:#CFC">1ヶ月後</a></li>
+            <?php else:?>
+          		<li><a href="#tab8" data-toggle="tab">3週間後</a></li>
+            <?php endif;?>
+            <?php if($this->data['check_2m']):?>
+          		<li class="disabled"><a data-toggle="tab" style="background:#CFC">2ヶ月後</a></li>
+            <?php else:?>
+          		<li><a href="#tab9" data-toggle="tab">2ヶ月後</a></li>
+            <?php endif;?>
+            <?php if($this->data['check_3m']):?>
+          		<li class="disabled"><a data-toggle="tab" style="background:#CFC"3ヶ月後</a></li>
+            <?php else:?>
+          		<li><a href="#tab10" data-toggle="tab">3ヶ月後</a></li>
+            <?php endif;?>
+            <?php if($this->data['check_6m']):?>
+          		<li class="disabled"><a data-toggle="tab" style="background:#CFC"6ヶ月後</a></li>
+            <?php else:?>
+          		<li><a href="#tab11" data-toggle="tab">6ヶ月後</a></li>
+            <?php endif;?>
+          <li><a href="#tab12" data-toggle="tab">督促</a></li>
+          <li><a href="#tab13" data-toggle="tab">キャンセル</a></li>
+        </ul>
+        <br>
+        <div class="tab-content">
+          <div class="tab-pane active" id="tab2">
+            <form action="<?=BASEURL?>/admin/order/mailsend/" method="post">
+            <div class="row">
+                <div class="col-xs-4">
+            	  <h3>受付完了メール</h3>
+                <input type="hidden" name="name" value="checkOrder">
+                <input type="hidden" name="id" value="<?=$this->data['id']?>">
+                <p><label><input type="checkbox" name="autoRes" value="1" checked>管理者控えを送る</label></p>
+                </div>
+                <div class="col-xs-8">
+                 <button type="submit" class="btn btn-danger">送信</button>
+                </div>
+            </div>
+                <div class="row-fluid">
+                    <div class="span3">件名</div>
+                    <div class="span9"><input type="text" name="subject" class="form-control" value="<?=$this->mail['checkOrder']['subject']?>">
+                    </div>
+                </div>
+                <div class="row-fluid">
+                    <div class="span3">本文</div>
+                    <div class="span9"><textarea name="body" rows="30" class="form-control"><?=$this->mail['checkOrder']['body']?></textarea>
+                    </div>
+                </div>
+            </form>
+            </div>
+          <div class="tab-pane" id="tab3">
+            <form action="<?=BASEURL?>/admin/order/mailsend/" method="post">
+            <div class="row">
+                <div class="col-xs-4">
+            		  <h3>入金確認メール</h3>
+                    <input type="hidden" name="name" value="paymentEnd">
+                    <input type="hidden" name="id" value="<?=$this->data['id']?>">
+                    <p><label><input type="checkbox" name="autoRes" value="1" checked>管理者控えを送る</label></p>
+                </div>
+                <div class="col-xs-8">
+                 <button type="submit" class="btn btn-danger">送信</button>
+                </div>
+            </div>
+                <div class="row-fluid">
+                    <div class="span3">件名</div>
+                    <div class="span9"><input type="text" name="subject" class="form-control" value="<?=$this->mail['paymentEnd']['subject']?>">
+                    </div>
+                </div>
+                <div class="row-fluid">
+                    <div class="span3">本文</div>
+                    <div class="span9"><textarea name="body" rows="30" class="form-control"><?=$this->mail['paymentEnd']['body']?></textarea>
+                    </div>
+                </div>
+            </form>
+            </div>
+          <div class="tab-pane" id="tab4">
+            <form action="<?=BASEURL?>/admin/order/mailsend/" method="post">
+            <div class="row">
+                <div class="col-xs-4">
+           	 <h3>発送完了メール</h3>
+                <input type="hidden" name="name" value="delivery">
+                <input type="hidden" name="id" value="<?=$this->data['id']?>">
+                <p><label><input type="checkbox" name="autoRes" value="1" checked>管理者控えを送る</label></p>
+                </div>
+                <div class="col-xs-8">
+                 <button type="submit" class="btn btn-danger">送信</button>
+                </div>
+            </div>
+                <div class="row-fluid">
+                    <div class="span3">件名</div>
+                    <div class="span9"><input type="text" name="subject" class="form-control" value="<?=$this->mail['delivery']['subject']?>">
+                    </div>
+                </div>
+                <div class="row-fluid">
+                    <div class="span3">本文</div>
+                    <div class="span9"><textarea name="body" rows="30" class="form-control"><?=$this->mail['delivery']['body']?></textarea>
+                    </div>
+                </div>
+            </form>
+            </div>
+          <div class="tab-pane" id="tab7">
+            <form action="<?=BASEURL?>/admin/order/mailsend/" method="post">
+            <div class="row">
+                <div class="col-xs-4">
+                    <h3>3日後</h3>
+                    <input type="hidden" name="name" value="3d">
+                    <input type="hidden" name="id" value="<?=$this->data['id']?>">
+                    <p><label><input type="checkbox" name="autoRes" value="1" checked>管理者控えを送る</label></p>
+                </div>
+                <div class="col-xs-8">
+                 <p><button type="submit" class="btn btn-danger">送信</button></p>
+                </div>
+            </div>
+                <div class="row-fluid">
+                    <div class="span3">件名</div>
+                    <div class="span9"><input type="text" name="subject" class="form-control" value="<?=$this->mail['follow']['subject']?>">
+                    </div>
+                </div>
+                <div class="row-fluid">
+                    <div class="span3">本文</div>
+                    <div class="span9"><textarea name="body" rows="30" class="form-control"><?=$this->mail['follow']['body']?></textarea>
+                    </div>
+                </div>
+            </form>
+            </div>
+          <div class="tab-pane" id="tab8">
+            <form action="<?=BASEURL?>/admin/order/mailsend/" method="post">
+            <div class="row">
+                <div class="col-xs-4">
+                    <h3>１ヶ月後</h3>
+                    <input type="hidden" name="name" value="1m">
+                    <input type="hidden" name="id" value="<?=$this->data['id']?>">
+                    <p><label><input type="checkbox" name="autoRes" value="1" checked>管理者控えを送る</label></p>
+                </div>
+                <div class="col-xs-8">
+                 <p><button type="submit" class="btn btn-danger">送信</button></p>
+                </div>
+            </div>
+                <div class="row-fluid">
+                    <div class="span3">件名</div>
+                    <div class="span9"><input type="text" name="subject" class="form-control" value="<?=$this->mail['follow2']['subject']?>">
+                    </div>
+                </div>
+                <div class="row-fluid">
+                    <div class="span3">本文</div>
+                    <div class="span9"><textarea name="body" rows="30" class="form-control"><?=$this->mail['follow2']['body']?></textarea>
+                    </div>
+                </div>
+            </form>
+            </div>
+          <div class="tab-pane" id="tab9">
+            <form action="<?=BASEURL?>/admin/order/mailsend/" method="post">
+            <div class="row">
+                <div class="col-xs-4">
+                    <h3>2ヶ月後</h3>
+                    <input type="hidden" name="name" value="2m">
+                    <input type="hidden" name="id" value="<?=$this->data['id']?>">
+                    <p><label><input type="checkbox" name="autoRes" value="1" checked>管理者控えを送る</label></p>
+                </div>
+                <div class="col-xs-8">
+                 <p><button type="submit" class="btn btn-danger">送信</button></p>
+                </div>
+            </div>
+                <div class="row-fluid">
+                    <div class="span3">件名</div>
+                    <div class="span9"><input type="text" name="subject" class="form-control" value="<?=$this->mail['follow3']['subject']?>">
+                    </div>
+                </div>
+                <div class="row-fluid">
+                    <div class="span3">本文</div>
+                    <div class="span9"><textarea name="body" rows="30" class="form-control"><?=$this->mail['follow3']['body']?></textarea>
+                    </div>
+                </div>
+            </form>
+            </div>
+          <div class="tab-pane" id="tab10">
+            <form action="<?=BASEURL?>/admin/order/mailsend/" method="post">
+            <div class="row">
+                <div class="col-xs-4">
+                    <h3>3ヶ月後</h3>
+                    <input type="hidden" name="name" value="3m">
+                    <input type="hidden" name="id" value="<?=$this->data['id']?>">
+                    <p><label><input type="checkbox" name="autoRes" value="1" checked>管理者控えを送る</label></p>
+                </div>
+                <div class="col-xs-8">
+                 <p><button type="submit" class="btn btn-danger">送信</button></p>
+                </div>
+            </div>
+                <div class="row-fluid">
+                    <div class="span3">件名</div>
+                    <div class="span9"><input type="text" name="subject" class="form-control" value="<?=$this->mail['follow4']['subject']?>">
+                    </div>
+                </div>
+                <div class="row-fluid">
+                    <div class="span3">本文</div>
+                    <div class="span9"><textarea name="body" rows="30" class="form-control"><?=$this->mail['follow4']['body']?></textarea>
+                    </div>
+                </div>
+            </form>
+            </div>
+          <div class="tab-pane" id="tab11">
+            <form action="<?=BASEURL?>/admin/order/mailsend/" method="post">
+            <div class="row">
+                <div class="col-xs-4">
+                    <h3>6ヶ月後</h3>
+                    <input type="hidden" name="name" value="6m">
+                    <input type="hidden" name="id" value="<?=$this->data['id']?>">
+                    <p><label><input type="checkbox" name="autoRes" value="1" checked>管理者控えを送る</label></p>
+                </div>
+                <div class="col-xs-8">
+                 <p><button type="submit" class="btn btn-danger">送信</button></p>
+                </div>
+            </div>
+                <div class="row-fluid">
+                    <div class="span3">件名</div>
+                    <div class="span9"><input type="text" name="subject" class="form-control" value="<?=$this->mail['follow5']['subject']?>">
+                    </div>
+                </div>
+                <div class="row-fluid">
+                    <div class="span3">本文</div>
+                    <div class="span9"><textarea name="body" rows="30" class="form-control"><?=$this->mail['follow5']['body']?></textarea>
+                    </div>
+                </div>
+            </form>
+            </div>
+          <div class="tab-pane" id="tab12">
+            <form action="<?=BASEURL?>/admin/order/mailsend/" method="post">
+            <div class="row">
+                <div class="col-xs-4">
+                    <h3>督促</h3>
+                    <input type="hidden" name="name" value="follow">
+                    <input type="hidden" name="id" value="<?=$this->data['id']?>">
+                    <p><label><input type="checkbox" name="autoRes" value="1" checked>管理者控えを送る</label></p>
+                </div>
+                <div class="col-xs-8">
+                 <p><button type="submit" class="btn btn-danger">送信</button></p>
+                </div>
+            </div>
+                <div class="row-fluid">
+                    <div class="span3">件名</div>
+                    <div class="span9"><input type="text" name="subject" class="form-control" value="<?=$this->mail['tokusoku']['subject']?>">
+                    </div>
+                </div>
+                <div class="row-fluid">
+                    <div class="span3">本文</div>
+                    <div class="span9"><textarea name="body" rows="30" class="form-control"><?=$this->mail['tokusoku']['body']?></textarea>
+                    </div>
+                </div>
+            </form>
+            </div>
+          <div class="tab-pane" id="tab13">
+            <form action="<?=BASEURL?>/admin/order/mailsend/" method="post">
+            <div class="row">
+                <div class="col-xs-4">
+                    <h3>6ヶ月後</h3>
+                    <input type="hidden" name="name" value="follow">
+                    <input type="hidden" name="id" value="<?=$this->data['id']?>">
+                    <p><label><input type="checkbox" name="autoRes" value="1" checked>管理者控えを送る</label></p>
+                </div>
+                <div class="col-xs-8">
+                 <p><button type="submit" class="btn btn-danger">送信</button></p>
+                </div>
+            </div>
+                <div class="row-fluid">
+                    <div class="span3">件名</div>
+                    <div class="span9"><input type="text" name="subject" class="form-control" value="<?=$this->mail['cancel']['subject']?>">
+                    </div>
+                </div>
+                <div class="row-fluid">
+                    <div class="span3">本文</div>
+                    <div class="span9"><textarea name="body" rows="30" class="form-control"><?=$this->mail['cancel']['body']?></textarea>
+                    </div>
+                </div>
+            </form>
+            </div>
+        </div>
+  		<!--中身-->
+        </div>
+      </div>
+    </div>
+</section>
+<script>
+$(function(){
+	//進捗情報変更
+	$('#step').on('click',function(){
+		if($('[name="check_order"]:checked').val()){
+			var check_order = 1;
+		}else{
+			var check_order = 0;
+		}
+		if($('[name="check_payment_end"]:checked').val()){
+			var check_payment_end = 1;
+		}else{
+			var check_payment_end = 0;
+		}
+		if($('[name="check_delivery"]:checked').val()){
+			var check_delivery = 1;
+		}else{
+			var check_delivery = 0;
+		}
+		if($('[name="check_delivery_end"]:checked').val()){
+			var check_delivery_end = 1;
+		}else{
+			var check_delivery_end = 0;
+		}
+		if($('[name="check_payment"]:checked').val()){
+			var check_payment = 1;
+		}else{
+			var check_payment = 0;
+		}
+		if($('[name="check_follow_mail"]:checked').val()){
+			var check_follow_mail = 1;
+		}else{
+			var check_follow_mail = 0;
+		}
+		if($('[name="check_3w"]:checked').val()){
+			var check_3w = 1;
+		}else{
+			var check_3w = 0;
+		}
+		if($('[name="check_2m"]:checked').val()){
+			var check_2m = 1;
+		}else{
+			var check_2m = 0;
+		}
+		if($('[name="check_3m"]:checked').val()){
+			var check_3m = 1;
+		}else{
+			var check_3m = 0;
+		}
+		if($('[name="check_6m"]:checked').val()){
+			var check_6m = 1;
+		}else{
+			var check_6m = 0;
+		}
+		var step = {
+			'check_order':check_order,
+			'check_payment_end':check_payment_end,
+			'check_delivery':check_delivery,
+			'check_delivery_end':check_delivery_end,
+			'check_payment':check_payment,
+			'check_follow_mail':check_follow_mail,
+			'check_3w':check_3w,
+			'check_2m':check_2m,
+			'check_3m':check_3m,
+			'check_6m':check_6m,
+			'id':<?=$this->data['id']?>
+		};
+		$.post("<?=BASEURL?>/api/order/step",step,function(data){
+			if(data == "OK"){
+				$("#stepForm").submit();
+			}else{
+				console.log(data);
+			}
+		});
+	});
+});
+</script>

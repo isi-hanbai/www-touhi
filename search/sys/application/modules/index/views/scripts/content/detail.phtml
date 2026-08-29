@@ -1,0 +1,21 @@
+<!-- Message section -->
+<div class="section">
+	<div class="container">
+    <p><?=date("Y.m.d",strtotime($this->data['created']))?></p>
+    <!--h3><?=$this->data['name']?></h3-->
+		<div class="row col-spacing-30">
+			<div class="col-12 col-sm-12 col-md-8 col-lg-8">
+				<?=htmlspecialchars_decode($this->data['content'])?>
+			</div>
+			<div class="col-12 col-sm-12 col-md-4 col-lg-4">
+	      <a class="lightbox-image" href="<?=BASEURL?><?=$this->data['thumb']?>">
+	      	<img src="<?=BASEURL?><?=$this->data['thumb']?>" alt="">
+	      </a>
+	    </div>
+		</div>
+    <div class="text-center margin-top-20">
+      <a class="button button-lg button-radius button-dark margin-top-20" href="<?=BASEURL?>/content/"><i class="ti-arrow-left"></i> 一覧へ戻る</a>
+    </div>
+
+	</div>
+</div>

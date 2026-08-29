@@ -1,0 +1,388 @@
+<h2><img src="<?=BASEURL?>/img/cart/new/shopping.jpg" width="159">ショッピングカート　注文内容の確認</h2>
+<!--p class="text-center">ご注文内容にお間違えがないか、ご確認ください。修正する場合は、下記より戻り注文内容の修正を行ってください。</p>
+<p class="text-center"><button type="button" id="returnBtn" class="btn btn-disable btn-lg returnBtn" style="width:200px;">注文内容を修正する</button></p-->
+<div class="shopping">
+<section class="row">
+    <div class="col-xs-12">
+      <div class="x_panel">
+        <div class="x_title">
+        	<!--タイトルをH２で定義する"-->
+          <h3>カートの中の商品</h3>
+        	<!--タイトルをH２で定義する"-->
+        </div>
+        <div class="x_content">
+			<!--中身-->
+                <div class="incart">
+                    <ul>
+                    　<?php foreach($this->item as $v):?>
+                        <li>
+                            <div class="clearfix">
+                                <?php if($v['image'][0]['url']):?>
+                                    <img src="<?=BASEURL."/".$v['image'][0]['url']?>">
+                                <?php endif;?>
+                                <p>【<?=$v['number']?>】 <?=$v['name']?></p>
+                                <p>単価：<?=number_format($v['price'])?>円</p>
+                            </div>
+    
+                            <div class="clearfix updateDelete">
+                               <span class="tq"><?=$v['q']?><?=$v['unit']?></span>
+                            <div class="itotal">
+                            	<span class="tt">計：<?=number_format(($v['price']*$v['q']))?>円</span>
+                            </div>
+                            </div>
+                        </li>
+                    <?php endforeach;?>
+                    </ul>
+           		 <div class="total clearfix"><span class="tq">商品点数：<?=$this->detail['c']?>点</span><span class="tt">小計：<?=number_format($this->detail['t'])?>円</span></div>
+           		 <div class="total clearfix"><span class="tq">消費税</span><span class="tt"><?=number_format($this->detail['tax'])?>円</span></div>
+                 	<?php if($this->setting['point']['pointuse']==0 && $this->detail['poinAmount'] > 0):?>
+           		 <div class="total clearfix"><span class="tq">使用<?=$this->setting['point']['pointname']?></span><span class="tt">-<?=number_format($this->detail['poinAmount'])?>円</span></div>
+                 	<?php endif;?>
+           		 <div class="total clearfix"><span class="tq">送料</span><span class="tt"><?=number_format($this->detail['shipping'])?>円</span></div>
+                 	<?php if($this->detail['collect_cost']):?>
+           		 <div class="total clearfix"><span class="tq">代引手数料</span><span class="tt"><?=number_format($this->detail['collect_cost'])?>円</span></div>
+                 <?php endif;?>
+           		 <div class="total clearfix"><span class="tq">合計</span><span class="tt"><?=number_format($this->detail['total'])?>円</span></div>
+                 </div>
+			<!--中身-->
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="row">
+    <div class="col-xs-12">
+      <div class="x_panel">
+        <div class="x_title">
+        	<!--タイトルをH２で定義する"-->
+          <h3>注文主様情報</h3>
+        	<!--タイトルをH２で定義する"-->
+        </div>
+        <div class="x_content">
+		<!--中身-->
+        <div class="formset">
+        	<div class="line clearfix">
+           	<div class="left"><label for="cus_name" class="required clearfix">お名前</label></div>
+           	<div class="right"><?=$this->detail['cus_name']?> <?=$this->detail['cus_name2']?>
+               </div>
+           </div>
+        	<div class="line clearfix">
+           	<div class="left"><label for="cus_kana" class="required clearfix">フリガナ</label></div>
+           	<div class="right"><?=$this->detail['cus_kana']?> <?=$this->detail['cus_kana2']?>
+               </div>
+           </div>
+        	<div class="line clearfix">
+           	<div class="left"><label for="mail" class="required clearfix">メールアドレス</label></div>
+           	<div class="right"><?=$this->detail['cus_mail']?><br>
+                ※当社からのメールを受信できるよう<br>
+                「@john-mary.com」のドメイン受信設定をお願いします。
+               </div>
+           </div>
+        	<div class="line clearfix">
+           	<div class="left"><label for="cus_sex" class="required clearfix">性別</label></div>
+           	<div class="right">
+                        <?php foreach(array(1=>"女性",2=>"男性") as $k=>$v):?>
+                        <?php if($k== $this->detail['cus_sex']):?>
+                        <?=$v?>
+                        <?php endif;?>
+                        <?php endforeach;?>
+                    </select>
+               </div>
+           </div>
+        	<div class="line clearfix">
+           	<div class="left"><label for="cus_birthY" class="required clearfix">生年月日</label></div>
+           	<div class="right"><?=$this->detail['cus_birthY']?>年　<?=$this->detail['cus_birthM']?>月　 <?=$this->detail['cus_birthD']?>日
+               </div>
+           </div>
+        	<div class="line clearfix">
+           	<div class="left"><label for="cus_tel" class="required clearfix">電話番号（携帯可）</label></div>
+           	<div class="right"><?=$this->detail['cus_tel']?>-<?=$this->detail['cus_tel2']?>-<?=$this->detail['cus_tel3']?>
+               </div>
+           </div>
+        	<div class="line clearfix">
+           	<div class="left"><label for="cus_mtel" class="">緊急連絡先</label></div>
+           	<div class="right"><?=$this->detail['cus_mtel']?>-<?=$this->detail['cus_mtel2']?>-<?=$this->detail['cus_mtel3']?>
+               </div>
+           </div>
+        	<div class="line clearfix">
+           	<div class="left"><label for="cus_zip" class="required clearfix">郵便番号</label></div>
+           	<div class="right"><?=$this->detail['cus_zip']?>-<?=$this->detail['cus_zip2']?>
+               </div>
+           </div>
+        	<div class="line clearfix">
+           	<div class="left"><label for="cus_pref" class="required clearfix">都道府県</label></div>
+           	<div class="right">
+                        <?php foreach($this->pref as $v):?>
+                        <?php if($v['id'] == $this->detail['cus_pref']):?>
+                        <?=$v['name']?>
+                        <?php endif;?>
+                        <?php endforeach;?>
+               </div>
+           </div>
+        	<div class="line clearfix">
+           	<div class="left"><label for="cus_addr" class="required clearfix">市区町村、番地</label></div>
+           	<div class="right"><?=$this->detail['cus_addr']?>
+               </div>
+           </div>
+        	<div class="line clearfix">
+           	<div class="left"><label for="cus_addr2" class="">ビル名・マンション名、号室</label></div>
+           	<div class="right"><?=$this->detail['cus_addr2']?>
+               </div>
+           </div>
+        </div>
+  		<!--中身-->
+        </div>
+      </div>
+    </div>
+</section>
+<!--お届け先を選択-->
+<section class="row">
+    <div class="col-xs-12">
+      <div class="x_panel">
+        <div class="x_title">
+        	<!--タイトルをH２で定義する"-->
+          <h3>お届け先情報</h3>
+        	<!--タイトルをH２で定義する"-->
+        </div>
+        <div class="x_content">
+		<!--中身-->
+        <div class="formset">
+        	<div class="line clearfix">
+           	<div class="left"><label for="cus_name" class="required clearfix">お名前</label></div>
+           	<div class="right"><?=$this->detail['delivery_name']?> <?=$this->detail['delivery_name2']?>
+               </div>
+           </div>
+        	<div class="line clearfix">
+           	<div class="left"><label for="cus_name" class="required clearfix">フリガナ</label></div>
+           	<div class="right"><?=$this->detail['delivery_kana']?> <?=$this->detail['delivery_kana2']?>
+               </div>
+           </div>
+        	<div class="line clearfix">
+           	<div class="left"><label for="cus_tel" class="required clearfix">電話番号</label></div>
+           	<div class="right"><?=$this->detail['delivery_tel']?>-<?=$this->detail['delivery_tel2']?>-<?=$this->detail['delivery_tel3']?>
+               </div>
+           </div>
+        	<div class="line clearfix">
+           	<div class="left"><label for="delivery_zip" class="required clearfix">郵便番号</label></div>
+           	<div class="right"><?=$this->detail['delivery_zip']?>-<?=$this->detail['delivery_zip2']?>
+               </div>
+           </div>
+        	<div class="line clearfix">
+           	<div class="left"><label for="delivery_pref" class="required clearfix">都道府県</label></div>
+           	<div class="right">
+                        <?php foreach($this->pref as $v):?>
+                        <?php if($v['id'] == $this->detail['delivery_pref']):?>
+                        <?=$v['name']?>
+                        <?php endif;?>
+                        <?php endforeach;?>
+                    </select>
+               </div>
+           </div>
+        	<div class="line clearfix">
+           	<div class="left"><label for="delivery_addr" class="required clearfix">市区町村、番地</label></div>
+           	<div class="right"><?=$this->detail['delivery_addr']?>
+               </div>
+           </div>
+        	<div class="line clearfix">
+           	<div class="left"><label for="delivery_addr2" class="">ビル名・マンション名、号室</label></div>
+           	<div class="right"><?=$this->detail['delivery_addr2']?>
+               </div>
+           </div>
+        </div>
+           
+  		<!--中身-->
+        </div>
+      </div>
+    </div>
+</section>
+<?php if($this->setting['delivery']['shippingdate'] ==0 || $this->setting['delivery']['shippingtime'] ==0):?>
+<!--お届け日時設定-->
+<section class="row">
+    <div class="col-xs-12">
+      <div class="x_panel">
+        <div class="x_title">
+        	<!--タイトルをH２で定義する"-->
+          <h3>お届け日時設定</h3>
+        	<!--タイトルをH２で定義する"-->
+        </div>
+        <div class="x_content">
+		<!--中身-->
+        
+        <p>※お届け希望日、希望時間帯は、天候、天災、交通情勢の都合により、ご希望に添えない場合があります。</p>
+        <div class="formset">
+				<?php if($this->setting['delivery']['shippingdate'] ==0):?>
+        	<div class="line clearfix">
+                <div class="left"><label for="delivery_date">お届け希望日</label></div>
+                <div class="right"><?=$this->detail['delivery_date']?>
+                </div>
+                </div>
+                <?php endif;?>
+				<?php if($this->setting['delivery']['shippingtime'] ==0):?>
+                <div class="line clearfix">
+                <div class="left"><label for="delivery_date">お届け希望時間帯</label></div>
+                <div class="right"><?=$this->detail['delivery_time']?>
+                </div>
+                </div>
+                <?php endif;?>
+         </div>
+  		<!--中身-->
+        </div>
+      </div>
+    </div>
+</section>
+<?php endif;?>
+<!--決済方法設定-->
+<section class="row">
+    <div class="col-xs-12">
+      <div class="x_panel">
+        <div class="x_title">
+        	<!--タイトルをH２で定義する"-->
+          <h3 id="payment_method">決済方法設定</h3>
+        	<!--タイトルをH２で定義する"-->
+        </div>
+        <div class="x_content">
+		<!--中身-->
+        
+        <div class="formset">
+        	<?php foreach($this->setting['payment'] as $v):
+				if($v['id'] == $this->detail['payment_method']):?>
+                <div class="line clearfix">
+                    <div class="left">
+                        <div class="form-group">
+                        <label class="checkbox-inline">
+                        <?=$v['name']?>
+                        </label>
+                        </div>
+                    </div>
+                <div class="right">
+                            <div><?=str_replace("\n","<br>",$v['description'])?>
+                </div>
+            </div>
+        </div>
+              <?php endif; endforeach;?>
+          </div>
+  		<!--中身-->
+        </div>
+      </div>
+    </div>
+</section>
+
+<!--その他設定-->
+<section class="row">
+    <div class="col-xs-12">
+      <div class="x_panel">
+        <div class="x_title">
+        	<!--タイトルをH２で定義する"-->
+          <h3>その他、備考など</h3>
+        	<!--タイトルをH２で定義する"-->
+        </div>
+        <div class="x_content">
+		<!--中身-->
+        
+        <p><?=nl2br($this->detail['order_comment'])?></p>
+
+  		<!--中身-->
+        </div>
+      </div>
+    </div>
+</section>
+
+<form action="<?=BASEURL?>/order/finish" method="post" id="finish">
+<?php /*if(!$this->detail['member_no'] && !$this->mem_exists):?>
+<section class="row">
+    <div class="col-xs-12">
+      <div class="x_panel">
+        <div class="x_title">
+        	<!--タイトルをH２で定義する"-->
+          <h3>会員登録</h3>
+        	<!--タイトルをH２で定義する"-->
+        </div>
+        <div class="x_content">
+		<!--中身-->
+        <p>会員登録をすると、今回のお買い物分から<?=$this->setting['point']['pointname']?>が加算されます。<?=$this->setting['point']['pointname']?>は、お買い物時に1<?=$this->setting['point']['pointname']?>1円としてご利用いただけます。また、次回以降のお買い物時に、お客様情報を入力すること無くお買い物ができるのでお買い物がスムーズです。</p>
+		　<p>会員登録をご希望の方は、下記のパスワード欄をご入力いただくと、ご注文と同時に会員登録を行うことができます。</p>
+        
+        
+        <div class="formset">
+        <div class="line clearfix">
+        <div class="left">パスワード
+        </div>
+        <div class="right">
+        	<p><input type="password" name="pw" value="" class="" placeholder="半角英数小文字"></p>
+        	<p><input type="password" name="pwConfurm" value="" class="" placeholder="確認のため再入力"></p>
+        </div>
+        </div>
+        </div>
+        
+        
+  		<!--中身-->
+        </div>
+      </div>
+	</div>
+</section>
+<?php endif;*/?>
+	<?php foreach($this->detail as $k=>$v):?>
+    		<input type="hidden" name="<?=$k?>" value="<?=$v?>">
+    <?php endforeach;?>
+</form>
+    <p class="text-center">
+        <br class="visible-xs"><br class="visible-xs"><span class="hidden-xs">　</span>
+        <button type="button" id="finishBtn" class="btn btn-success btn-lg" style="width:200px;">注文を確定する</button>
+        <br>
+        <br>
+    </p>
+    <p><button type="button" id="returnBtn" class="btn btn-default returnBtn">戻る</button></p>
+</div>
+<div id="disableBox" style="display:none;">
+    <div class="sample6Wrap">
+        <div class="sample6 text-center">
+        	<img src="http://www.john-mary.com/wp-content/uploads/2016/10/left_logo.png"><br>
+        	<img src="<?=BASEURL?>/img/icons/loading-08.gif"><br>注文処理中
+        </div>
+    </div>
+</div>
+<style>
+	#disableBox {
+		position:fixed;
+		width:100%;
+		height:100%;
+		left:0;
+		top:0;
+		background:rgba(0,0,0,0.50);
+		z-index:3000;
+	}
+	.sample6Wrap{
+		width: 100%;
+		height: 100%;
+		position: relative;
+	}
+	.sample6{
+		position: absolute;
+		top: 0;
+		right: 0;
+		bottom: 0;
+		left: 0;
+		margin: auto;
+		width: 220px;
+		height: 280px;
+		background-color:#fff;
+		padding:1em;
+		border-radius:3px;
+	}
+</style>
+<script>
+	$("#finishBtn").on("click",function(){
+		$("#disableBox").css("display","block");
+		$("#finish").submit();
+	});
+	$(".returnBtn").on("click",function(){
+		$("#finish").attr("action","<?=BASEURL?>/order/");
+		var returnObj = $("<input>");
+		returnObj.attr("type","hidden");
+		returnObj.attr("name","edit");
+		returnObj.attr("value","1");
+		$("#finish").append(returnObj);
+		$("#finish").attr("action","<?=BASEURL?>/order/");
+		$("#finish").submit();
+	});
+</script>

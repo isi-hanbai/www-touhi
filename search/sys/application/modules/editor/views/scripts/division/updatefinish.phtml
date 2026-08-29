@@ -1,0 +1,50 @@
+<!--工場情報-->
+<section class="row">
+    <div class="col-xs-12">
+      <div class="x_panel">
+        <div class="x_title">
+        	<!--タイトルをH２で定義する"-->
+          <h2>編集後の部門情報</h2>
+        	<!--タイトルをH２で定義する"-->
+          <ul class="nav navbar-right panel_toolbox">
+            <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+            <li><a class="close-link"><i class="fa fa-close"></i></a>
+            </li>
+          </ul>
+          <div class="clearfix"></div>
+        </div>
+        <div class="x_content">
+		<!--中身-->
+    		<p>下記の内容で部門情報の編集を行いました。編集及び削除は、部門管理画面より行えます。</p>
+        <p><a href="<?=BASEURL?>/editor/division/detail?id=<?=$this->detail['id']?>" class="btn btn-success"><?=$this->detail['name']?>の部門詳細へ進む</a>　<a href="<?=BASEURL?>/editor/division/" class="btn btn-primary">部門管理画面へ進む</a></p>
+          <div class="data-table">
+              <table class="table table-striped table-responcive">
+                <tbody>
+                  <tr>
+                    <th><label for="name" class="required">部門名</label></th>
+                    <td class="form-inline"><?=$this->detail['name']?></td>
+                  </tr>
+                  <tr>
+                    <th><label for="name" class="required">スキル</label></th>
+                    <td class="form-inline">
+                    <div id="rest">
+                    <?php foreach($this->skil as $v):?>
+                     <p><?=$v["name"]?></p>
+                    <?php endforeach;?>
+                    </div>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="form-actions">
+                <form action="<?=BASEURL?>/editor/division/update/" method="get">
+                    <input type="hidden" name="id" value="<?=$this->detail['id']?>">
+                    <button type="submit" class="btn btn-large btn-block btn-primary">編集</button>
+                </form>
+            </div>
+			<!--中身-->
+        </div>
+      </div>
+    </div>
+</section>

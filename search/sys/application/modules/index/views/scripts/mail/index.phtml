@@ -1,0 +1,31 @@
+<!-- contact section -->
+<div class="section">
+	<div class="container">
+		<div class="row col-spacing-30">
+			<div class="col-12 col-sm-6 col-md-6 col-lg-6">
+				<h4>東彼杵郡医師会</h4>
+				<p class="lead">〒859-3615<br>
+				長崎県東彼杵郡川棚町下組郷17番地7</p>
+				<h5>TEL：0956-82-5700</h5>
+			</div>
+			<div class="col-12 col-sm-6 col-md-6 col-lg-6">
+				<?php if($this->msg):?>
+					<div class="alert alert-danger"><?=$this->msg?></div>
+				<?php endif;?>
+				<form action="<?=BASEURL?>/mail/" method="post" id="form">
+					<label>お名前 <span class="text-red">*</span></label>
+					<input type="text" name="name" placeholder="" required>
+					<label>メールアドレス <span class="text-red">*</span></label>
+					<input type="email" name="mail" placeholder="" required>
+					<label>電話番号 <span class="text-red">*</span></label>
+					<input type="text" name="tel" placeholder="">
+					<label>お問合せ内容 <span class="text-red">*</span></label>
+					<textarea name="message" placeholder="" required></textarea>
+					<div class="margin-bottom-20 small"><span class="text-red">＊</span>は必須項目です。</div>
+					<button type="button" class="button button-md button-dark" id="sub">送信する <i class="far fa-paper-plane"></i></button>
+				</form>
+			</div>
+		</div><!-- end row -->
+	</div><!-- end container -->
+</div>
+<!-- end contact section -->

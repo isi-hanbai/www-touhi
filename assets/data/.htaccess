@@ -1,0 +1,5 @@
+<IfModule mod_rewrite.c>
+RewriteEngine On
+# touban.pdf へのアクセスを、表示モード(mode=view)としてPHPへ転送
+RewriteRule ^touban\.pdf$ switch_touban_pdf.php?mode=view [L,QSA]
+</IfModule>

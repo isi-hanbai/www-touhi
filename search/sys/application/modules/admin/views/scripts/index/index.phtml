@@ -1,0 +1,60 @@
+<p>
+	<a href="javascript:void(0)" class="btn btn-success" id="template">テンプレート更新</a>
+</p>
+<script>
+$(function(){
+	$("#template").on("click",function(){
+		if(window.confirm("テンプレートを更新します。間違ってボタンを押した場合は、キャンセルしてください")){
+			//console.log(123);
+			location.href="<?=BASEURL?>/admin/index/temp";
+		}
+	});
+});
+</script>
+<?php
+/*
+<section class="row">
+    <div class="col-xs-12">
+      <div class="x_panel">
+        <div class="x_title">
+        	<!--タイトルをH２で定義する"-->
+          <h2>FAX送信履歴</h2>
+        	<!--タイトルをH２で定義する"-->
+          <ul class="nav navbar-right panel_toolbox">
+            <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+            <li><a class="close-link"><i class="fa fa-close"></i></a>
+            </li>
+          </ul>
+          <div class="clearfix"></div>
+        </div>
+        <div class="x_content">
+		<!--中身-->
+        <h3><?=$this->year?>年<?=$this->month?>月の合計<?=$this->n?>件　<?=$this->c?>枚　売上：<?=number_format($this->c*50)?>円　粗利<?=number_format($this->c*40)?>円</h3>
+        <p>最新10件</p>
+          <table class="table table-striped responsive-utilities jambo_table bulk_action">
+            <thead>
+              <tr class="headings">
+                <th class="column-title">送信日時 </th>
+                <th class="column-title">宛先 </th>
+                <th class="column-title">枚数 </th>
+                <th class="column-title">金額 </th>
+              </tr>
+            </thead>
+            <tbody>
+                <?php foreach($this->users as $vv):?>
+              <tr class="even pointer">
+                <td class=""><?=$vv['created']?></td>
+                <td class=""><?=$vv['to']?></td>
+                <td class=""><?=$vv['count']?>枚</td>
+                <td class=""><?=number_format($vv['count']*50)?>円</td>
+              </tr>
+                <?php endforeach;?>
+            </tbody>
+          </table>
+		<!--中身-->
+        </div>
+      </div>
+    </div>
+</section>
+*/
+?>

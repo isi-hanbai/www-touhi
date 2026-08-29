@@ -1,0 +1,1111 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>UltraDate.js</title>
+
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+        <link rel="stylesheet" href="css/jquery.ex-code-prettify.css">
+        <link rel="stylesheet" href="css/demo.css">
+    </head>
+    <body>
+        <div id="content">
+            <section id="isLeapYear">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h1>isLeapYear()</h1>
+                    </div>
+                    <div class="panel-body">
+                        <h2>関数概要</h2>
+                        <p class="lead">
+                            UltraDate.prototype.isLeapYear()
+                        </p>
+                        <ul>
+                            <li>現在のUltraDateオブジェクトの年がうるう年かどうかの判定</li>
+                        </ul>
+                    </div>
+                    <div class="panel panel-default doc-return">
+                        <div class="panel-heading">
+                            <h2 class="panel-title">戻り値</h2>
+                        </div>
+                        <table class="table table-bordered table-responsive">
+                            <tr>
+                                <th>型</th>
+                                <th>説明</th>
+                            </tr>
+                            <tr>
+                                <td>Boolean</td>
+                                <td>うるう年なら「true」</td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div class="panel-body">
+                        <h2>サンプル</h2>
+                        <h3>うるう年かどうかの判定</h3>
+                        <div class="ex-code-prettify">
+                            <textarea class="code" data-ex-code-prettify-param="{codeType:'script', autoRun:false}">
+var date = new UltraDate();
+var str =  "うるう年";
+
+if (date.isLeapYear()) {
+    str = date.getFullYear() + "年は" + str + "です";
+} else {
+    str = date.getFullYear() + "年は" + str + "ではありません";
+}
+console.log(str);
+
+var date2016 = new UltraDate("2016/01/01");
+if (date2016.isLeapYear()) {
+    str = "2016年はうるう年です";
+} else {
+    str = "2016年はうるう年ではありません";
+}
+console.log(str);
+                            </textarea>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <section id="isDayCountsInMonth">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h1>isDayCountsInMonth()</h1>
+                    </div>
+                    <div class="panel-body">
+                        <h2>関数概要</h2>
+                        <p class="lead">
+                            UltraDate.prototype.isDayCountsInMonth(count, day)
+                        </p>
+                        <ul>
+                            <li>現在の月のcount回目のday曜日かどうかの判定（例：第３月曜日）</li>
+                        </ul>
+                        <ul>
+                            <li>引数：(<em>Number</em>&nbsp;count,&nbsp;<em>Number</em>&nbsp;day)</li>
+                            <li>戻り値：Boolean</li>
+                        </ul>
+                    </div>
+                    <div class="panel panel-default doc-args">
+                        <div class="panel-heading">
+                            <h2 class="panel-title">引数</h2>
+                        </div>
+                        <table class="table table-bordered table-responsive">
+                            <tr>
+                                <th>名前</th>
+                                <th>型</th>
+                                <th>説明</th>
+                            </tr>
+                            <tr>
+                                <td>count</td>
+                                <td>Number</td>
+                                <td>
+                                    <ul>
+                                        <li>何回目かを指定します</li>
+                                        <li>数字にパースできない場合は「0」になります</li>
+                                    </ul>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>day</td>
+                                <td>Number</td>
+                                <td>
+                                    <ul>
+                                        <li>曜日を表す 0 (日曜日) ～ 6 (土曜日) の整数を指定します</li>
+                                        <li>数字にパースできない場合は「0」になります</li>
+                                    </ul>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div class="panel panel-default doc-return">
+                        <div class="panel-heading">
+                            <h2 class="panel-title">戻り値</h2>
+                        </div>
+                        <table class="table table-bordered table-responsive">
+                            <tr>
+                                <th>型</th>
+                                <th>説明</th>
+                            </tr>
+                            <tr>
+                                <td>Boolean</td>
+                                <td>現在のUltraDateオブジェクトの日付が現在の月のcount回目のday曜日なら「true」</td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div class="panel-body">
+                        <h2>サンプル</h2>
+                        <h3>第3火曜日かどうかの判定</h3>
+                        <div class="ex-code-prettify">
+                            <textarea class="code" data-ex-code-prettify-param="{codeType:'script', autoRun:false}">
+var date = new UltraDate();
+var str = date.format("yyyy年MM月dd日") + "は第3火曜日";
+
+if (date.isDayCountsInMonth(3, 2)) {
+    str += "です";
+} else {
+    str += "ではありません";
+}
+console.log(str);
+                            </textarea>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <section id="isISOWeekDay">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h1>isISOWeekDay()</h1>
+                    </div>
+                    <div class="panel-body">
+                        <h2>関数概要</h2>
+                        <p class="lead">
+                            UltraDate.prototype.isISOWeekDay(week, day)
+                        </p>
+                        <ul>
+                            <li>ISO8601形式でweek週のday曜日かどうかの判定（例：第27週の月曜日）</li>
+                        </ul>
+                        <ul>
+                            <li>引数：(<em>Number</em>&nbsp;week,&nbsp;<em>Number</em>&nbsp;day)</li>
+                            <li>戻り値：Boolean</li>
+                        </ul>
+                    </div>
+                    <div class="panel panel-default doc-args">
+                        <div class="panel-heading">
+                            <h2 class="panel-title">引数</h2>
+                        </div>
+                        <table class="table table-bordered table-responsive">
+                            <tr>
+                                <th>名前</th>
+                                <th>型</th>
+                                <th>説明</th>
+                            </tr>
+                            <tr>
+                                <td>week</td>
+                                <td>Number</td>
+                                <td>
+                                    <ul>
+                                        <li>何週目かを指定します</li>
+                                        <li>数字にパースできない場合は「0」になります</li>
+                                    </ul>
+                                    <div class="alert alert-warning margin-bottom-none">
+                                        <ul>
+                                            <li>週番号が前年の週番号となる場合は「0」としてください（1月1日が金曜日、土曜日、日曜日の場合）</li>
+                                            <li>週番号が翌年の週番号となる場合は最終週に「1」を足した値にしてください（12月31日が月曜日、火曜日、水曜日）</li>
+                                        </ul>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>day</td>
+                                <td>Number</td>
+                                <td>
+                                    <ul>
+                                        <li>曜日を表す 0 (日曜日) ～ 6 (土曜日) の整数を指定します</li>
+                                        <li>数字にパースできない場合は「0」になります</li>
+                                    </ul>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div class="panel panel-default doc-return">
+                        <div class="panel-heading">
+                            <h2 class="panel-title">戻り値</h2>
+                        </div>
+                        <table class="table table-bordered table-responsive">
+                            <tr>
+                                <th>型</th>
+                                <th>説明</th>
+                            </tr>
+                            <tr>
+                                <td>Boolean</td>
+                                <td>現在のUltraDateオブジェクトの日付がISO8601形式でweek週のday曜日なら「true」</td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div class="panel-body">
+                        <h2>サンプル</h2>
+                        <h3>第32週の火曜日かどうかの判定</h3>
+                        <div class="ex-code-prettify">
+                            <textarea class="code" data-ex-code-prettify-param="{codeType:'script', autoRun:false}">
+var date = new UltraDate();
+var str = date.format("yyyy年MM月dd日") + "は第32週の火曜日";
+
+if (date.isISOWeekDay(32, 2)) {
+    str += "です";
+} else {
+    str += "ではありません";
+}
+console.log(str);
+                            </textarea>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <section id="isUSWeekDay">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h1>isUSWeekDay()</h1>
+                    </div>
+                    <div class="panel-body">
+                        <h2>関数概要</h2>
+                        <p class="lead">
+                            UltraDate.prototype.isUSWeekDay(week, day)
+                        </p>
+                        <ul>
+                            <li>US形式でweek週のday曜日かどうかの判定（例：第27週の月曜日）</li>
+                        </ul>
+                        <ul>
+                            <li>引数：(<em>Number</em>&nbsp;week,&nbsp;<em>Number</em>&nbsp;day)</li>
+                            <li>戻り値：Boolean</li>
+                        </ul>
+                    </div>
+                    <div class="panel panel-default doc-args">
+                        <div class="panel-heading">
+                            <h2 class="panel-title">引数</h2>
+                        </div>
+                        <table class="table table-bordered table-responsive">
+                            <tr>
+                                <th>名前</th>
+                                <th>型</th>
+                                <th>説明</th>
+                            </tr>
+                            <tr>
+                                <td>week</td>
+                                <td>Number</td>
+                                <td>
+                                    <ul>
+                                        <li>何週目かを指定します</li>
+                                        <li>数字にパースできない場合は「0」になります</li>
+                                    </ul>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>day</td>
+                                <td>Number</td>
+                                <td>
+                                    <ul>
+                                        <li>曜日を表す 0 (日曜日) ～ 6 (土曜日) の整数を指定します</li>
+                                        <li>数字にパースできない場合は「0」になります</li>
+                                    </ul>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div class="panel panel-default doc-return">
+                        <div class="panel-heading">
+                            <h2 class="panel-title">戻り値</h2>
+                        </div>
+                        <table class="table table-bordered table-responsive">
+                            <tr>
+                                <th>型</th>
+                                <th>説明</th>
+                            </tr>
+                            <tr>
+                                <td>Boolean</td>
+                                <td>現在のUltraDateオブジェクトの日付がUS形式でweek週のday曜日なら「true」</td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div class="panel-body">
+                        <h2>サンプル</h2>
+                        <h3>第32週の火曜日かどうかの判定</h3>
+                        <div class="ex-code-prettify">
+                            <textarea class="code" data-ex-code-prettify-param="{codeType:'script', autoRun:false}">
+var date = new UltraDate();
+var str = date.format("yyyy年MM月dd日") + "は第32週の火曜日";
+
+if (date.isUSWeekDay(32, 2)) {
+    str += "です";
+} else {
+    str += "ではありません";
+}
+console.log(str);
+                            </textarea>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <section id="isISOWeek">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h1>isISOWeek()</h1>
+                    </div>
+                    <div class="panel-body">
+                        <h2>関数概要</h2>
+                        <p class="lead">
+                            UltraDate.prototype.isISOWeek(week)
+                        </p>
+                        <ul>
+                            <li>ISO8601形式でweek週の日かどうかの判定</li>
+                        </ul>
+                        <ul>
+                            <li>引数：(<em>Number</em>&nbsp;week)</li>
+                            <li>戻り値：Boolean</li>
+                        </ul>
+                    </div>
+                    <div class="panel panel-default doc-args">
+                        <div class="panel-heading">
+                            <h2 class="panel-title">引数</h2>
+                        </div>
+                        <table class="table table-bordered table-responsive">
+                            <tr>
+                                <th>名前</th>
+                                <th>型</th>
+                                <th>説明</th>
+                            </tr>
+                            <tr>
+                                <td>week</td>
+                                <td>Number</td>
+                                <td>
+                                    <ul>
+                                        <li>何週目かを指定します</li>
+                                        <li>数字にパースできない場合は「0」になります</li>
+                                    </ul>
+                                    <div class="alert alert-warning margin-bottom-none">
+                                        <ul>
+                                            <li>週番号が前年の週番号となる場合は「0」としてください（1月1日が金曜日、土曜日、日曜日の場合）</li>
+                                            <li>週番号が翌年の週番号となる場合は最終週に「1」を足した値にしてください（12月31日が月曜日、火曜日、水曜日）</li>
+                                        </ul>
+                                    </div>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div class="panel panel-default doc-return">
+                        <div class="panel-heading">
+                            <h2 class="panel-title">戻り値</h2>
+                        </div>
+                        <table class="table table-bordered table-responsive">
+                            <tr>
+                                <th>型</th>
+                                <th>説明</th>
+                            </tr>
+                            <tr>
+                                <td>Boolean</td>
+                                <td>現在のUltraDateオブジェクトの日付がISO8601形式でweek週なら「true」</td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div class="panel-body">
+                        <h2>サンプル</h2>
+                        <h3>第32週かどうかの判定</h3>
+                        <div class="ex-code-prettify">
+                            <textarea class="code" data-ex-code-prettify-param="{codeType:'script', autoRun:false}">
+var date = new UltraDate();
+var str = date.format("yyyy年MM月dd日") + "は第32週";
+
+if (date.isISOWeek(32)) {
+    str += "です";
+} else {
+    str += "ではありません";
+}
+console.log(str);
+                            </textarea>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <section id="isUSWeek">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h1>isUSWeek()</h1>
+                    </div>
+                    <div class="panel-body">
+                        <h2>関数概要</h2>
+                        <p class="lead">
+                            UltraDate.prototype.isUSWeek(week)
+                        </p>
+                        <ul>
+                            <li>US形式でweek週の日かどうかの判定</li>
+                        </ul>
+                        <ul>
+                            <li>引数：(<em>Number</em>&nbsp;week)</li>
+                            <li>戻り値：Boolean</li>
+                        </ul>
+                    </div>
+                    <div class="panel panel-default doc-args">
+                        <div class="panel-heading">
+                            <h2 class="panel-title">引数</h2>
+                        </div>
+                        <table class="table table-bordered table-responsive">
+                            <tr>
+                                <th>名前</th>
+                                <th>型</th>
+                                <th>説明</th>
+                            </tr>
+                            <tr>
+                                <td>week</td>
+                                <td>Number</td>
+                                <td>
+                                    <ul>
+                                        <li>何週目かを指定します</li>
+                                        <li>数字にパースできない場合は「0」になります</li>
+                                    </ul>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div class="panel panel-default doc-return">
+                        <div class="panel-heading">
+                            <h2 class="panel-title">戻り値</h2>
+                        </div>
+                        <table class="table table-bordered table-responsive">
+                            <tr>
+                                <th>型</th>
+                                <th>説明</th>
+                            </tr>
+                            <tr>
+                                <td>Boolean</td>
+                                <td>現在のUltraDateオブジェクトの日付がUS形式でweek週なら「true」</td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div class="panel-body">
+                        <h2>サンプル</h2>
+                        <h3>第32週かどうかの判定</h3>
+                        <div class="ex-code-prettify">
+                            <textarea class="code" data-ex-code-prettify-param="{codeType:'script', autoRun:false}">
+var date = new UltraDate();
+var str = date.format("yyyy年MM月dd日") + "は第32週";
+
+if (date.isUSWeek(32)) {
+    str += "です";
+} else {
+    str += "ではありません";
+}
+console.log(str);
+                            </textarea>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <section id="isSameDate">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h1>isSameDate()</h1>
+                    </div>
+                    <div class="panel-body">
+                        <h2>関数概要</h2>
+                        <p class="lead">
+                            UltraDate.prototype.isSameDate(date)
+                        </p>
+                        <ul>
+                            <li>引数「date」と同じ日かどうかの判定</li>
+                        </ul>
+                        <ul>
+                            <li>引数：(<em>UltraDate</em>|<em>Date</em>|<em>String</em>|<em>Number</em>&nbsp;date)</li>
+                            <li>戻り値：Boolean</li>
+                        </ul>
+                    </div>
+                    <div class="panel panel-default doc-args">
+                        <div class="panel-heading">
+                            <h2 class="panel-title">引数</h2>
+                        </div>
+                        <table class="table table-bordered table-responsive">
+                            <tr>
+                                <th>名前</th>
+                                <th>型</th>
+                                <th>説明</th>
+                            </tr>
+                            <tr>
+                                <td>date</td>
+                                <td>UltraDate<br>Date<br>String<br>Number</td>
+                                <td>
+                                    <ul>
+                                        <li>Dateオブジェクトを指定します</li>
+                                        <li>Stringの場合Dateオブジェクトを作成できる文字列</li>
+                                        <li>Numberの場合Dateオブジェクトを作成できる数字</li>
+                                        <li>undefinedの場合は現在の日付</li>
+                                    </ul>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div class="panel panel-default doc-return">
+                        <div class="panel-heading">
+                            <h2 class="panel-title">戻り値</h2>
+                        </div>
+                        <table class="table table-bordered table-responsive">
+                            <tr>
+                                <th>型</th>
+                                <th>説明</th>
+                            </tr>
+                            <tr>
+                                <td>Boolean</td>
+                                <td>
+                                    <ul>
+                                        <li>現在のUltraDateオブジェクトの日付が引数「date」と同じ日付なら「true」</li>
+                                        <li>時間は考慮しません</li>
+                                    </ul>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div class="panel-body">
+                        <h2>サンプル</h2>
+                        <h3>「2015/04/01」と同じ日付かどうかの判定</h3>
+                        <div class="ex-code-prettify">
+                            <textarea class="code" data-ex-code-prettify-param="{codeType:'script', autoRun:false}">
+var date = new UltraDate();
+var str = date.format("yyyy年MM月dd日") + "は「2015/04/01」と同じ日付";
+
+if (date.isSameDate("2015/04/01")) {
+    str += "です";
+} else {
+    str += "ではありません";
+}
+console.log(str);
+                            </textarea>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <section id="isBeforeDate">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h1>isBeforeDate()</h1>
+                    </div>
+                    <div class="panel-body">
+                        <h2>関数概要</h2>
+                        <p class="lead">
+                            UltraDate.prototype.isBeforeDate(date)
+                        </p>
+                        <ul>
+                            <li>現在のUltraDateオブジェクトの日付が引数「date」より前かどうかの判定</li>
+                        </ul>
+                        <ul>
+                            <li>引数：(<em>UltraDate</em>|<em>Date</em>|<em>String</em>|<em>Number</em>&nbsp;date)</li>
+                            <li>戻り値：Boolean</li>
+                        </ul>
+                    </div>
+                    <div class="panel panel-default doc-args">
+                        <div class="panel-heading">
+                            <h2 class="panel-title">引数</h2>
+                        </div>
+                        <table class="table table-bordered table-responsive">
+                            <tr>
+                                <th>名前</th>
+                                <th>型</th>
+                                <th>説明</th>
+                            </tr>
+                            <tr>
+                                <td>date</td>
+                                <td>UltraDate<br>Date<br>String<br>Number</td>
+                                <td>
+                                    <ul>
+                                        <li>Dateオブジェクトを指定します</li>
+                                        <li>Stringの場合Dateオブジェクトを作成できる文字列</li>
+                                        <li>Numberの場合Dateオブジェクトを作成できる数字</li>
+                                        <li>undefinedの場合は現在の日付</li>
+                                    </ul>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div class="panel panel-default doc-return">
+                        <div class="panel-heading">
+                            <h2 class="panel-title">戻り値</h2>
+                        </div>
+                        <table class="table table-bordered table-responsive">
+                            <tr>
+                                <th>型</th>
+                                <th>説明</th>
+                            </tr>
+                            <tr>
+                                <td>Boolean</td>
+                                <td>
+                                    <ul>
+                                        <li>現在のUltraDateオブジェクトの日付が引数「date」より前の日付なら「true」</li>
+                                        <li>時間は考慮しません</li>
+                                    </ul>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div class="panel-body">
+                        <h2>サンプル</h2>
+                        <h3>「2015/04/01」より前の日付かどうかの判定</h3>
+                        <div class="ex-code-prettify">
+                            <textarea class="code" data-ex-code-prettify-param="{codeType:'script', autoRun:false}">
+var date = new UltraDate();
+var str = date.format("yyyy年MM月dd日") + "は「2015/04/01」より前の日付";
+
+if (date.isBeforeDate("2015/04/01")) {
+    str += "です";
+} else {
+    str += "ではありません";
+}
+console.log(str);
+                            </textarea>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <section id="isAfterDate">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h1>isAfterDate()</h1>
+                    </div>
+                    <div class="panel-body">
+                        <h2>関数概要</h2>
+                        <p class="lead">
+                            UltraDate.prototype.isAfterDate(date)
+                        </p>
+                        <ul>
+                            <li>現在のUltraDateオブジェクトの日付が引数「date」より後かどうかの判定</li>
+                        </ul>
+                        <ul>
+                            <li>引数：(<em>UltraDate</em>|<em>Date</em>|<em>String</em>|<em>Number</em>&nbsp;date)</li>
+                            <li>戻り値：Boolean</li>
+                        </ul>
+                    </div>
+                    <div class="panel panel-default doc-args">
+                        <div class="panel-heading">
+                            <h2 class="panel-title">引数</h2>
+                        </div>
+                        <table class="table table-bordered table-responsive">
+                            <tr>
+                                <th>名前</th>
+                                <th>型</th>
+                                <th>説明</th>
+                            </tr>
+                            <tr>
+                                <td>date</td>
+                                <td>UltraDate<br>Date<br>String<br>Number</td>
+                                <td>
+                                    <ul>
+                                        <li>Dateオブジェクトを指定します</li>
+                                        <li>Stringの場合Dateオブジェクトを作成できる文字列</li>
+                                        <li>Numberの場合Dateオブジェクトを作成できる数字</li>
+                                        <li>undefinedの場合は現在の日付</li>
+                                    </ul>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div class="panel panel-default doc-return">
+                        <div class="panel-heading">
+                            <h2 class="panel-title">戻り値</h2>
+                        </div>
+                        <table class="table table-bordered table-responsive">
+                            <tr>
+                                <th>型</th>
+                                <th>説明</th>
+                            </tr>
+                            <tr>
+                                <td>Boolean</td>
+                                <td>
+                                    <ul>
+                                        <li>現在のUltraDateオブジェクトの日付が引数「date」より後の日付なら「true」</li>
+                                        <li>時間は考慮しません</li>
+                                    </ul>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div class="panel-body">
+                        <h2>サンプル</h2>
+                        <h3>「2015/04/01」より後の日付かどうかの判定</h3>
+                        <div class="ex-code-prettify">
+                            <textarea class="code" data-ex-code-prettify-param="{codeType:'script', autoRun:false}">
+var date = new UltraDate();
+var str = date.format("yyyy年MM月dd日") + "は「2015/04/01」より後の日付";
+
+if (date.isAfterDate("2015/04/01")) {
+    str += "です";
+} else {
+    str += "ではありません";
+}
+console.log(str);
+                            </textarea>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <section id="isBetween">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h1>isBetween()</h1>
+                    </div>
+                    <div class="panel-body">
+                        <h2>関数概要</h2>
+                        <p class="lead">
+                            UltraDate.prototype.isBetween(startDate, endDate, useDaily)
+                        </p>
+                        <ul>
+                            <li>現在のUltraDateオブジェクトが引数「startDate」以上、引数「endDate」以下かどうかの判定</li>
+                            <li>引数「useDaily」がtrueの場合は日単位</li>
+                        </ul>
+                        <ul>
+                            <li>引数：(<em>UltraDate</em>|<em>Date</em>|<em>String</em>|<em>Number</em>&nbsp;startDate,&nbsp;<em>UltraDate</em>|<em>Date</em>|<em>String</em>|<em>Number</em>&nbsp;endDate,&nbsp;<em>Boolean</em>&nbsp;useDaily)</li>
+                            <li>戻り値：Boolean</li>
+                        </ul>
+                    </div>
+                    <div class="panel panel-default doc-args">
+                        <div class="panel-heading">
+                            <h2 class="panel-title">引数</h2>
+                        </div>
+                        <table class="table table-bordered table-responsive">
+                            <tr>
+                                <th>名前</th>
+                                <th>型</th>
+                                <th>説明</th>
+                            </tr>
+                            <tr>
+                                <td>startDate</td>
+                                <td>UltraDate<br>Date<br>String<br>Number</td>
+                                <td>
+                                    <ul>
+                                        <li>Dateオブジェクトを指定します</li>
+                                        <li>Stringの場合Dateオブジェクトを作成できる文字列</li>
+                                        <li>Numberの場合Dateオブジェクトを作成できる数字</li>
+                                        <li>undefinedの場合は現在の日付</li>
+                                    </ul>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>endDate</td>
+                                <td>UltraDate<br>Date<br>String<br>Number</td>
+                                <td>
+                                    <ul>
+                                        <li>Dateオブジェクトを指定します</li>
+                                        <li>Stringの場合Dateオブジェクトを作成できる文字列</li>
+                                        <li>Numberの場合Dateオブジェクトを作成できる数字</li>
+                                        <li>undefinedの場合は現在の日付</li>
+                                    </ul>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div class="panel panel-default doc-return">
+                        <div class="panel-heading">
+                            <h2 class="panel-title">戻り値</h2>
+                        </div>
+                        <table class="table table-bordered table-responsive">
+                            <tr>
+                                <th>型</th>
+                                <th>説明</th>
+                            </tr>
+                            <tr>
+                                <td>Boolean</td>
+                                <td>
+                                    <ul>
+                                        <li>現在のUltraDateオブジェクトが引数「startDate」以上、引数「endDate」以下なら「true」</li>
+                                        <li>引数「useDaily」がtrueの場合は日単位</li>
+                                    </ul>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div class="panel-body">
+                        <h2>サンプル</h2>
+                        <h3>UltraDateの日付が「2015/04/01」から「2015/04/04」の範囲内かどうかの判定</h3>
+                        <div class="ex-code-prettify">
+                            <textarea class="code" data-ex-code-prettify-param="{codeType:'script', autoRun:false}">
+var date = new UltraDate("2015/04/04 20:00:00");
+var startDate = new UltraDate("2015/04/04 12:00:00");
+var endDate = new UltraDate("2015/04/04 12:00:00");
+var str = date.format("yyyy年MM月dd日 HH時mm分ss秒") + "は" +
+    startDate.format("yyyy年MM月dd日 HH時mm分ss秒") + "以上" +
+    endDate.format("yyyy年MM月dd日 HH時mm分ss秒") + "以下";
+ var tmpStr = "";
+
+// 範囲内の検証
+if (date.isBetween(startDate, endDate)) {
+    tmpStr = str + "です";
+} else {
+    tmpStr = str + "ではありません";
+}
+console.log(tmpStr);
+
+// 範囲外の検証
+date.addDate(1);
+str = date.format("yyyy年MM月dd日 HH時mm分ss秒") + "は" +
+    startDate.format("yyyy年MM月dd日 HH時mm分ss秒") + "以上" +
+    endDate.format("yyyy年MM月dd日 HH時mm分ss秒") + "以下";
+if (date.isBetween(startDate, endDate)) {
+    tmpStr = str + "です";
+} else {
+    tmpStr = str + "ではありません";
+}
+console.log(tmpStr);
+
+// 日付単位での検証
+date.addDate(-1);
+str = date.format("yyyy年MM月dd日 HH時mm分ss秒") + "は" +
+    startDate.format("yyyy年MM月dd日 HH時mm分ss秒") + "以上" +
+    endDate.format("yyyy年MM月dd日 HH時mm分ss秒") + "以下";
+
+// 範囲内の検証（日付単位）
+if (date.isBetween(startDate, endDate, true)) {
+    tmpStr = str + "です（日付単位）";
+} else {
+    tmpStr = str + "ではありません（日付単位）";
+}
+console.log(tmpStr);
+
+// 範囲外の検証（日付単位）
+date.addDate(1);
+str = date.format("yyyy年MM月dd日 HH時mm分ss秒") + "は" +
+    startDate.format("yyyy年MM月dd日 HH時mm分ss秒") + "以上" +
+    endDate.format("yyyy年MM月dd日 HH時mm分ss秒") + "以下";
+if (date.isBetween(startDate, endDate, true)) {
+    tmpStr = str + "です（日付単位）";
+} else {
+    tmpStr = str + "ではありません（日付単位）";
+}
+console.log(tmpStr);
+                            </textarea>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <section id="isWeekday">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h1>isWeekday()</h1>
+                    </div>
+                    <div class="panel-body">
+                        <h2>関数概要</h2>
+                        <p class="lead">
+                            UltraDate.prototype.isWeekday(option, locale)
+                        </p>
+                        <ul>
+                            <li>平日かどうかの判定</li>
+                        </ul>
+                        <ul>
+                            <li>引数：(<em>Number</em>&nbsp;option,&nbsp;<em>String</em>&nbsp;locale)</li>
+                            <li>戻り値：Boolean</li>
+                        </ul>
+                    </div>
+                    <div class="panel panel-default doc-args">
+                        <div class="panel-heading">
+                            <h2 class="panel-title">引数</h2>
+                        </div>
+                        <table class="table table-bordered table-responsive">
+                            <tr>
+                                <th>名前</th>
+                                <th>型</th>
+                                <th>説明</th>
+                            </tr>
+                            <tr>
+                                <td>option</td>
+                                <td>Number</td>
+                                <td>
+                                    <ul>
+                                        <li>0：土曜日、日曜日、引数「locale」で取得される祝祭日一覧</li>
+                                        <li>1：土曜日、日曜日のみ</li>
+                                        <li>2：日曜日、引数「locale」で取得される祝祭日一覧のみ</li>
+                                        <li>3：日曜日のみ</li>
+                                        <li>4：引数「locale」で取得される祝祭日一覧のみ</li>
+                                    </ul>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>locale</td>
+                                <td>String</td>
+                                <td>
+                                    <ul>
+                                        <li>取得するロケールの文字列を指定します</li>
+                                        <li>指定の無い場合はデフォルトのロケールが使用されます</li>
+                                    </ul>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div class="panel-body">
+                        <h2>サンプル</h2>
+                        <h3>平日かどうかの判定</h3>
+                        <div class="ex-code-prettify">
+                            <textarea class="code" data-ex-code-prettify-param="{codeType:'script', autoRun:false}">
+var date = new UltraDate("2014/05/03");
+var str = date.format("yyyy年MM月dd日") + "は";
+
+if (date.isWeekday()) {
+    str += "土日祝日以外です";
+} else {
+    str += "土日祝日です";
+}
+console.log(str);
+
+if (date.isWeekday(1)) {
+    str += "土日以外です";
+} else {
+    str += "土日です";
+}
+console.log(str);
+
+if (date.isWeekday(2)) {
+    str += "日曜祝日以外です";
+} else {
+    str += "日曜祝日です";
+}
+console.log(str);
+
+if (date.isWeekday(3)) {
+    str += "日曜日以外です";
+} else {
+    str += "日曜日です";
+}
+console.log(str);
+
+if (date.isWeekday(4)) {
+    str += "祝日以外です";
+} else {
+    str += "祝日です";
+}
+console.log(str);
+                            </textarea>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <section id="isHoliday">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h1>isHoliday()</h1>
+                    </div>
+                    <div class="panel-body">
+                        <h2>関数概要</h2>
+                        <p class="lead">
+                            UltraDate.prototype.isHoliday(locale)
+                        </p>
+                        <ul>
+                            <li>現在のUltraDateオブジェクトが祝祭日かどうかの判定</li>
+                        </ul>
+                        <ul>
+                            <li>引数：<em>String</em>&nbsp;locale</li>
+                            <li>戻り値：Boolean</li>
+                        </ul>
+                    </div>
+                    <div class="panel panel-default doc-args">
+                        <div class="panel-heading">
+                            <h2 class="panel-title">引数</h2>
+                        </div>
+                        <table class="table table-bordered table-responsive">
+                            <tr>
+                                <th>名前</th>
+                                <th>型</th>
+                                <th>説明</th>
+                            </tr>
+                            <tr>
+                                <td>locale</td>
+                                <td>String</td>
+                                <td>
+                                    <ul>
+                                        <li>取得するロケールの文字列を指定します</li>
+                                        <li>指定の無い場合はデフォルトのロケールが使用されます</li>
+                                    </ul>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div class="panel panel-default doc-return">
+                        <div class="panel-heading">
+                            <h2 class="panel-title">戻り値</h2>
+                        </div>
+                        <table class="table table-bordered table-responsive">
+                            <tr>
+                                <th>型</th>
+                                <th>説明</th>
+                            </tr>
+                            <tr>
+                                <td>Boolean</td>
+                                <td>
+                                    <ul>
+                                        <li>現在のUltraDateオブジェクトが「UltraDate.getHolidays(オブジェクトの年)」
+                                            で取得したオブジェクトの中に該当する日付キーがあれば「true」</li>
+                                        <li>時間は考慮しません</li>
+                                    </ul>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div class="panel-body">
+                        <h2>サンプル</h2>
+                        <h3>祝祭日かどうかの判定</h3>
+                        <ul>
+                            <li>「UltraDate.ja.js」を読み込んでいるものとする</li>
+                        </ul>
+                        <div class="ex-code-prettify">
+                            <textarea class="code" data-ex-code-prettify-param="{codeType:'script', autoRun:false}">
+var checkDate = function(date){
+    var str = date.format("yyyy年MM月dd日");
+    if (date.isHoliday()) {
+        str += "は祝祭日です";
+    } else {
+        str += "は祝祭日ではありません";
+    }
+    return str;
+};
+
+// 今日が祝祭日かどうかを確認する
+var date = new UltraDate();
+console.log(checkDate(date));
+
+// 2015年11月23日が祝祭日かどうかを確認する
+date.setFullYear(2015, 10, 23);
+console.log(checkDate(date));
+                            </textarea>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <section id="isValid">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h1>isValid()</h1>
+                    </div>
+                    <div class="panel-body">
+                        <h2>関数概要</h2>
+                        <p class="lead">
+                            UltraDate.prototype.isValid()
+                        </p>
+                        <ul>
+                            <li>現在のUltraDateオブジェクトが正当な日付かどうかの判定</li>
+                        </ul>
+                    </div>
+                    <div class="panel panel-default doc-return">
+                        <div class="panel-heading">
+                            <h2 class="panel-title">戻り値</h2>
+                        </div>
+                        <table class="table table-bordered table-responsive">
+                            <tr>
+                                <th>型</th>
+                                <th>説明</th>
+                            </tr>
+                            <tr>
+                                <td>Boolean</td>
+                                <td>
+                                    <ul>
+                                        <li>現在のUltraDateオブジェクトが正当な日付であれば「true」</li>
+                                    </ul>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div class="panel-body">
+                        <h2>サンプル</h2>
+                        <h3>正当な日付かどうかの判定</h3>
+                        <div class="ex-code-prettify">
+                            <textarea class="code" data-ex-code-prettify-param="{codeType:'script', autoRun:false}">
+// 現在の時間で作成したオブジェクトは正当な日付
+var date = new UltraDate();
+console.log(date.isValid());
+
+// 2015年1月1日は正当な日付
+var date = new UltraDate("2015/01/01");
+console.log(date.isValid());
+
+// 「あいうえお」は正当でない日付
+var date = new UltraDate("あいうえお");
+console.log(date.isValid());
+                            </textarea>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </body>
+</html>

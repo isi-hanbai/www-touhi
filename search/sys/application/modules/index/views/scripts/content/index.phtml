@@ -1,0 +1,26 @@
+<!-- Message section -->
+<div class="section">
+	<div class="container">
+		<div class="row">
+			<?php foreach($this->data as $v):?>
+			<div class="col-12 col-sm-6 col-md-4 col-lg-4">
+				<div class="contentsList">
+					<a href="<?=BASEURL?>/content/detail?id=<?=$v['id']?>">
+						<?php if($v['thumb'] != "/img/"):?>
+							<img src="<?=BASEURL?><?=$v['thumb']?>" alt="">
+						<?php else:?>
+							<img src="<?=BASEURL?>/image/noImage.png" alt="">
+						<?php endif;?>
+					</a>
+				</div>
+				<div class="margin-top-20">
+          <span><?=date("Y.m.d",strtotime($v['created']))?></span>
+					<h5 class="font-weight-normal margin-0"><a href="<?=BASEURL?>/content/detail?id=<?=$v['id']?>"><?=$v['name']?></a></h5>
+				</div>
+			</div>
+			<?php endforeach;?>
+		</div>
+		<?=$this->pager?>
+	</div><!-- end container -->
+</div>
+<!-- end Message section -->

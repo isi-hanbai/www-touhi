@@ -1,0 +1,78 @@
+<div class="block">
+    <div class="navbar navbar-inner block-header">
+    	<div class="muted pull-left">会員登録情報</div>
+    </div>
+    <div class="block-content collapse in">
+    	<p>下記の内容で会員登録を行いました。編集及び削除は、会員管理画面より行えます。</p>
+        <p><a href="<?=BASEURL?>/admin/user/">会員管理画面へ進む</a></p>
+        <p><a href="<?=BASEURL?>/admin/user/registrer">続けて会員を登録する</a></p>
+        <br><br>
+        <div class="span12">
+            <div class="row-fluid">
+                <div class="span3">会社名<span id="l-001"></span></div>
+                <div class="span9"><?=$this->data['company']?></div>
+            </div>
+            <div class="row-fluid">
+                <div class="span3">お名前<span id="l-002"></span></div>
+                <div class="span9"><?=$this->data['name']?></div>
+            </div>
+            <div class="row-fluid">
+                <div class="span3">フリガナ<span id="l-003"></span></div>
+                <div class="span9"><?=$this->data['kana']?></div>
+            </div>
+            <div class="row-fluid">
+                <div class="span3">メールアドレス<span id="l-004"></span></div>
+                <div class="span9"><?=$this->data['mail']?></div>
+            </div>
+            <div class="row-fluid">
+                <div class="span3">電話番号<span id="l-003"></span></div>
+                <div class="span9"><?=$this->data['tel']?></div>
+            </div>
+            <div class="row-fluid">
+                <div class="span3">住所<span id="l-003"></span></div>
+                <div class="span9">〒<?=$this->data['zip']?><br><?=$this->data['prefName']?><?=$this->data['addr']?><?=$this->data['addr2']?></div>
+            </div>
+            <div class="row-fluid">
+                <div class="span3">部署<span id="l-003"></span></div>
+                <div class="span9"><?=$this->data['division']?></div>
+            </div>
+            <div class="row-fluid">
+                <div class="span3">fax<span id="l-003"></span></div>
+                <div class="span9"><?=$this->data['fax']?></div>
+            </div>
+            <div class="row-fluid">
+                <div class="span3">売掛管理<span id="l-003"></span></div>
+                <div class="span9">
+				<?php foreach(array(0=>"売掛管理を行わない",1=>"売掛管理行う") as $k=>$v):?>
+                   <?php if($this->data['demand'] == $k):?>
+                   <?=$v?>
+                   <?php endif;?>
+                   <?php endforeach;?>
+                   </div>
+            </div>
+            <div class="row-fluid">
+                <div class="span3">アクティブ/停止<span id="l-005"></span></div>
+                <div class="span9">
+                <?php
+					$arr = array(0=>"停止",1=>"アクティブ");
+					foreach($arr as $k=>$v){
+				 		if($this->data['active'] == $k){
+							echo $v;
+						}
+					}?>
+                </div>
+            </div>
+            <div class="row-fluid">
+                <div class="span3">パスワード<span id="l-006"></span></div>
+                <div class="span9">
+                <?php
+              	  		$n = mb_strlen($this->data['pw']);
+						for($i=0;$i<$n;$i++){
+							echo "*";
+						}
+					?>
+                </div>
+            </div>
+    	</div>
+    </div>
+</div>

@@ -1,0 +1,128 @@
+<!--配達日時設定-->
+<section class="row">
+    <div class="col-xs-12">
+      <div class="x_panel">
+        <div class="x_title">
+        	<!--タイトルをH２で定義する"-->
+          <h2>各種メール設定</h2>
+        	<!--タイトルをH２で定義する"-->
+          <ul class="nav navbar-right panel_toolbox">
+            <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+            <li><a class="close-link"><i class="fa fa-close"></i></a>
+            </li>
+          </ul>
+          <div class="clearfix"></div>
+        </div>
+        <div class="x_content">
+		<!--中身-->
+        	<div class="row">
+            	<div class="col-sm-9">
+            <ul class="nav nav-tabs">
+              <li class="active"><a href="#tab5" data-toggle="tab">会員登録</a></li>
+              <li><a href="#tab3" data-toggle="tab">入金</a></li>
+              <li><a href="#tab6" data-toggle="tab">督促</a></li>
+              <li><a href="#tab7" data-toggle="tab">キャンセル</a></li>
+            </ul>
+            
+            <div class="tab-content">
+              <div class="tab-pane active" id="tab5">
+              	<h3>会員登録の編集フォーム</h3>
+                <form action="<?=BASEURL?>/admin/settings/mail/" method="post">
+                    <input type="hidden" name="name" value="register">
+                    <div class="row-fluid">
+                        <div class="span3">件名</div>
+                        <div class="span9"><input type="text" class="form-control" name="subject" value="<?=$this->mail['register']['subject']?>">
+                        </div>
+                    </div>
+                    <div class="row-fluid">
+                        <div class="span3">本文</div>
+                        <div class="span9"><textarea name="body" rows="30" class="form-control"><?=$this->mail['register']['body']?></textarea>
+                        </div>
+                    </div>
+                    <div class="form-actions">
+                   	 <button type="submit" class="btn btn-large btn-block btn-primary">編集</button>
+                    </div>
+                </form>
+                </div>
+              <div class="tab-pane" id="tab3">
+              	<h3>入金確認メールの編集フォーム</h3>
+                <form action="<?=BASEURL?>/admin/settings/mail/" method="post">
+                    <input type="hidden" name="name" value="paymentEnd">
+                    <div class="row-fluid">
+                        <div class="span3">件名</div>
+                        <div class="span9"><input type="text" class="form-control" name="subject" value="<?=$this->mail['paymentEnd']['subject']?>">
+                        </div>
+                    </div>
+                    <div class="row-fluid">
+                        <div class="span3">本文</div>
+                        <div class="span9"><textarea name="body" rows="30" class="form-control"><?=$this->mail['paymentEnd']['body']?></textarea>
+                        </div>
+                    </div>
+                    <div class="form-actions">
+                   	 <button type="submit" class="btn btn-large btn-block btn-primary">編集</button>
+                    </div>
+                </form>
+                </div>
+              <div class="tab-pane" id="tab6">
+              	<h3>督促の編集フォーム</h3>
+                <form action="<?=BASEURL?>/admin/settings/mail/" method="post">
+                    <input type="hidden" name="name" value="tokusoku">
+                    <div class="row-fluid">
+                        <div class="span3">件名</div>
+                        <div class="span9"><input type="text" class="form-control" name="subject" value="<?=$this->mail['tokusoku']['subject']?>">
+                        </div>
+                    </div>
+                    <div class="row-fluid">
+                        <div class="span3">本文</div>
+                        <div class="span9"><textarea name="body" rows="30" class="form-control"><?=$this->mail['tokusoku']['body']?></textarea>
+                        </div>
+                    </div>
+                    <div class="form-actions">
+                   	 <button type="submit" class="btn btn-large btn-block btn-primary">編集</button>
+                    </div>
+                </form>
+                </div>
+              <div class="tab-pane" id="tab7">
+              	<h3>キャンセルの編集フォーム</h3>
+                <form action="<?=BASEURL?>/admin/settings/mail/" method="post">
+                    <input type="hidden" name="name" value="cancel">
+                    <div class="row-fluid">
+                        <div class="span3">件名</div>
+                        <div class="span9"><input type="text" class="form-control" name="subject" value="<?=$this->mail['cancel']['subject']?>">
+                        </div>
+                    </div>
+                    <div class="row-fluid">
+                        <div class="span3">本文</div>
+                        <div class="span9"><textarea name="body" rows="30" class="form-control"><?=$this->mail['cancel']['body']?></textarea>
+                        </div>
+                    </div>
+                    <div class="form-actions">
+                   	 <button type="submit" class="btn btn-large btn-block btn-primary">編集</button>
+                    </div>
+                </form>
+                </div>
+                </div>
+                
+                </div>
+            	<div class="col-sm-3 hidden-xs">
+                <ul>
+                	<li>%NAME% はお客様名（会社名＋お名前）に置換されます。</li>
+                	<li>%MAIL% はお客様メールアドレスに置換されます。</li>
+                	<li>%ORDER% は注文内容に置換されます。</li>
+                	<li>%SHOP% はショップ名に置換されます。</li>
+              </ul>
+                </div>
+            </div>
+  		<!--中身-->
+        </div>
+      </div>
+    </div>
+</section>
+<script>
+$(function(){
+	//アラート
+	$(window).load(function(){
+        window.setTimeout("$('.alert-fadeout').fadeOut()", 4000);
+    });
+});
+</script>

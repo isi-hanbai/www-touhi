@@ -1,0 +1,26 @@
+<ul class="nav side-menu">
+    <!--li><a href="<?=BASEURL?>/editor/"><i class="fa fa-tachometer"></i>　ダッシュボード</a></li-->
+    <li><a href="<?=BASEURL?>/editor/mail/"><i class="fa fa-envelope"></i>　メール一覧</a></li>
+    <li><a href="<?=BASEURL?>/editor/user/"><i class="fa fa-user"></i>　会員一覧</a></li>
+    <li><a href="<?=BASEURL?>/editor/content/"><i class="fa fa-user"></i>　お知らせ一覧</a></li>
+    <?php
+    /*
+    <li>
+      <a><i class="fa fa-user"></i>　会員管理<span class="fa fa-chevron-down"></span></a>
+      <ul class="nav child_menu" style="display: none">
+        <li><a href="<?=BASEURL?>/editor/user/">　会員一覧</a></li>
+        <li><a href="<?=BASEURL?>/editor/userclass/">　分類一覧</a></li>
+      </ul>
+    </li>
+    */
+    ?>
+    <?php if($this->Auth <=2 )://管理者以上のみ表示?>
+    <!--li>
+      <a><i class="fa fa-male"></i>　スタッフ管理<span class="fa fa-chevron-down"></span></a>
+      <ul class="nav child_menu" style="display: none">
+        <li><a href="<?=BASEURL?>/editor/editor/">　スタッフ一覧</a></li>
+        <li><a href="<?=BASEURL?>/editor/division/">　部署一覧</a></li>
+      </ul>
+    </li-->
+    <?php endif;?>
+</ul>

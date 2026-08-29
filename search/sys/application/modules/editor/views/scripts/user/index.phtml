@@ -1,0 +1,140 @@
+<input type="hidden" name="base" value="<?=BASEURL?>">
+
+<section class="row">
+  <div class="x_panel">
+    <div class="x_title">
+      <!--タイトルをH２で定義する"-->
+      <h2>会員一覧</h2>
+      <!--タイトルをH２で定義する"-->
+      <div class="clearfix"></div>
+    </div>
+    <div class="x_content">
+      <!--中身-->
+      <div class="row">
+        <form action="<?=BASEURL?>/editor/user/" method="get">
+        <p class="col-sm-9 col-xs-9 form-inline">
+            <input type="text" name="keyword" value="<?=$_GET['keyword']?>" class="form-control keyword" placeholder="キーワード">
+            <select class="form-control" name="classes">
+              <?php foreach($this->classes as $v){
+                if($v['id'] == $_GET['classes']){
+                  echo '<option value="'.$v['id'].'" selected>'.$v['name'].'</option>';
+                }else{
+                  echo '<option value="'.$v['id'].'">'.$v['name'].'</option>';
+                }
+              }?>
+            </select>
+            <button type="submit" class="btn btn-default"><i class="fa fa-search"></i> 検索</button>
+        </p>
+        <p class="col-sm-3 col-xs-3 text-right">
+          <a href="<?=BASEURL?>/editor/user/registrer/" class="btn btn-success"><i class="fa fa-plus"></i> 登録</a>
+        </p>
+        </form>
+      </div>
+
+        <?=$this->pager?>
+        <table class="table responsive-utilities jambo_table bulk_action">
+          <thead>
+            <tr class="headings">
+              <th class="p">
+                <input type="checkbox" id="allcheck" class="flat ck">
+              </th>
+              <th class="column-title p">番号</th>
+              <th class="column-title">分類</th>
+              <th class="column-title">お名前</th>
+              <th class="column-title p">電話</th>
+              <th class="column-title p">アドレス</th>
+              <th class="column-title p">住所</th>
+              <th class="column-title p">更新日時</th>
+              <th class="column-title text-right">詳細</th>
+            </tr>
+          </thead>
+          <tbody>
+            <?php foreach($this->users as $vv):?>
+            <tr class="even pointer">
+              <td class="a-center p">
+                <input type="checkbox" class="ck" name="ck[]" value="<?=$vv['id']?>">
+              </td>
+              <td class="p"><?=$vv['id']?></td>
+              <td class="">
+              <?php foreach($this->classes as $v){
+                if($v['id'] == $vv['class']){
+                  echo $v['name'];
+                }
+              }?></td>
+              <td class=""><?=$vv['name']?></td>
+              <td class="p"><?=$vv['tel']?>-<?=$vv['tel2']?>-<?=$vv['tel3']?></td>
+              <td class="p"><?=$vv['mail']?></td>
+              <td class="p"><?=$vv['addr']?></td>
+              <td class="p"><?php
+              if($vv['updated'] == "0000-00-00 00:00:00"){
+                echo "更新なし";
+              }else{
+                echo date("Y年m月d日 H時i分",strtotime($vv['updated']));
+              }
+              ?></td>
+              <td class="text-right">
+                <a href="<?=BASEURL?>/editor/user/update/?id=<?=$vv['id']?>" class="btn btn-default">詳細</a>
+              </td>
+            </tr>
+            <?php endforeach;?>
+          </tbody>
+        </table>
+        <div class="profile_title p">
+          <div class="row">
+            <div class="col-sm-12">チェックしたものを
+              <button class="btn btn-danger" type="button" id="deleteAll">削除</button>
+              <button class="btn btn-info" type="button" id="exportAll">CSVダウンロード</button>
+            </div>
+          </div>
+        </div>
+        <?=$this->pager?>
+      <!--中身-->
+    </div>
+  </div>
+</section>
+
+<script>
+$(function(){
+	$('input[type=checkbox]').click(function() {
+	  var t = $(this).prop;
+		if(t('checked'))
+			t('checked', '');
+		else
+			t('checked', 'checked');
+	});
+	//checkboxを全て同時に選択
+	$("#allcheck").on("click",function(){
+		if($(this).is(':checked')){
+			$(".ck").prop('checked', true);
+		}else{
+			$(".ck").prop('checked', false);
+		}
+	});
+	$("#deleteAll").on("click",function(){
+		if(window.confirm("本当に削除してもいいですか？")){
+			var ck = $('[class="ck"]:checked').map(function(){
+				return $(this).val();
+			}).get();
+			var url = "<?=BASEURL?>/api/user/delete/";
+			$.post(url,{ids:ck},function(data){
+				if(data = "OK"){
+					location.href = "<?=BASEURL?>/editor/user/";
+				}
+			});
+		}
+	});
+	$("#exportAll").on("click",function(){
+    var ck = $('[class="ck"]:checked').map(function(){
+      return $(this).val();
+    }).get();
+    var url = "<?=BASEURL?>/api/user/export/";
+    $.post(url,{ids:ck},function(data){
+      console.log(data);
+      var result = JSON.parse(data);
+      if(result.status == "success"){
+        location.href = result.url;
+      }
+    });
+	});
+});
+</script>

@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <!-- Meta, title, CSS, favicons, etc. -->
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=0">
+  <title><?=strip_tags($this->title)?></title>
+  <!-- Bootstrap core CSS -->
+  <link href="<?=BASEURL?>/theme2/css/bootstrap.min.css" rel="stylesheet">
+  <link href="<?=BASEURL?>/theme2/fonts/css/font-awesome.min.css" rel="stylesheet">
+  <link href="<?=BASEURL?>/theme2/css/animate.min.css" rel="stylesheet">
+  <!-- Custom styling plus plugins -->
+  <link href="<?=BASEURL?>/theme2/css/custom.css" rel="stylesheet">
+  <link href="<?=BASEURL?>/theme2/css/icheck/flat/green.css" rel="stylesheet">
+  <link rel="stylesheet" href="<?=BASEURL?>/theme2/js/lightbox/src/css/lightbox.css">
+  <script src="<?=BASEURL?>/theme2/js/jquery.min.js"></script>
+  <script src="<?=BASEURL?>/theme2/js/lightbox/src/js/lightbox.js" type="text/javascript"></script>
+  <script src="<?=BASEURL?>/js/jquery-ui-1.12.1.custom/jquery-ui.min.js"></script>
+  <script src="<?=BASEURL?>/js/jquery-ui-touch-punch-master/jquery.ui.touch-punch.min.js"></script>
+  <script src="<?=BASEURL?>/js/jquery.contextmenu.r2.packed.js"></script>
+  <!--[if lt IE 9]>
+        <script src="../assets/js/ie8-responsive-file-warning.js"></script>
+        <![endif]-->
+  <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+  <!--[if lt IE 9]>
+          <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+          <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+        <![endif]-->
+<script>
+var _click = "click";
+</script>
+</head>
+
+
+<body class="nav-md">
+
+  <div class="container body">
+
+
+    <div class="main_container">
+
+      <div class="col-md-3 left_col">
+        <div class="left_col scroll-view">
+
+          <div class="navbar nav_title" style="border: 0;">
+            <a href="<?=BASEURL?>/login" class="site_title"><i class="fa fa-cart-arrow-down"></i> <span>東彼杵郡医師会</span></a>
+          </div>
+          <div class="clearfix"></div>
+
+          <br />
+          <!-- sidebar menu -->
+          <div id="sidebar-menu" class="main_menu_side hidden-print main_menu">
+
+            <div class="menu_section">
+            <?php
+				if($this->user->kind == 1){
+					require_once(LAYOUT_PATH.'/admin_sidebar.phtml');
+				}elseif($this->user->kind == 4){
+					require_once(LAYOUT_PATH.'/merchant_sidebar.phtml');
+				}elseif($this->user->kind == 3){
+					require_once(LAYOUT_PATH.'/member_sidebar.phtml');
+				}
+			?>
+            </div>
+
+          </div>
+          <!-- /sidebar menu -->
+
+        </div>
+      </div>
+
+      <!-- top navigation -->
+      <div class="top_nav">
+        <div class="nav_menu">
+        <!--div class="nav_menu" style="background-image:url(<?=BASEURL?>/theme2/images/logo_sekokan.png);background-position:center center;background-repeat:no-repeat;"-->
+          <nav class="" role="navigation" style="z-index:6;">
+            <div class="nav toggle">
+              <a id="menu_toggle" style="z-index:6;"><i class="fa fa-bars"></i></a>
+            </div>
+            <ul class="nav navbar-nav navbar-right">
+              <li class="">
+                <a href="javascript:;" class="user-profile dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+				<?php
+                    if($this->user->kind ==1 || $this->user->kind ==4 || $this->user->kind ==3){
+                        echo $this->user->company;
+                    }else{
+                        echo $this->user->name;
+                    }
+                ?>
+                  <span class=" fa fa-angle-down"></span>
+                </a>
+                <ul class="dropdown-menu dropdown-usermenu animated fadeInDown pull-right">
+					<?php
+					if($this->user->kind){
+                        if($this->user->kind == 1){
+                            require_once(LAYOUT_PATH.'/admin_nav.phtml');
+                        }elseif($this->user->kind == 4){
+                            require_once(LAYOUT_PATH.'/merchant_nav.phtml');
+                        }elseif($this->user->kind == 3){
+                            require_once(LAYOUT_PATH.'/member_nav.phtml');
+                        }else{
+                            require_once(LAYOUT_PATH.'/nav.phtml');
+					  }
+					 }else{
+                            require_once(LAYOUT_PATH.'/off_nav.phtml');
+					 }
+					?>
+                  </li>
+                </ul>
+              </li>
+            </ul>
+          </nav>
+        </div>
+      </div>
+      <!-- /top navigation -->
+
+      <!-- page content -->
+      <div class="right_col" role="main">
+
+        <div class="">
+          <!--div class="page-title">
+            <div class="title_left">
+              <h3><?=$this->title?></h3>
+            </div>
+          </div>
+          <div class="clearfix"></div>
+          <ol class="breadcrumb">
+			       <?=$this->bread?>
+          </ol-->
+
+		      <?php echo $this->layout()->content; ?>
+
+
+      </div>
+      <!-- /page content -->
+    </div>
+
+  </div>
+<!-- ここはコピペ -->
+<div class="modal fade" id="modal_box">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+        <h4 class="modal-title" id="modal-title">Modal title</h4>
+      </div>
+      <div class="modal-body" id="modal-body">
+        <p>One fine body&hellip;</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">閉じる</button>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+  <script src="<?=BASEURL?>/theme2/js/bootstrap.min.js"></script>
+  <!-- bootstrap progress js -->
+  <script src="<?=BASEURL?>/theme2/js/progressbar/bootstrap-progressbar.min.js"></script>
+  <script src="<?=BASEURL?>/theme2/js/nicescroll/jquery.nicescroll.min.js"></script>
+  <!-- icheck -->
+  <!--script src="<?=BASEURL?>/theme2/js/icheck/icheck.min.js"></script-->
+  <script src="<?=BASEURL?>/theme2/js/custom.js"></script>
+  <!-- pace -->
+  <script src="<?=BASEURL?>/theme2/js/pace/pace.min.js"></script>
+	<script>
+	//全体でヘルプを参照するためのスクリプト
+    $(".help").on("click",function(){
+		$.get("<?=BASEURL?>/api/help/detail?code="+$(this).attr("id"),function(data){
+			var json = JSON.parse(data);
+			$("#modal-title").text(json['title']);
+			$("#modal-body").html(json['html']);
+			$('#modal_box').modal('show');
+		});
+	});
+    </script>
+</body>
+</html>

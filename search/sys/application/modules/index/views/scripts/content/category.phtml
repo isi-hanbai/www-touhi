@@ -1,0 +1,48 @@
+<section class="row">
+        <div class="col-xs-12">
+          <div class="x_panel">
+            <div class="x_content">
+            <!--中身-->
+            <p class="description"><?=$this->data['description']?></p>
+            <div class="banner">
+            <?php if($this->data['thumb']):?>
+            <div class="hidden-xs">
+            	<p class="text-center"><img src="<?=BASEURL.$this->data['thumb']?>" alt="<?=$this->data['title']?>"></p>
+            </div>
+            <?php endif;?>
+            <?php if($this->data['thumb2']):?>
+            <div class="visible-xs">
+            	<p class="text-center"><img src="<?=BASEURL.$this->data['thumb2']?>" alt="<?=$this->data['title']?>"></p>
+            </div>
+            <?php endif;?>
+            </div>
+
+            <div class="body">
+            	<?=htmlspecialchars_decode($this->data['html'])?>
+            </div>
+            <div class="sitemap row">
+                	<?php foreach($this->content as $v):?>
+                    <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
+                        <?php if($v['thumb']):?>
+                        <div class="hidden-xs">
+                            <a href="<?=BASEURL?>/content/detail/?id=<?=$v['id']?>"><img src="<?=BASEURL.$v['thumb']?>" alt="<?=$v['title']?>"></a>
+                        </div>
+                        <?php endif;?>
+                        <?php if($v['thumb2']):?>
+                        <div class="visible-xs">
+                            <a href="<?=BASEURL?>/content/detail/?id=<?=$v['id']?>"><img src="<?=BASEURL.$v['thumb2']?>" alt="<?=$v['title']?>"></a>
+                        </div>
+                        <?php endif;?>
+                        <dl class="acMenu">
+                            <dt><a href="<?=BASEURL?>/content/detail/?id=<?=$v['id']?>"><?=$v['title']?></a></dt>
+                        </dl>
+
+                    </div>
+                    <?php endforeach;?>
+            </div>
+
+            　<!--中身-->
+            </div>
+          </div>
+        </div>
+    </section>

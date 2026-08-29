@@ -1,0 +1,144 @@
+<!--検索-->
+<section class="row">
+    <div class="col-xs-12">
+      <div class="x_panel">
+        <div class="x_title">
+        	<!--タイトルをH２で定義する"-->
+          <h2>ヘルプページを検索</h2>
+        	<!--タイトルをH２で定義する"-->
+          <ul class="nav navbar-right panel_toolbox">
+            <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+            <li><a class="close-link"><i class="fa fa-close"></i></a>
+            </li>
+          </ul>
+          <div class="clearfix"></div>
+        </div>
+        <div class="x_content">
+		<!--中身-->
+          
+            <form action="<?=BASEURL?>/admin/help/category" method="get">
+            	 <div class="row">
+                   <p class="col-sm-2">キーワード：</p>
+                   <p class="col-sm-4"><input type="text" name="keyword" value="<?=$_GET['keyword']?>" class="form-control"></p>
+                   <p class="col-sm-2">表示件数：</p>
+                   <p class="col-sm-4">
+                   <select name="limit" class="form-control">
+                        <!--option value="1">1件</option-->
+                        <option value="10">10件</option>
+                        <option value="25">25件</option>
+                        <option value="50">50件</option>
+                        <option value="75">75件</option>
+                        <option value="100">100件</option>
+                    </select>
+                   </p>
+                </div>
+                <p class="text-center">
+                <button type="reset" class="btn btn-danger">検索条件をリセット</button>
+                <button type="submit" class="btn btn-warning">検索</button>
+                </p>
+            </form>
+          
+			<!--中身-->
+        </div>
+      </div>
+    </div>
+</section>
+
+
+<!--リスト表示-->
+<section class="row">
+    <div class="col-xs-12">
+      <div class="x_panel">
+        <div class="x_title">
+        	<!--タイトルをH２で定義する"-->
+          <h2>ヘルプページ一覧</h2>
+        	<!--タイトルをH２で定義する"-->
+          <ul class="nav navbar-right panel_toolbox">
+            <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+            <li><a class="close-link"><i class="fa fa-close"></i></a>
+            </li>
+          </ul>
+          <div class="clearfix"></div>
+        </div>
+        <div class="x_content">
+		<!--中身-->
+        <div class="profile_title text-right">
+        <a href="<?=BASEURL?>/admin/help/categoryregistrer/" class="btn btn-success">ヘルプページ登録</a>
+        <!--a href="<?=BASEURL?>/admin/item/import/" class="btn btn-warning">CSV一括登録</a-->
+        </div>
+        <?=$this->pager?>
+        
+        <table class="table table-striped responsive-utilities jambo_table bulk_action">
+            <thead>
+            <tr class="headings">
+                <th><input type="checkbox" id="allcheck"></th>
+                <th>ページ名</th>
+                <th>表示/非表示</th>
+                <th>詳細</th>
+            </tr>
+            </thead>
+            <tbody>
+        <?php foreach($this->users as $vv):?>
+            <tr>
+                <td><input type="checkbox" class="ck" name="ck[]" value="<?=$vv['id']?>"></td>
+                <td><?=$vv['name']?></td>
+                <td><?php
+				foreach(array(0=>"表示",1=>"非表示") as $key=>$vvv){
+					if($vv['display'] == $key){
+						echo $vvv;
+					}
+				}
+				?></td>
+                <td>
+                    <form action="<?=BASEURL?>/admin/help/categorydetail/" method="get">
+                        <input type="hidden" name="id" value="<?=$vv['id']?>">
+                        <button type="submit" class="btn btn-primary">詳細</button>
+                    </form>
+                </td>
+            </tr>
+        <?php endforeach;?>
+            </tbody>
+        </table>
+        <div class="profile_title">チェックしたものを　
+        <button class="btn btn-danger" type="button" id="deleteAll">削除</button>
+        <!--button class="btn btn-info" type="button" id="exportAll">CSV出力</button-->
+        </div>
+        
+        <?=$this->pager?>
+          
+		<!--中身-->
+        </div>
+      </div>
+    </div>
+</section>
+<script>
+	//checkboxを全て同時に選択
+	$("#allcheck").on("click",function(){
+		if($(this).is(':checked')){
+			$(".ck").prop('checked', true);
+		}else{
+			$(".ck").prop('checked', false);
+		}
+	});
+	$("#deleteAll").on("click",function(){
+		if(window.confirm("本当に削除してもいいですか？")){
+			var ck = $('[class="ck"]:checked').map(function(){
+				return $(this).val();
+			}).get();
+			var url = "<?=BASEURL?>/api/help/deletecate/";
+			$.post(url,{ids:ck},function(data){
+				if(data = "OK"){
+					location.href = "<?=BASEURL?>/admin/help/category";
+				}
+			});
+		}
+	});
+	$("#exportAll").on("click",function(){
+			var ck = $('[class="ck"]:checked').map(function(){
+				return $(this).val();
+			}).get();
+			var str = JSON.stringify(ck);
+			var url = "<?=BASEURL?>/api/help/export/?ids="+str;
+			location.href = url;
+	});
+</script>

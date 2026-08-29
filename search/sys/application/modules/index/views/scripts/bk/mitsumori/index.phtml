@@ -1,0 +1,50 @@
+<p>ご希望のご葬儀のご予算をこの場でお見積いただけます。下記の項目をご選択して、「お見積」ボタンを押してください。</p>
+<form action="<?=BASEURL?>/mitsumori/result" method="post" id="form">
+<div class="categorys">
+<ul>
+    <li>
+    	<h3>会場を選択してください</h3>
+        <p>
+        	<select name="kaijou" class="form-control">
+                <option value="">選択してください</option>
+            	<?php foreach($this->kaijou as $v):?>
+                	<option value="<?=$v['id']?>"><?=$v['name']?><?=$v['room']?></option>
+ 				<?php endforeach;?>
+            </select>
+        </p>
+	</li>
+<?php foreach($this->category as $v):?>
+	<li>
+    	<h3><?=$v['name']?>を選択してください</h3>
+        <ul class="items clearfix">
+		<?php foreach($this->items as $k =>$vv):?>
+        	<?php if($v['id'] == $k):?>
+            <?php foreach($vv as $vvv):?>
+            	<li<?php if($v['id'] == 4) echo " class=\"saidan\""?>>
+                	<p class="itemName"><?=$vvv['name']?></p>
+                	<div class="itemImage" style="background-image:url(<?=$vvv['thumb']?>);"></div>
+					<p class="itemPrice"><?=number_format($vvv['price'])?>円</p>
+					<p class="button-radio text-center">
+                        <input type="radio" name="cate<?=$v['id']?>" id="cate<?=$vvv['id']?>" value="<?=$vvv['id']?>" data-kaijou="<?=$vvv['k']?>" />
+                    	<label for="cate<?=$vvv['id']?>">選択</label>
+                    </p>
+                </li>
+            <?php endforeach;?>
+            <?php endif;?>
+        <?php endforeach;?>
+        </ul>
+    </li>
+<?php endforeach;?>
+</ul>
+</div>
+
+<button type="submit" class="btn btn-success btn-lg btn-block">見積もりする</button>
+</form>
+<script>
+	$("[name=kaijou]").on("change",function(){
+		var i = $("input");
+		for(var k in i){
+			console.log(i.data("kaijou"));
+		}
+	});
+</script>

@@ -1,0 +1,11 @@
+<?php if($this->success):?>
+<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+<script type="text/javascript">
+var fullFileName = '<?=$this->icon?>';
+var FileName = '<?=$this->filename?>';
+$(function(){
+	parent.$('#tmp').append('<p><img src="'+fullFileName+'" style="width:30px"> '+FileName+'<a href="javascript:void(0)" class="btn btn-danger btn-sm deleteFile" style="border-radius:50%;padding:0 0.35em;" data-filename="<?=$this->filename?>"><i class="fa fa-times"></i></a></p>');
+	parent.$('#tmpData').append('<input type="hidden" name="tmp[]" value="'+FileName+'">');
+});
+</script>
+<?php endif;?>

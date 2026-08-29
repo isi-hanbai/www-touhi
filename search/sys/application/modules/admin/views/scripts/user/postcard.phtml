@@ -1,0 +1,121 @@
+<style>
+	@page {
+		size: 100mm 148mm ;
+		margin:0;
+	}
+	.tate{
+		writing-mode: tb-rl; /* IE独自仕様 */
+		writing-mode: vertical-rl;
+		-moz-writing-mode: vertical-rl;
+		-o-writing-mode: vertical-rl;
+		-webkit-writing-mode: vertical-rl;
+		text-orientation:upright;
+	  -webkit-text-combine: digits 2l;
+	  -ms-text-combine-horizontal: digits 2;
+	  text-combine-upright: digits 2;
+	}
+	body{
+		margin:0;
+	}
+	section{
+		background-image:url(https://shop.digipri.jp/picasa/images/homeimages/hagaki.gif);
+		background-size:100mm 148mm;
+		background-repeat:no-repeat;
+		width:100mm;
+		height:148mm;
+		page-break-after:always;
+	}
+	#zip{
+		position:relative;
+		left:44mm;
+		top:12mm;
+	}
+	.zip{
+		position:absolute;
+		display:block;
+		font-size:24px;
+	}
+	#z2{
+		left:7.5mm;
+	}
+	#z3{
+		left:14.2mm;
+	}
+	#z4{
+		left:22.8mm;
+	}
+	#z5{
+		left:29.8mm;
+	}
+	#z6{
+		left:36.8mm;
+	}
+	#z7{
+		left:43.8mm;
+	}
+	.detail{
+		position:relative;
+		width:100%;
+		height:100%;
+	}
+	#addr{
+		font-size:20px;
+		position:absolute;
+		left:84mm;
+		top:27mm;
+		
+	}
+	#addr2{
+		font-size:20px;
+		position:absolute;
+		left:75mm;
+		top:33mm;
+	}
+	#company{
+		font-size:30px;
+		position:absolute;
+		left:60mm;
+		top:27mm;
+	}
+	#authority{
+		font-size:20px;
+		position:absolute;
+		left:47mm;
+		top:35mm;
+	}
+	#name{
+		font-size:42px;
+		position:absolute;
+		left:42mm;
+	}
+</style>
+<?php
+	if($this->data){
+		foreach($this->data as $v){
+?>
+<section>
+<div id="zip">
+	<span id="z1" class="zip"><?=$v['z1']?></span>
+	<span id="z2" class="zip"><?=$v['z2']?></span>
+	<span id="z3" class="zip"><?=$v['z3']?></span>
+	<span id="z4" class="zip"><?=$v['z4']?></span>
+	<span id="z5" class="zip"><?=$v['z5']?></span>
+	<span id="z6" class="zip"><?=$v['z6']?></span>
+	<span id="z7" class="zip"><?=$v['z7']?></span>
+</div>
+<div class="detail">
+<div class="tate" id="addr"><?=$v['addr']?></div>
+<div class="tate" id="addr2"><?=$v['addr2']?></div>
+<div class="tate" id="company"><?=$v['company']?></div>
+<div class="tate" id="authority"><?=$v['div']?></div>
+<?php if($v['div']):?>
+	<div class="tate" id="name" style="top:70mm"><?=$v['name']?>様</div>
+<?php else:?>
+	<div class="tate" id="name" style="top:35mm"><?=$v['name']?>様</div>
+<?php endif;?>
+</div>
+</section>
+<?
+		}
+	}
+?>

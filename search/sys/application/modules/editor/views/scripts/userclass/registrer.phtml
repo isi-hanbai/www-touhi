@@ -1,0 +1,67 @@
+<!--スタッフ情報編集フォーム-->
+<section class="row">
+    <div class="col-xs-12">
+      <div class="x_panel">
+        <div class="x_title">
+        	<!--タイトルをH２で定義する"-->
+          <h2>会員分類登録フォーム</h2>
+        	<!--タイトルをH２で定義する"-->
+          <ul class="nav navbar-right panel_toolbox">
+            <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+            <li><a class="close-link"><i class="fa fa-close"></i></a>
+            </li>
+          </ul>
+          <div class="clearfix"></div>
+        </div>
+        <div class="x_content">
+		<!--中身-->
+          <div class="data-table">
+            <form action="<?=BASEURL?>/editor/userclass/registrerfinish/" method="post" id="form">
+              <table class="table table-striped table-responcive">
+                <tbody>
+                  <tr>
+                    <th>分類名</th>
+                    <td class="form-inline">
+                      <input type="text" name="name" value="<?=$this->detail['name']?>" class=" form-control" style="width:20em;">
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+              </form>
+            </div>
+            <div class="form-actions">
+              <button class="btn btn-large btn-block btn-primary" id="sub">登録</button>
+            </div>
+			<!--中身-->
+        </div>
+      </div>
+    </div>
+</section>
+<script src="<?=BASEURL?>/js/validation.js"></script>
+<script>
+
+var error =new Array;
+$(function(){
+	//バリデーション
+	$("[name=name]").on("blur",function(){
+		validEmpty("name","分類名");
+	});
+	$("#sub").on("click",function(){
+		validEmpty("name","分類名");
+		if(error.length >0){
+			var str = "";
+			str+= "入力に誤りがあります。下記の項目を修正して再度ボタンを押してください。\n";
+			for(var i =0;i<error.length;i++){
+				if(error[i] =="nameEmpty"){
+					str+="「分類名」を入力してください。\n";
+				}
+			}
+			alert(str);
+		}else{
+			if(window.confirm("会員分類登録を行います。内容を変更される場合はキャンセルボタンを押してください。")){
+				$("#form").submit();
+			}
+		}
+	});
+});
+</script>

@@ -1,0 +1,1029 @@
+<!--商品選択部-->
+<section class="row">
+    <div class="col-xs-12">
+      <div class="x_panel">
+        <div class="x_title">
+        	<!--タイトルをH２で定義する"-->
+          <h2>商品情報</h2>
+        	<!--タイトルをH２で定義する"-->
+          <ul class="nav navbar-right panel_toolbox">
+            <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+            <li><a class="close-link"><i class="fa fa-close"></i></a>
+            </li>
+          </ul>
+          <div class="clearfix"></div>
+        </div>
+        <div class="x_content">
+		<!--中身-->
+        
+        <!--カテゴリ選択部-->
+        <p class="smallRow">↓カテゴリを選択してください。</p>
+        <p class="smallRow text-right">横にスクロールします。→</p>
+        <div class="max">
+        <table>
+        <tr>
+        <td nowrap id="categorys"></td>
+        </tr>
+        </table>
+        </div>
+        
+        <!--商品選択部-->
+        <div class="max">
+        <table>
+        	<tr>
+            <td nowrap id="itemlist"></td>
+            </tr>
+        </table>
+        </div>
+        
+        <!--選択商品を表示する--> 
+        <div id="adding"></div>
+               
+    	</div>
+        
+  		<!--中身-->
+        </div>
+      </div>
+    </div>
+</section>
+<form action="<?=BASEURL?>/admin/order/updatefinish" method="post" id="form">
+
+
+<!--注文基本データ-->
+<section class="row">
+    <div class="col-xs-12">
+      <div class="x_panel">
+        <div class="x_title">
+        	<!--タイトルをH２で定義する"-->
+          <h2>注文詳細情報</h2>
+        	<!--タイトルをH２で定義する"-->
+          <ul class="nav navbar-right panel_toolbox">
+            <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+            <li><a class="close-link"><i class="fa fa-close"></i></a>
+            </li>
+          </ul>
+          <div class="clearfix"></div>
+        </div>
+        <div class="x_content">
+		<!--中身-->
+        <div class="data-table">
+        <table class="table table-striped table-responcive">
+        <tbody>
+            <tr>
+            <th>注文注文日</th>
+            <td>
+                	　<select name="order_date" class="form-control">
+                    	<?php
+							$min = $this->setting['delivery']['shippingend']*-1;
+							$max = $this->setting['delivery']['shippingend'];
+							/*
+							for($i=$min;$i<$max;$i++):
+							*/
+							for($i=-1100;$i<$max;$i++):
+							?>
+                        <?php if($i == $this->data['order_date'] || $i == 0):?>
+                    			<option value="<?=date("Y-m-d",time()+60*60*24*$i)?>" selected><?=date("Y-m-d",time()+60*60*24*$i)?></option>
+                        <?php else:?>
+                    			<option value="<?=date("Y-m-d",time()+60*60*24*$i)?>"><?=date("Y-m-d",time()+60*60*24*$i)?></option>
+                        <?php endif;?>
+                      <?php endfor;?>
+                    </select></td>
+            </tr>
+            <?php if($this->data['order_id']):?>
+            <tr>
+            <th>注文番号</th>
+            <td>
+                	<?=$this->data['order_id']?></td>
+            </tr>
+            <?php endif;?>
+            <tr>
+            <th>注文種別</th>
+            <td>
+                　<select name="order_kind" class="form-control">
+                    <?php foreach(array(0=>"注文",1=>"見積もり") as $k=>$v):?>
+                    <?php if($k == $this->data['order_kind']):?>
+                            <option value="<?=$k?>" selected><?=$v?></option>
+                    <?php else:?>
+                            <option value="<?=$k?>"><?=$v?></option>
+                    <?php endif;?>
+                  <?php endforeach;?>
+                </select>
+            </td>
+            </tr>
+            <tr>
+         </tbody>
+        </table>  
+        </tr>
+  		<!--中身-->
+        </div>
+      </div>
+    </div>
+</section>
+
+
+<!--注文主を選択-->
+<section class="row">
+    <div class="col-xs-12">
+      <div class="x_panel">
+        <div class="x_title">
+        	<!--タイトルをH２で定義する"-->
+          <h2>注文主情報</h2>
+        	<!--タイトルをH２で定義する"-->
+          <ul class="nav navbar-right panel_toolbox">
+            <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+            <li><a class="close-link"><i class="fa fa-close"></i></a>
+            </li>
+          </ul>
+          <div class="clearfix"></div>
+        </div>
+        <div class="x_content">
+		<!--中身-->
+        <input type="hidden" name="member_no" value="<?=$this->data['member_no']?>">
+        <div class="data-table">      
+        <table class="table table-striped table-responcive">
+        <tbody>
+            <tr>
+            <th>会社名</th>
+            <td><input type="text" name="cus_campany" value="<?=$this->data['cus_campany']?>" class="form-control"></td>
+            </tr>
+            <tr>
+            <th>部署</th>
+            <td><input type="text" name="cus_div" value="<?=$this->data['cus_div']?>" class="form-control"></td>
+            </tr>
+            <tr>
+            <th>メールアドレス</th>
+            <td><input type="text" name="cus_mail" value="<?=$this->data['cus_mail']?>" class="form-control"></td>
+            </tr>
+            <tr>
+            <th>お名前</th>
+            <td><input type="text" name="cus_name" value="<?=$this->data['cus_name']?>" class="form-control"></td>
+            </tr>
+            <tr>
+            <th>フリガナ</th>
+            <td><input type="text" name="cus_kana" value="<?=$this->data['cus_kana']?>" class="form-control"></td>
+            </tr>
+            <tr>
+            <th>電話番号</th>
+            <td><input type="text" name="cus_tel" value="<?=$this->data['cus_tel']?>" class="form-control"></td>
+            </tr>
+            <tr>
+            <th>FAX</th>
+            <td><input type="text" name="cus_fax" value="<?=$this->data['cus_fax']?>" class="form-control"></td>
+            </tr>
+            <tr>
+            <th>住所</th>
+            <td>〒<input type="text" name="cus_zip" value="<?=$this->data['cus_zip']?>" class="form-control"><br>
+                <select name="cus_pref" class="form-control">
+                	<option value="">選択</option>
+                   <?php foreach($this->pref as $v):?>
+                   	<?php if($v['id'] == $this->data['cus_pref']):?>
+                		<option value="<?=$v['id']?>" selected><?=$v['name']?></option>
+                      <?php else:?>
+                		<option value="<?=$v['id']?>"><?=$v['name']?></option>
+                      <?php endif;?>
+                   <?php endforeach;?>
+                </select><br>
+                <input type="text" name="cus_addr" value="<?=$this->data['cus_addr']?>" class="form-control"><br>
+                <input type="text" name="cus_addr2" value="<?=$this->data['cus_addr2']?>" class="form-control">
+            </td>
+            </tr>
+         </tbody>
+        </table>        
+        </div>
+  		<!--中身-->
+        </div>
+      </div>
+    </div>
+</section>
+
+<!--ポイント情報-->
+<?php if($this->setting['point']['pointuse'] ==0):?>
+<section class="row">
+    <div class="col-xs-12">
+      <div class="x_panel">
+        <div class="x_title">
+        	<!--タイトルをH２で定義する"-->
+          <h2><?=$this->setting['point']['pointname']?>情報</h2>
+        	<!--タイトルをH２で定義する"-->
+          <ul class="nav navbar-right panel_toolbox">
+            <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+            <li><a class="close-link"><i class="fa fa-close"></i></a>
+            </li>
+          </ul>
+          <div class="clearfix"></div>
+        </div>
+        <div class="x_content">
+		<!--中身-->
+        <div class="data-table">      
+        <table class="table table-striped table-responcive">
+        <tbody>
+            <tr>
+            <th>使用可能<?=$this->setting['point']['pointname']?>残高</th>
+            <td><input type="text" id="point_balance" value="<?=$this->data['point']?>" disabled class="form-control"></td>
+            </tr>
+            <tr>
+            <th>使用<?=$this->setting['point']['pointname']?></th>
+            <td><input type="text" name="poinAmount" value="" class="form-control"><?=$this->setting['point']['pointname']?></td>
+            </tr>
+         </tbody>
+        </table>        
+        </div>
+  		<!--中身-->
+        </div>
+      </div>
+    </div>
+</section>
+<?php endif;?>
+              
+<!--お届け先を選択-->
+<section class="row">
+    <div class="col-xs-12">
+      <div class="x_panel">
+        <div class="x_title">
+        	<!--タイトルをH２で定義する"-->
+          <h2>お届け先情報</h2>
+        	<!--タイトルをH２で定義する"-->
+          <ul class="nav navbar-right panel_toolbox">
+            <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+            <li><a class="close-link"><i class="fa fa-close"></i></a>
+            </li>
+          </ul>
+          <div class="clearfix"></div>
+        </div>
+        <div class="x_content">
+		<!--中身-->
+		<p><label><input type="checkbox" id="samecus">お届け先がご注文主様と同じ場合はここをチェック</label></p>
+        <div class="data-table">      
+        <table class="table table-striped table-responcive">
+        <tbody>
+            <tr>
+            <th>会社名</th>
+            <td><input type="text" name="delivery_campay" value="<?=$this->data['delivery_campay']?>" class="form-control"></td>
+            </tr>
+            <tr>
+            <th>部署</th>
+            <td><input type="text" name="delivery_div" value="<?=$this->data['delivery_div']?>" class="form-control"></td>
+            </tr>
+            <tr>
+            <th>お名前</th>
+            <td><input type="text" name="delivery_name" value="<?=$this->data['delivery_name']?>" class="form-control"></td>
+            </tr>
+            <tr>
+            <th>フリガナ</th>
+            <td><input type="text" name="delivery_kana" value="<?=$this->data['delivery_kana']?>" class="form-control"></td>
+            </tr>
+            <tr>
+            <th>電話番号</th>
+            <td><input type="text" name="delivery_tel" value="<?=$this->data['delivery_tel']?>" class="form-control"></td>
+            </tr>
+            <tr>
+            <th>住所</th>
+            <td>〒<input type="text" name="delivery_zip" value="<?=$this->data['delivery_zip']?>" class="form-control"><br>
+                <select name="delivery_pref" class="form-control">
+                	<option value="">選択</option>
+                   <?php foreach($this->pref as $v):?>
+                   	<?php if($v['id'] == $this->data['delivery_pref']):?>
+                		<option value="<?=$v['id']?>" selected><?=$v['name']?></option>
+                      <?php else:?>
+                		<option value="<?=$v['id']?>"><?=$v['name']?></option>
+                      <?php endif;?>
+                   <?php endforeach;?>
+                </select><br>
+                <input type="text" name="delivery_addr" value="<?=$this->data['delivery_addr']?>" class="form-control"><br>
+                <input type="text" name="delivery_addr2" value="<?=$this->data['delivery_addr2']?>" class="form-control">
+            </td>
+            </tr>
+         </tbody>
+        </table>        
+        </div>
+  		<!--中身-->
+        </div>
+      </div>
+    </div>
+</section>
+<!--お届け日時設定-->>
+<section class="row">
+    <div class="col-xs-12">
+      <div class="x_panel">
+        <div class="x_title">
+        	<!--タイトルをH２で定義する"-->
+          <h2>お届け日時設定</h2>
+        	<!--タイトルをH２で定義する"-->
+          <ul class="nav navbar-right panel_toolbox">
+            <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+            <li><a class="close-link"><i class="fa fa-close"></i></a>
+            </li>
+          </ul>
+          <div class="clearfix"></div>
+        </div>
+        <div class="x_content">
+		<!--中身-->
+        <div class="data-table">      
+        <table class="table table-striped table-responcive">
+        <tbody>
+            <tr>
+            <th>お届け日</th>
+            <td>
+                	<select name="delivery_date" class="form-control">
+                	<option value="">選択</option>
+                 	<?php for($i=0;$i<60;$i++):?>
+                    <?php if(date("Y-m-d",time()+60*60*24*$i) == $this->data['delivery_date']):?>
+                  <option value="<?=date("Y-m-d",time()+60*60*24*$i)?>" selected><?=date("Y-m-d",time()+60*60*24*$i)?></option>
+                  <?php else:?>
+                  <option value="<?=date("Y-m-d",time()+60*60*24*$i)?>"><?=date("Y-m-d",time()+60*60*24*$i)?></option>
+                  <?php endif;?>
+                  <?php endfor;?>
+                  </select>
+            </td>
+            </tr>
+            <tr>
+            <th>お届け時間</th>
+            <td>
+                	<select name="delivery_time" class="form-control">
+                	<option value="">選択</option>
+                 	<?php
+                    	$timezonArr = explode("\n",str_replace("\r","",$this->setting['delivery']['shippingselection']));
+					$timezonArr = str_replace("\n","",$timezonArr);
+					for($i=0;$i<count($timezonArr);$i++):?>
+                  <?php if($timezonArr[$i] == $this->data['delivery_time']):?>
+                  <option value="<?=$timezonArr[$i]?>" selected><?=$timezonArr[$i]?></option>
+                  <?php else:?>
+                  <option value="<?=$timezonArr[$i]?>"><?=$timezonArr[$i]?></option>
+                  <?php endif;?>
+                  <?php endfor;?>
+                  </select>
+            </td>
+            </tr>
+         </tbody>
+        </table>        
+        </div>
+  		<!--中身-->
+        </div>
+      </div>
+    </div>
+</section>
+
+<!--メッセージカード設定-->
+<section class="row">
+    <div class="col-xs-12">
+      <div class="x_panel">
+        <div class="x_title">
+        	<!--タイトルをH２で定義する"-->
+          <h2>メッセージカード設定</h2>
+        	<!--タイトルをH２で定義する"-->
+          <ul class="nav navbar-right panel_toolbox">
+            <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+            <li><a class="close-link"><i class="fa fa-close"></i></a>
+            </li>
+          </ul>
+          <div class="clearfix"></div>
+        </div>
+        <div class="x_content">
+		<!--中身-->
+        <div class="data-table">      
+        <table class="table table-striped table-responcive">
+        <tbody>
+            <tr>
+            <th>メッセージカード種類</th>
+            <td>
+                	<select name="noshi_kind" class="form-control">
+                	<option value="">選択</option>
+                 	<?php
+					$msgArr = explode("\n",str_replace("\r","",$this->setting['global']['messageCardKind']));
+					$msgArr = str_replace("\n","",$msgArr);
+					for($i=0;$i<count($msgArr);$i++):?>
+                  <?php if($msgArr[$i] == $this->data['noshi_kind']):?>
+                  	<option value="<?=$msgArr[$i]?>" selected><?=$msgArr[$i]?></option>
+                  <?php else:?>
+                  	<option value="<?=$msgArr[$i]?>"><?=$msgArr[$i]?></option>
+                  <?php endif;?>
+                  <?php endfor;?>
+                  </select>
+            </td>
+            </tr>
+            <tr>
+            <th>メッセージカード内容</th>
+            <td>
+                	<textarea name="message" rows="5" class="form-control"><?=$this->data['message']?></textarea>
+            </td>
+            </tr>
+            <tr>
+            <th>用途</th>
+            <td>
+                	<select name="youto" class="form-control">
+                	<option value="">選択</option>
+                 	<?php
+					$youtoArr = $this->setting['youto'];
+					for($i=0;$i<count($youtoArr);$i++):?>
+                  <?php if($youtoArr[$i] == $this->data['youto']):?>
+                  <option value="<?=$youtoArr[$i]['id']?>" selected><?=$youtoArr[$i]['name']?></option>
+                  <?php else:?>
+                  <option value="<?=$youtoArr[$i]['id']?>"><?=$youtoArr[$i]['name']?></option>
+                  <?php endif;?>
+                  <?php endfor;?>
+                  </select>
+            </td>
+            </tr>
+         </tbody>
+        </table>        
+        </div>
+  		<!--中身-->
+        </div>
+      </div>
+    </div>
+</section>
+
+<?php
+/*
+*/
+?>
+
+<!--決済方法設定-->
+<section class="row">
+    <div class="col-xs-12">
+      <div class="x_panel">
+        <div class="x_title">
+        	<!--タイトルをH２で定義する"-->
+          <h2>決済方法設定</h2>
+        	<!--タイトルをH２で定義する"-->
+          <ul class="nav navbar-right panel_toolbox">
+            <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+            <li><a class="close-link"><i class="fa fa-close"></i></a>
+            </li>
+          </ul>
+          <div class="clearfix"></div>
+        </div>
+        <div class="x_content">
+		<!--中身-->
+        <div class="Accordion">
+        		<?php foreach($this->setting['payment'] as $v):?>
+                <div class="panelItem">
+                	<?php if($v['id'] == $this->data['payment_method']):?>
+                    <input type="radio" id="radio-<?=$v['id']?>" name="payment_method" value="<?=$v['id']?>" checked/>
+                  <?php else:?>
+                    <input type="radio" id="radio-<?=$v['id']?>" name="payment_method" value="<?=$v['id']?>"/>
+                  <?php endif;?>
+                    <label for="radio-<?=$v['id']?>" style="display:block !important;">
+                        <div class="AccordionItem"><?=$v['name']?></div>
+                        <div class="AccordionPanel">
+                            <div><?=str_replace("\n","<br>",$v['description'])?></div>
+                        </div>
+                    </label>
+                </div>
+              <?php endforeach;?>
+        </div>
+  		<!--中身-->
+        </div>
+      </div>
+    </div>
+</section>
+
+
+<!--その他設定-->
+<section class="row">
+    <div class="col-xs-12">
+      <div class="x_panel">
+        <div class="x_title">
+        	<!--タイトルをH２で定義する"-->
+          <h2>その他、備考など</h2>
+        	<!--タイトルをH２で定義する"-->
+          <ul class="nav navbar-right panel_toolbox">
+            <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+            <li><a class="close-link"><i class="fa fa-close"></i></a>
+            </li>
+          </ul>
+          <div class="clearfix"></div>
+        </div>
+        <div class="x_content">
+		<!--中身-->
+        
+        <p><textarea name="order_comment" rows="5" class="form-control"><?=$this->data['order_comment']?></textarea></p>
+
+  		<!--中身-->
+        </div>
+      </div>
+    </div>
+</section>
+
+<input type="hidden" name="item" value="" id="items">
+<input type="hidden" name="tax_total" value="" id="tax_total">
+<input type="hidden" name="order_id" value="<?=$this->data['order_id']?>">
+<input type="hidden" name="id" value="<?=$this->data['id']?>">
+
+<!--ページ下部追従部-->
+<div class="gfooter" id="gfooter">
+<p class="clearfix"><a href="javascript:void(0)" id="calcdisp" class="hidden-sm hidden-md hidden-lg"><i class="fa fa-calculator"></i></a></p>
+<div class="muted">
+<ul id="calcration" class="row">
+    <li class="col-sm-2">小計:<input type="text" name="item_total" class="form-control"readonly value="<?=$this->data['item_total']?>"></li>
+    <li class="col-sm-2">送料:<input type="text" name="shipping_cost" class="form-control" readonly value="<?=$this->data['shipping_cost']?>"></li>
+    <?php if($this->setting['discont']['discountUse'] ==0):?>
+        <li class="col-sm-2">割引:<input type="text" name="off_price" class="form-control" value="<?=$this->data['off_price']?>"></li>
+    <?php endif;?>
+    <?php if($this->setting['point']['pointuse'] ==0):?>
+        <li class="col-sm-3"><?=$this->setting['point']['pointname'] ?>:<input type="text" name="use_point" class="form-control" value="<?=$this->data['use_point']?>"></li>
+    <?php endif;?>
+    <li class="col-sm-3">合計:<input type="text" name="seikyu_cost" class="form-control"readonly value="<?=$this->data['seikyu_cost']?>"></li>
+</ul>
+</div>
+</div>
+
+</form>
+        
+        
+        
+            <div class="form-actions">
+                <button class="btn btn-large btn-block btn-primary" id="sub">編集</button>
+            </div>
+            
+<br><br><br><br><br><br><br>
+<br><br><br><br><br><br><br>
+    	</div>
+    </div>
+</div>
+<script src="<?=BASEURL?>/js/help-validation.js"></script>
+<script>
+$(function(){
+	$("#calcdisp").on("touchstart",function(){
+		$("#gfooter .muted").toggle("slow");
+	});
+	//送信ボタン
+	$("#sub").on(_click,function(){
+		if(window.confirm("ユーザー登録を行います。内容を変更される場合はキャンセルボタンを押してください。")){
+			$("#form").submit();
+		}
+	});
+
+//<!-------###　　サジェスト部のスクリプト　　###------->
+	//注文主会社名及び名前を入力した時
+	$("[name=cus_campany] ,[name=cus_campany]").on("keyup",function(){
+		var key = $(this);
+		$.post("<?=BASEURL?>/api/user/getcustomer/",{"keyword":key.val()},function(data){
+			if($("#searchBox")){
+				$("#searchBox").remove();
+			}
+			//リスト収容用のboxを挿入
+			var searchBox = $("<div>");
+			searchBox.attr("id","searchBox");
+			key.after(searchBox);
+			
+			var ul = $("<ul>");
+			searchBox.append(ul);
+			//$(document).click(function() {　$('#searchBox').hide();　});
+			//リストを挿入
+			var customers =  JSON.parse(data);
+			if(customers[0].length >0 ){
+				for(var i=0;i<customers[0].length;i++){
+					var li =$("<li>");
+					ul.append(li);
+					var a = $("<a>");
+					a.attr("href","javascript:void(0)");
+					a.attr("id","cus_"+customers[0][i]['id']);
+					a.addClass("cus");
+					if(customers[0][i]['company']){
+						a.text(customers[0][i]['company']+" "+customers[0][i]['name']);
+					}else{
+						a.text(customers[0][i]['name']);
+					}
+					li.append(a);
+					var index = customers[0][i];
+					a.on(_click,function(){
+						for(var j =0;j<customers[0].length;j++){
+							if(customers[0][j]['id'] == $(this).attr("id").substr(4)){
+								//クリックされたら値を挿入
+								
+								$("[name=cus_campany]").val(customers[0][j]['company']);
+								$("[name=cus_div]").val(customers[0][j]['division']);
+								$("[name=cus_fax]").val(customers[0][j]['fax']);
+								$("[name=cus_name]").val(customers[0][j]['name']);
+								$("[name=cus_kana]").val(customers[0][j]['kana']);
+								$("[name=cus_tel]").val(customers[0][j]['tel']);
+								$("[name=cus_zip]").val(customers[0][j]['zip']);
+								$("[name=cus_pref]").val(customers[0][j]['pref']);
+								$("[name=cus_addr]").val(customers[0][j]['addr']);
+								$("[name=cus_addr2]").val(customers[0][j]['addr2']);
+								$("[name=cus_mail]").val(customers[0][j]['mail']);
+								$("[name=member_no]").val(customers[0][j]['id']);
+								//送料計算
+								parseCart();
+								
+								//検索候補リストを削除
+								$("#searchBox").remove();
+								break;
+							}
+						}
+					});
+				}
+			}
+		});
+	});
+	
+	$("#samecus").　on("change",function(){
+		if($(this).prop("checked")){
+			$("[name=delivery_campay]").val($("[name=cus_campany]").val());
+			$("[name=delivery_div]").val($("[name=cus_div]").val());
+			$("[name=delivery_name]").val($("[name=cus_name]").val());
+			$("[name=delivery_kana]").val($("[name=cus_kana]").val());
+			$("[name=delivery_tel]").val($("[name=cus_tel]").val());
+			$("[name=delivery_zip]").val($("[name=cus_zip]").val());
+			$("[name=delivery_pref]").val($("[name=cus_pref]").val());
+			$("[name=delivery_addr]").val($("[name=cus_addr]").val());
+			$("[name=delivery_addr2]").val($("[name=cus_addr2]").val());
+		}else{
+			$("[name=delivery_campay]").val("");
+			$("[name=delivery_div]").val("");
+			$("[name=delivery_name]").val("");
+			$("[name=delivery_kana]").val("");
+			$("[name=delivery_tel]").val("");
+			$("[name=delivery_zip]").val("");
+			$("[name=delivery_pref]").val("");
+			$("[name=delivery_addr]").val("");
+			$("[name=delivery_addr2]").val("");
+		}
+		parseCart();
+	});
+});
+
+
+//<!-------###　　以下は商品選択及び諸計算部のスクリプト　　###------->
+//消費税の設定
+var taxRatio =<?=$this->setting['tax']['ratio']?>;
+var taxrule =<?=$this->setting['tax']['rule']?>;
+//var taxkind =<?=$this->setting['tax']['knd']?>;
+//var taxproduct =<?=$this->setting['tax']['product']?>;
+
+//割引の設定
+var discountUse = <?=$this->setting['discount']['discountUse']?>;
+var discountShipping = <?=$this->setting['discount']['shippingDiscountUse']?>;
+var shippingDiscountAmount = <?=$this->setting['discount']['shippingDiscountAmount']?>;
+
+//送料の設定
+var shippingList = JSON.parse('<?=json_encode($this->setting['shipping'])?>');
+<?php if($this->item):?>
+var cart =<?=$this->item?>;
+<?php else:?>
+var cart =new Array();
+<?php endif;?>
+
+$(function(){
+	var member_no = $('[name="member_no"]').val();
+	if(member_no){
+		$.post("<?=BASEURL?>/api/user/point/",{"id":member_no},function(data){
+			var pointData = JSON.parse(data);
+			$("#point_balance").val(pointData['POINT']);
+		});
+	}
+	//商品を展開
+	parseCart();
+	//ロード時に商品カテゴリリストを取得する
+	$.post("<?=BASEURL?>/api/item/itemcategory",{merchant:<?=$this->user->id?>},function(data){
+		var Categorys = JSON.parse(data);
+		for(var i=0;i<Categorys.length;i++){
+			//console.log(Categorys[i]['id']);
+			var id =Categorys[i]['id'];
+			var btn = $("<button>");
+			btn.attr("id",id);
+			btn.type = "button";
+			btn.addClass("btn btn-warning");
+			btn.text(Categorys[i]['name']);
+			$("#categorys").append(btn);
+			//商品カテゴリボタン押下時に商品リストをロードする。
+			$(document).on(_click,"#"+id,function(){
+				$.post(
+					"<?=BASEURL?>/api/item/items",
+					{
+						"merchant":<?=$this->user->id?>,
+						"category":$(this).attr("id")
+					},
+					function(data2){
+						//console.log(JSON.parse(data2));
+						itemAppend(JSON.parse(data2));
+					}
+				);
+				 return false;
+			});
+		}
+	});
+	$('[name="off_price"]').on("change",function(){
+		parseCart();
+	});
+	$('[name=delivery_pref]').on("change",function(){
+		parseCart();
+	});
+	$('[name=poinAmount]').on("change",function(){
+		$("[name=use_point]").val($(this).val());
+		parseCart();
+	});
+});
+//商品一覧を取得して値を挿入
+function itemAppend(json){
+	var via = 1/100*taxRatio;
+	$("#itemlist").empty();
+	var n =json.length *115;
+	$("#itemlist").css("width",n+"px");
+	for(var i =0;i<json.length;i++){
+		//商品ごとの枠
+		var div = $('<div class="pull-left">');
+		div.css("margin-right","10px");
+		$("#itemlist").append(div);
+		//画像（サムネイル）
+		var img = $('<a class="thumb">');
+		if(json[i]["imagen"] == null){
+			img.css("background-image","url(<?=BASEURL."/"?>/img/noimage.jpg)");
+		}else{
+			img.css("background-image","url(<?=BASEURL."/"?>"+json[i]["imagen"]+")");
+			img.attr("href","<?=BASEURL."/"?>"+json[i]["imagen"]);
+			img.attr("rel","lightbox");
+			img.addClass("bigger");
+		}
+		div.append($('<p style="line-height:1em">').append(img));
+		//価格
+			if(json[i]['tax'] == 0){
+				//外税
+				var zei = (json[i]['price']*via);
+				
+				if(taxrule == 0){
+					//四捨五入
+					zei = Math.round(zei);
+				}else if(taxrule == 1){
+					//切り上げ
+					zei = Math.ceil(zei);
+				}else{
+					//切り捨て
+					zei = Math.floor(zei);
+				}
+				var price = (json[i]['price']*1)+zei;
+			}else{
+				var price = json[i]['price'];
+			}
+			div.append($('<p style="text-align:center;line-height:1em;font-weight:bold">').text(price+"円"));
+		//ボタン
+		var btn2 = $("<button>");
+		btn2.type = "button";
+		btn2.addClass("btn btn-success lib");
+		btn2.text(json[i]["number"]);
+		btn2.attr("id",json[i]["number"]);
+		div.append($('<p style="text-align:center;line-height:1em">').append(btn2));
+		var id = json[i]["number"];
+	}
+}
+function addCart(number){
+	var exists = false;
+	for(var i=0;i<cart.length;i++){
+		if(cart[i]['data']['number'] == number){
+			cart[i]['q'] = cart[i]['q']*1 +1;
+			exists = true;
+			parseCart();
+			break;
+		}
+	}
+	if(!exists){
+		$.post(
+			"<?=BASEURL?>/api/item/itemofnumber",
+			{
+				"merchant":<?=$this->user->id?>,
+				"number":number
+			},
+			function(data2){
+				var itemD = JSON.parse(data2);
+				addData = {'q':1,'data':itemD}
+				cart.push(addData);
+				//表示用のスクリプトを記載
+				parseCart();
+			}
+		);
+	}
+	return false;
+}
+function delCart(number){
+	for(var i =0;i<cart.length;i++){
+		if(cart[i]['data']['number'] ==number){
+			cart[i]['q'] = cart[i]['q']-1;
+			if(cart[i]['q'] ==　0){
+				//数量が０になった場合は、データ自体を削除
+				cart.splice(i,1) ;
+			}
+			break;
+		}
+	}
+	//表示用のスクリプトを記載
+	parseCart();
+	return false;
+}
+function parseCart(){
+	var shipping = 0;
+	//商品がカートに入っている場合
+	var shoukei = 0;
+	var adding = $("#adding");
+	adding.empty();
+	var divP = $('<div class="row heding">');
+	adding.append(divP);
+		var div6 = $('<div class="col-sm-2 col-xs-3">');
+		var div7 = $('<div class="col-sm-4 col-xs-3">');
+		var div8 = $('<div class="col-sm-2 col-xs-2 text-right">');
+		var div9 = $('<div class="col-sm-2 col-xs-2 text-right">');
+		var div10 = $('<div class="col-sm-2 col-xs-2 text-right">');
+	div6.text("画像");
+	div7.text("【商品番号】商品名");
+	div8.text("単価");
+	div9.text("数量");
+	div10.text("価格");
+	divP.append(div1).append(div2).append(div3).append(div4).append(div5);
+	
+	var via = 1/100*taxRatio;
+	var zeiTotal = 0;
+	for(var i = 0;i < cart.length;i++){
+		if(cart[i]['data']['tax'] == 0){
+			//外税
+			var zei = (cart[i]['data']['price']*via);
+			
+			if(taxrule == 0){
+				//四捨五入
+				zei = Math.round(zei);
+			}else if(taxrule == 1){
+				//切り上げ
+				zei = Math.ceil(zei);
+			}else{
+				//切り捨て
+				zei = Math.floor(zei);
+			}
+			var price = (cart[i]['data']['price']*1)+zei;
+			zei = zei*cart[i]['q'];
+		}else{
+			//内税
+			var zei = (cart[i]['data']['price']*1)*cart[i]['q']-(cart[i]['data']['price'])/(1+via)*cart[i]['q'];
+			if(taxrule == 0){
+				//四捨五入
+				zei = Math.round(zei);
+			}else if(taxrule == 1){
+				//切り上げ
+				zei = Math.ceil(zei);
+			}else{
+				//切り捨て
+				zei = Math.floor(zei);
+			}
+			var price = cart[i]['data']['price'];
+		}
+		zeiTotal = zeiTotal+zei;
+		var kei = price*cart[i]['q'];
+		shoukei = shoukei+kei;
+		
+		//表示部分
+		var divP2 = $('<div class="row">');
+		adding.append(divP2);
+		var div1 = $('<div class="col-sm-2 col-xs-3">');
+		var div2 = $('<div class="col-sm-4 col-xs-3">');
+		var div3 = $('<div class="col-sm-2 col-xs-2 text-right">');
+		var div4 = $('<div class="col-sm-2 col-xs-2 text-right">');
+		var div5 = $('<div class="col-sm-2 col-xs-2 text-right">');
+		divP2.append(div1).append(div2).append(div3).append(div4).append(div5);
+		var img2 = $('<a class="thumb">');
+		if(cart[i]['data']["imagen"] == null){
+			img2.css("background-image","url(<?=BASEURL."/"?>/img/noimage.jpg)");
+		}else{
+			img2.css("background-image","url(<?=BASEURL."/"?>"+cart[i]['data']["imagen"]+")");
+			img2.attr("href","<?=BASEURL."/"?>"+cart[i]['data']["imagen"]);
+			img2.attr("rel","lightbox");
+			img2.addClass("bigger");
+		}
+		div1.append(img2);
+		//div2.text("【"+cart[i]['data']["number"]+"】"+cart[i]['data']["name"]);
+		//2016.05.18　inputに変更
+		var nameInput = $("<input>");
+		nameInput.name = "itemName"+i;
+		nameInput.type = "text";
+		nameInput.attr("id","itemN"+i);
+		nameInput.val(cart[i]['data']["name"]);
+		nameInput.addClass("form-control");
+		div2.append(nameInput);
+		div2.append("【"+cart[i]['data']["number"]+"】");
+		$(document).on('change', '#itemN'+i, function(){
+			// clickイベントで発動する処理
+			i = $(this).attr("id").substr(5);
+			cart[i]['data']["name"] = $(this).val();
+			parseCart();
+		});
+		
+		var priceInput = $("<input>");
+		priceInput.name = "itemPrice"+i;
+		priceInput.type = "text";
+		priceInput.attr("id","itemP"+i);
+		priceInput.addClass("form-control");
+		priceInput.val(price);
+		div3.append(priceInput);
+		if(cart[i]['data']['tax'] == 0){
+			div3.append("円(外税)");
+		}else{
+			div3.append("円(内税)");
+		}
+		$(document).on('change', '#itemP'+i, function(){
+			// clickイベントで発動する処理
+			i = $(this).attr("id").substr(5);
+			cart[i]['data']["price"] = $(this).val();
+			cart[i]['data']["tax"] = 1;
+			//console.log(cart[i]['data']["price"]);
+			parseCart();
+		});
+		
+	
+		
+		
+		div4.text(cart[i]['q']+cart[i]['data']["unit"]);
+		//数量の増減
+		var btnP = $("<button>");
+		btnP.addClass("btn btn-inverse plus");
+		btnP.text("+");
+		btnP.attr("id","p"+cart[i]['data']["number"]);
+		var btnM = $("<button>");
+		btnM.addClass("btn btn-inverse minus");
+		btnM.text("-");
+		btnM.attr("id","m"+cart[i]['data']["number"]);
+		var id = "m"+cart[i]['data']["number"];
+		div4.append(btnP).append(btnM);
+		div5.text(commaSpred(kei)+"円");
+		//送料合計を抽出
+		for(var j=0;j<shippingList.length;j++){
+			if(cart[i]['data']["shipping"] == shippingList[j]['id']){
+				for(var k in shippingList[j]){
+					if("s"+$("[name=delivery_pref]").val() == k){
+						shipping =( shipping*1) +( shippingList[j][k]*1);
+						break ;
+					}
+				}
+			}
+		}
+	}
+	tax =zeiTotal;
+	
+	
+	var div16 = $('<div class="row">');
+	var div15 = $('<div class="col-xs-12">');
+	var addRow = $("<a>");
+	//空の商品行を追加
+	addRow.addClass("btn btn-primary");
+	addRow.attr("id","addRowAAA");
+	addRow.text("行を追加");
+	div15.append(addRow);
+	div16.append(div15);
+	adding.append(div16);
+	//合計欄
+	var div11 = $('<div class="span10">');
+	var div12 = $('<div class="span2 text-right">');
+	var div13 = $('<div class="span10">');
+	var div14 = $('<div class="span2 text-right">');
+	div11.text("小計");
+	div12.text(commaSpred(shoukei)+"円");
+	var divP3 = $('<div class="row-fluid">');
+	adding.append(divP3);
+	divP3.append(div11).append(div12);
+	
+	div13.text("内消費税");
+	div14.text(commaSpred(tax)+"円");
+	var divP4 = $('<div class="row-fluid">');
+	adding.append(divP4);
+	divP4.append(div13).append(div14);
+	
+	//ページ下部に値を挿入
+	var pointAmount = $("[name=use_point]").val();
+	if(discountShipping ==0 && shippingDiscountAmount <= shoukei){
+		shipping = 0;
+	}
+	$('[name=shipping_cost]').val(shipping);
+	<?php
+	 if($this->setting['discont']['discountUse'] ==0){
+		echo "var discount = $('[name=off_price]').val();";
+		echo "goukei = shoukei-discount+shipping;";
+	}else{
+		echo "goukei = shoukei+shipping;";
+	}
+	?>
+	$('[name="item_total"]').val(shoukei);
+	$('[name="seikyu_cost"]').val(goukei);
+	$('[name="tax_total"]').val(tax);
+	
+	//商品情報をJsonに変換して非表示フィールドに挿入
+	var itemData = JSON.stringify(cart);
+	$("#items").val(itemData);
+	//プラスボタン
+	$(".plus").on(_click,function(){
+		addCart($(this).attr("id").substr(1));
+	});
+	//マイナスボタン
+	$(".minus").on(_click,function(){
+		delCart($(this).attr("id").substr(1));
+	});
+}
+$("body").on("click","#addRowAAA",function(){
+	var n = cart.length+1;
+	cart.push({"data":{"id":"0","imagen":"","cost":"0","category":"0","name":"","price":0,"tax":1,"number":"none"+n,"unit":"個"},"q":1});
+	parseCart();
+});
+$(document).on("click",".lib",function(){
+	addCart($(this).attr("id"));
+});
+
+
+function commaSpred(num){
+    return String(num).replace( /(\d)(?=(\d\d\d)+(?!\d))/g, '$1,');
+}
+</script>

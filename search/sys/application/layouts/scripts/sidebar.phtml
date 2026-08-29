@@ -1,0 +1,27 @@
+<ul class="nav side-menu">
+    <li>
+        <a><i class="fa fa-gift"></i>商品カテゴリ<span class="fa fa-chevron-down"></span></a>
+        <ul class="nav child_menu" style="display: none">
+            <?php foreach($this->itemCategorys as $v):?>
+            <li><a href="<?=BASEURL?>/item/category/?id=<?=$v['id']?>"><span class="icon-forest-tree"></span> <?=$v['name']?></a></li>
+            <?php endforeach;?>
+        </ul>
+    </li>
+    <li class="hidden-xs hidden-sm ad">
+        <form action="<?=BASEURL?>/item" method="get">
+        	<p><input type="text" name="keyword" value="<?=$_GET['keyword']?>" class="form-control" placeholder="商品を検索…"></p>
+         <p><button type="submit" class="btn btn-warning">検索</button></p>
+        <hr>
+        </form>
+    </li>
+    <?php foreach($this->ContentCategory as $v):?>
+    <li>
+        <a><i class="fa fa-gift"></i><?=$v['name']?><span class="fa fa-chevron-down"></span></a>
+        <ul class="nav child_menu" style="display: none">
+            <?php foreach($v['pages'] as $vv):?>
+            <li><a href="<?=BASEURL?>/content/detail/?id=<?=$vv['id']?>"><span class="icon-forest-tree"></span> <?=$vv['name']?></a></li>
+            <?php endforeach;?>
+        </ul>
+    </li>
+    <?php endforeach;?>
+</ul>

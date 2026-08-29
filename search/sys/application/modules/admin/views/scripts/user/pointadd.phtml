@@ -1,0 +1,32 @@
+<!--ポイント追加完了-->
+<section class="row">
+    <div class="col-xs-12">
+      <div class="x_panel">
+        <div class="x_title">
+        	<!--タイトルをH２で定義する"-->
+          <h2><?=$this->pointSetting['pointname']?>の追加完了</h2>
+        	<!--タイトルをH２で定義する"-->
+          <ul class="nav navbar-right panel_toolbox">
+            <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+            <li><a class="close-link"><i class="fa fa-close"></i></a>
+            </li>
+          </ul>
+          <div class="clearfix"></div>
+        </div>
+        <div class="x_content">
+		<!--中身-->
+        <?php if($this->Msg):?>
+        	<div class="alert alert-success"><?=$this->Msg?></div>
+        <?php endif;?>
+        
+            <div class="form-actions">
+                <form action="<?=BASEURL?>/admin/user/detail" method="get">
+                    <input type="hidden" name="id" value="<?=$this->data['id']?>">
+                    <p><button type="submit" class="btn btn-primary"><?=$this->data['name']?>様の会員詳細ページへ</button></p>
+                </form>
+            </div>
+		<!--中身-->
+        </div>
+      </div>
+    </div>
+</section>

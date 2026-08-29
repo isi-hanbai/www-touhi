@@ -1,0 +1,37 @@
+<style>
+@media screen and (max-width:767px){
+	#login-form input {
+		text-indent:3em;
+	}	
+}
+</style>
+<div class="x_panel" style="margin-top:5em;">
+<div class="x_title">
+<h2>パスワードリセット</h2>
+<div class="clearfix"></div>
+</div>
+<div class="x_content">
+
+
+  <form class="form-signin" action="<?=BASEURL?>/login/pass<?php if($this->m) echo "?m=".$this->m?>" method="post" id="login-form">
+      <p>パスワードを忘れた方は、下記の項目にご登録のメールアドレスを入力してください。該当するメールアドレス宛にパスワードリセット用のURLが送信されます。</p>
+      <?php if($this->Msg):?>
+      	<div class="alert alert-<?=$this->Msg['color']?>"><?=$this->Msg['message']?></div>
+      <?php endif;?>
+      <div class="row">
+        <div class="col-md-3 col-sm-3 col-xs-12"><strong>メールアドレス</strong></div>
+        <div class="col-md-9 col-sm-9 col-xs-12 form-group has-feedback">
+          <input type="text" class="form-control has-feedback-left" name="mail" placeholder="メールアドレス">
+          <span class="fa fa-user form-control-feedback left" aria-hidden="true"></span>
+        </div>
+      </div>
+      
+      <div class="form-actions">
+      	<p><button class="btn btn-large btn-block btn-primary" type="submit">URLを送信</button></p>
+      </div>
+  	<p><a href="<?=BASEURL?>/login/<?php if($this->m) echo "?m=".$this->m?>"><<ログイン画面へ戻る</a></p>
+  </form>
+
+
+</div>
+</div>

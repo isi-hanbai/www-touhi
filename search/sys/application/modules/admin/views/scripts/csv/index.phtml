@@ -1,0 +1,98 @@
+<!--リスト表示-->
+<section>
+    <div class="col-xs-12">
+      <div class="x_panel">
+        <div class="x_title">
+          <div class="row">
+            <h2 class="col-xs-6">CSV一覧</h2>
+            <p class="col-xs-6 text-right"><a href="<?=BASEURL?>/admin/csv/registrer/" class="btn btn-success">CSV登録</a></p>
+            <div class="clearfix"></div>
+          </div>
+        </div>
+        <div class="x_content">
+          <!--中身-->
+          <form action="<?=BASEURL?>/admin/csv/" method="get" class="row">
+            <p class="col-sm-4"><input type="text" name="keyword" value="<?=$_GET['keyword']?>" class="form-control" placeholder="キーワード"></p>
+            <p class="col-sm-1">件数</p>
+            <p class="col-sm-2">
+              <select name="limit" class="form-control">
+                <!--option value="1">1件</option-->
+                <option value="10">10件</option>
+                <option value="25">25件</option>
+                <option value="50">50件</option>
+                <option value="75">75件</option>
+                <option value="100">100件</option>
+              </select>
+            </p>
+            <p class="col-sm-5">
+              <button type="submit" class="btn btn-warning">検索</button>
+            </p>
+          </form>
+          <?=$this->pager?>
+          <table class="table table-striped responsive-utilities jambo_table bulk_action">
+            <thead>
+              <tr class="headings">
+                <th><input type="checkbox" id="allcheck" class="flat ck"></th>
+                <th class="column-title">CSV名 </th>
+                <th class="column-title">項目数 </th>
+                <th class="column-title">詳細 </th>
+              </tr>
+            </thead>
+            <tbody>
+              <?php foreach($this->users as $vv):?>
+                <tr class="even pointer">
+                <td class="a-center "><input type="checkbox" class="ck" name="ck[]" value="<?=$vv['id']?>"></td>
+                <td class=" "><?=$vv['name']?></td>
+                <td class=" "><?=$vv['valid']?> / <?=$vv['n']?></td>
+                <td class=""><a href="<?=BASEURL?>/admin/csv/update/?id=<?=$vv['id']?>" class="btn btn-primary">詳細</a></td>
+                </tr>
+              <?php endforeach;?>
+            </tbody>
+          </table>
+          <p><button class="btn btn-danger" type="button" id="deleteAll">チェックしたものを削除</button></p>
+          <?=$this->pager?>
+      		<!--中身-->
+        </div>
+      </div>
+    </div>
+</section>
+<script>
+$(function(){
+	$('input[type=checkbox]').click(function() {
+	  var t = $(this).prop;
+		if(t('checked'))
+			t('checked', '');
+		else
+			t('checked', 'checked');
+	});
+
+	$('table tr').click(function() {
+	  var c = $(this).children('td').children('input[type=checkbox]');
+		if(c.prop('checked'))
+			c.prop('checked', '');
+		else
+			c.prop('checked', 'checked');
+	});
+	//checkboxを全て同時に選択
+	$("#allcheck").on("click",function(){
+		if($(this).is(':checked')){
+			$(".ck").prop('checked', true);
+		}else{
+			$(".ck").prop('checked', false);
+		}
+	});
+	$("#deleteAll").on("click",function(){
+		if(window.confirm("本当に削除してもいいですか？")){
+			var ck = $('[class="ck"]:checked').map(function(){
+				return $(this).val();
+			}).get();
+			var url = "<?=BASEURL?>/api/delete/";
+			$.post(url,{ids:ck,table:"csv"},function(data){
+				if(data = "OK"){
+					location.href = "<?=BASEURL?>/admin/csv/";
+				}
+			});
+		}
+	});
+});
+</script>

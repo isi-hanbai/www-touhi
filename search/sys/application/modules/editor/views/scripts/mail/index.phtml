@@ -1,0 +1,175 @@
+ <section>
+  <div class="x_panel">
+    <div class="x_title">
+      <h2>メール送信一覧</h2>
+      <div class="clearfix"></div>
+    </div>
+    <div class="x_content">
+      <!--中身-->
+
+      <form action="<?=BASEURL?>/editor/mail/" method="get">
+        <div class="row">
+          <p class="col-sm-4"><input type="text" name="keyword" value="" class="form-control search_keyword" placeholder="&#xf002; キーワード"></p>
+          <p class="col-sm-1">件数</p>
+          <p class="col-sm-2">
+          <select name="limit" class="form-control">
+          <option value="10">10件</option>
+          <option value="25">25件</option>
+          <option value="50">50件</option>
+          <option value="75">75件</option>
+          <option value="100">100件</option>
+          </select>
+          </p>
+          <p class="col-sm-1">
+          <button type="submit" class="btn btn-warning">検索</button>
+          </p>
+          <p class="col-sm-4 text-right">
+          <a href="<?=BASEURL?>/editor/mail/registrer/" class="btn btn-success">メール送信登録</a>
+          </p>
+        </div>
+      </form>
+
+      <?=$this->pager?>
+      <table class="table table-striped responsive-utilities jambo_table bulk_action">
+        <thead>
+          <tr class="headings">
+            <th><input type="checkbox" id="allcheck" class="flat ck"></th>
+            <th class="column-title">件名</th>
+            <th class="column-title">添付ファイル</th>
+            <th class="column-title">詳細</th>
+            <th class="column-title">送信</th>
+          </tr>
+        </thead>
+        <tbody>
+          <?php if($this->data): foreach($this->data as $vv):?>
+            <tr class="even pointer">
+              <td class="a-center ">
+                <input type="checkbox" class="ck" name="ck[]" value="<?=$vv['id']?>">
+              </td>
+              <td class=" "><?=$vv['subject']?></td>
+              <td class="">
+							</td>
+							<td class="">
+                <form action="<?=BASEURL?>/editor/mail/update/" method="get">
+                  <input type="hidden" name="id" value="<?=$vv['id']?>">
+                  <button type="submit" class="btn btn-primary">詳細</button>
+                </form>
+              </td>
+              <td class="">
+                <!--button type="button" class="btn btn-dark sendmail" data-id="<?=$vv['id']?>">一括送信</button-->
+                <button type="button" class="btn btn-dark sendmail2" data-id="<?=$vv['id']?>">一括送信</button>
+							</td>
+            </tr>
+          <?php endforeach; else: echo "<tr><td colspan=\"5\">登録されていません。</td></tr>";endif;?>
+        </tbody>
+      </table>
+      <div class="profile_title">
+        <div class="row">
+          <div class="col-sm-12">
+          <button class="btn btn-danger" type="button" id="deleteAll">チェックしたものを削除</button>
+        </div>
+        </div>
+      </div>
+      <?=$this->pager?>
+
+      <!--中身-->
+    </div>
+  </div>
+</section>
+<script>
+var l;
+$(function(){
+  $(".sendmail2").on("click",function(){
+    if(window.confirm("会員にメールを送信します。よろしければOKボタンを押してください。")){
+      var id = $(this).data("id");
+      $.get("<?=BASEURL?>/api/mail/getmem",function(data){
+        l = JSON.parse(data);
+        var str = ''
+    	  str+= '<div id="sendreport"></div>';
+    	  str+= '';
+    	  $("#modal-title").text("送信レポート");
+    	  $("#modal-body").html(str);
+    	  $("#modal_box").modal();
+        multi(l.length,id);
+      });
+    }
+  });
+  function multi(n,id){
+    if(n <=0){
+      //$("#modal_box").modal("hide");
+      return 0
+    }
+    //console.log({id:id,mem:l[n-1]['id']});
+    $.post("<?=BASEURL?>/api/mail/sendmail2",{id:id,mem:l[n-1]['id']},function(data){
+      var result = JSON.parse(data);
+      console.log(result);
+      var str = ''
+      str+= result.name+'様（'+result.mail+'）に送信';
+      if(result.status == "success"){
+        str+= 'しました。<br>';
+      }else{
+        str+= 'できませんでした。<br>';
+      }
+      str+= '';
+      $("#sendreport").append(str);
+      sleep(1000);
+      return n * multi(n-1,id);
+    });
+  };
+
+
+  $(".sendmail").on("click",function(){
+    if(window.confirm("会員にメールを送信します。よろしければOKボタンを押してください。")){
+      //
+      $.post("<?=BASEURL?>/api/mail/sendmail",{id:$(this).data("id")},function(data){
+        console.log(data);
+        if(data == "OK"){
+          alert("送信しました。");
+        }
+      });
+    }
+  });
+	$('input[type=checkbox]').click(function() {
+	  var t = $(this).prop;
+		if(t('checked'))
+			t('checked', '');
+		else
+			t('checked', 'checked');
+	});
+  /*
+	$('table tr').click(function() {
+	  var c = $(this).children('td').children('input[type=checkbox]');
+		if(c.prop('checked'))
+			c.prop('checked', '');
+		else
+			c.prop('checked', 'checked');
+	});
+  */
+	//checkboxを全て同時に選択
+	$("#allcheck").on("click",function(){
+		if($(this).is(':checked')){
+			$(".ck").prop('checked', true);
+		}else{
+			$(".ck").prop('checked', false);
+		}
+	});
+	$("#deleteAll").on("click",function(){
+		if(window.confirm("本当に削除してもいいですか？")){
+			var ck = $('[class="ck"]:checked').map(function(){
+				return $(this).val();
+			}).get();
+			var url = "<?=BASEURL?>/api/mail/delete/";
+			$.post(url,{ids:ck},function(data){
+				if(data = "OK"){
+					location.href = "<?=BASEURL?>/editor/mail/";
+				}
+			});
+		}
+	});
+});
+function sleep(waitMsec) {
+  var startMsec = new Date();
+  // 指定ミリ秒間だけループさせる（CPUは常にビジー状態）
+  while (new Date() - startMsec < waitMsec);
+}
+</script>

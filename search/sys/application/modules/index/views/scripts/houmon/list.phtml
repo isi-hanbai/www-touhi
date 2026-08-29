@@ -1,0 +1,133 @@
+<!-- Search section -->
+<div class="section">
+  <div class="container">
+    <?php if(count($this->list) > 0):?>
+    <div class="text-center">
+      <p><?=$this->list[0]['c']?>件中 <?=$this->start?>〜<?=$this->end?>件表示中</p>
+    </div>
+
+    <!-- box1 -->
+    <?php foreach($this->list as $v):?>
+    <div class="border_02 padding-30 border-radius-05 margin-bottom-30">
+      <div class="row col-spacing-20">
+        <div class="col-12 col-sm-12 col-md-9 col-lg-10">
+          <p><span class="category button-rounded"><?=$v['className']?></span></p>
+          <h5><?=$v['name']?></h5>
+          <p><?=$v['prefName']?><?=$v['addr']?><?=$v['addr2']?><br>
+          TEL：<?=$v['tel']?>-<?=$v['tel2']?>-<?=$v['tel3']?></p>
+        </div>
+        <div class="col-12 col-sm-12 col-md-3 col-lg-2">
+          <div class="text-right">
+            <a class="button button-lg button-radius button-dark" href="<?=BASEURL?>/index/index/detail?id=<?=$v['id']?>">詳 細 <i class="ti-arrow-right"></i></a>
+          </div>
+        </div>
+      </div>
+    </div>
+    <?php endforeach;?>
+
+    <?=$this->pager?>
+    <?php else:?>
+      <p class="text-center">見つかりませんでした</p>
+    <?php endif;?>
+  </div>
+</div>
+
+<div class="section">
+  <div class="container">
+    <form action="<?=BASEURL?>/index/index/list" method="get">
+      <div class="border_02 padding-30 border-radius-05">
+        <!-- Etc section -->
+        <div class="text-center">
+          <h4>地域</h4>
+          <div class="divider-width-70px divider-height-2px margin-bottom-30">
+            <hr class="bg_yellow">
+          </div>
+        </div>
+        <div class="row col-spacing-20">
+          <?php foreach(array("東彼杵町","川棚町","波佐見町") as $v):?>
+              <div class="col-12 col-sm-6 col-md-4 col-lg-4">
+                <div class="form-check margin-bottom-10">
+                  <label class="form-check-label">
+                    <input class="form-check-input" type="checkbox" value="<?=$v?>" id="<?=$v?>" name="area[]">
+                    <?=$v?>
+                  </label>
+                </div>
+              </div>
+          <?php endforeach;?>
+        </div>
+        <!-- emd:Etc section -->
+        <hr class="bg-black-02 margin-top-30 margin-bottom-30">
+        <!-- Type of facility section -->
+        <div class="text-center">
+        <h4>施設の種類</h4>
+        <div class="divider-width-70px divider-height-2px margin-bottom-30">
+        <hr class="bg_yellow">
+        </div>
+        </div>
+        <div class="row col-spacing-20">
+        <?php foreach($this->class as  $v):?>
+          <div class="col-12 col-sm-6 col-md-4 col-lg-4">
+          <div class="form-check margin-bottom-10">
+          <label class="form-check-label">
+            <input class="form-check-input" type="checkbox" value="<?=$v['id']?>" id="<?=$v['id']?>" name="class[]">
+            <?=$v['name']?>
+          </label>
+          </div>
+          </div>
+        <?php endforeach;?>
+        </div>
+        <!-- end:Type of facility section -->
+        <hr class="bg-black-02 margin-top-30 margin-bottom-30">
+        <!-- Symptom section -->
+        <div class="text-center">
+        <h4>症状・処置</h4>
+        <div class="divider-width-70px divider-height-2px margin-bottom-30">
+        <hr class="bg_yellow">
+        </div>
+        </div>
+        <div class="row col-spacing-20">
+        <?php foreach($this->origin as $k => $v):?>
+          <?php if($v['sel'] == 1):?>
+            <div class="col-12 col-sm-6 col-md-4 col-lg-4">
+            <div class="form-check margin-bottom-10">
+            <label class="form-check-label">
+              <input class="form-check-input" type="checkbox" value="<?=$k?>" id="<?=$k?>" name="procedure[]">
+              <?=$v['origin']?>
+            </label>
+            </div>
+            </div>
+          <?php endif;?>
+        <?php endforeach;?>
+        </div>
+        <!-- end:Symptom section -->
+        <hr class="bg-black-02 margin-top-30 margin-bottom-30">
+        <!-- Etc section -->
+        <div class="text-center">
+        <h4>設備・その他サービス</h4>
+        <div class="divider-width-70px divider-height-2px margin-bottom-30">
+        <hr class="bg_yellow">
+        </div>
+        </div>
+        <div class="row col-spacing-20">
+        <?php foreach($this->origin as $k => $v):?>
+          <?php if($v['sel'] == 3):?>
+            <div class="col-12 col-sm-6 col-md-4 col-lg-4">
+            <div class="form-check margin-bottom-10">
+            <label class="form-check-label">
+              <input class="form-check-input" type="checkbox" value="<?=$k?>" id="<?=$k?>" name="service[]">
+              <?=$v['origin']?>
+            </label>
+            </div>
+            </div>
+          <?php endif;?>
+        <?php endforeach;?>
+        </div>
+        <!-- emd:Etc section -->
+      </div>
+      <div class="text-center margin-top-30">
+        <button type="submit" class="button button-lg button-radius button-dark margin-top-20" ><i class="ti-search"></i> 検索する</button>
+      </div>
+    </form>
+  </div>
+</div>
+<!-- end:Search section -->

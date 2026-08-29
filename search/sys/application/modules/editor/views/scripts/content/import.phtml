@@ -1,0 +1,32 @@
+<!--アップロードフォーム-->
+<section class="row">
+    <div class="col-xs-12">
+      <div class="x_panel">
+        <div class="x_title">
+        	<!--タイトルをH２で定義する"-->
+          <h2>商品一括登録フォーム</h2>
+        	<!--タイトルをH２で定義する"-->
+          <ul class="nav navbar-right panel_toolbox">
+            <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+            <li><a class="close-link"><i class="fa fa-close"></i></a>
+            </li>
+          </ul>
+          <div class="clearfix"></div>
+        </div>
+        <div class="x_content">
+		<!--中身-->
+            <form action="<?=BASEURL?>/admin/item/importfinish" method="post" enctype="multipart/form-data">
+            	 <div class="row-fluid">
+                    <p class="span2">CSVファイル：</p>
+                    <p class="span10"><input type="file" name="file"></p>
+                    <p>※CSVファイルをアップロードすると、CSVファイルをに登録されているデータを追加登録します。（現在登録されているデータはそのまま残ります。）データサンプルは、<a href="<?=BASEURL?>/sample/item.csv">こちら</a></p>
+                </div>
+                <div class="form-actions">
+                    <button class="btn btn-large btn-block btn-primary" id="sub">登録</button>
+                </div>
+            </form>
+			<!--中身-->
+        </div>
+      </div>
+    </div>
+</section>

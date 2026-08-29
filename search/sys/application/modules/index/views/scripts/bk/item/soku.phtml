@@ -1,0 +1,78 @@
+<?php if(!empty($this->html[0]['html']) || !empty($this->html[0]['thumb']) || !empty($this->html[0]['thumb2'])):?>
+<section class="row">
+    <div class="col-xs-12">
+      <div class="x_panel">
+        <div class="x_content">
+		<!--中身-->
+        <?php if(!empty($this->html[0]['thumb'])):?>
+            <div class="banner">
+            <div class="hidden-xs">
+            <p class="text-center"><img src="<?=BASEURL.$this->html[0]['thumb']?>" alt="<?=$this->html[0]['page']?>"></p>
+            </div>
+		<?php endif;?>
+        <?php if(!empty($this->html[0]['thumb2'])):?>
+            <div class="visible-xs">
+            <p class="text-center"><img src="<?=BASEURL.$this->html[0]['thumb2']?>" alt="<?=$this->html[0]['page']?>"></p>
+            </div>
+            </div>
+		<?php endif;?>
+        <?=htmlspecialchars_decode($this->html[0]['html'])?>
+       	　<!--中身-->
+        </div>
+      </div>
+    </div>
+</section>
+<?php endif;?>
+<!--リスト表示-->
+<section class="row">
+    <div class="col-xs-12">
+      <div class="x_panel">
+        <div class="x_title">
+        	<!--タイトルをH２で定義する"-->
+          <h2>商品一覧</h2>
+        	<!--タイトルをH２で定義する"-->
+          <ul class="nav navbar-right panel_toolbox">
+            <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+            <li><a class="close-link"><i class="fa fa-close"></i></a>
+            </li>
+          </ul>
+          <div class="clearfix"></div>
+        </div>
+        <div class="x_content">
+		<!--中身-->
+        <?=$this->pager?>
+        <div class="row">
+        <?php foreach($this->item as $vv):?>
+        <div class="col-md-55">
+          <div class="thumbnail">
+            <div class="image view view-first">
+            	<?php if($vv['imagen']):?>
+					<?php if($vv['realtimeFlug'] ==0 && $vv['orderToDeli'] <= 1):?>
+                    <img src="<?=BASEURL."/api/image/?size=400&url=".$vv['imagen']?>" alt="<?=$vv['name']?>" style="width: 100%; display: block;">
+                    <?php else:?>
+                    <img src="<?=BASEURL."/".$vv['imagen']?>" alt="<?=$vv['name']?>" style="width: 100%; display: block;">
+                    <?php endif;?>
+				<?php endif;?>
+              <div class="mask">
+                <p><a href="<?=BASEURL?>/item/detail/?id=<?=$vv['id']?>" style="color:#F5F5F5">【<?=$vv['number']?>】<?=$vv['name']?></a></p>
+                <div class="tools tools-bottom">
+                  <a href="<?=BASEURL?>/item/detail/?id=<?=$vv['id']?>">詳細</a>
+                </div>
+              </div>
+            </div>
+            <div class="caption">
+             <p><?=number_format($vv['price'])?>円</p>
+              <p><?=$vv['name']?></p>
+            </div>
+          </div>
+        </div>
+        <?php endforeach;?>
+        </div>
+        
+        <?=$this->pager?>
+          
+		<!--中身-->
+        </div>
+      </div>
+    </div>
+</section>

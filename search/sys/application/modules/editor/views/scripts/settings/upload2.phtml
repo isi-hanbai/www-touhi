@@ -1,0 +1,16 @@
+<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.5.0/jquery.min.js"></script>
+<script type="text/javascript">
+<?php if($this->success):?>
+var success = true;
+<?php else:?>
+var success = false;
+<?php endif;?>
+$(function(){
+	if(success){
+		parent.$('#preview2').empty().html('<img src="<?=BASEURL?><?=$this->filename?>" style="width:120px">');
+		parent.$('input[name="logo"]').val("<?=$this->filename?>");
+	}else{
+    		parent.$('#preview2').empty().html("同じ名前のファイルがあります。");
+	}
+});
+</script>

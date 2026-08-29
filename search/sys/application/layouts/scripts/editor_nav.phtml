@@ -1,0 +1,13 @@
+<li>
+  <a href="<?=BASEURL?>/login/index/logout/?m=<?=$this->m?>"><i class="fa fa-user"></i><i class="fa fa-sign-out pull-right"></i>　
+<?php
+if($this->user->kind ==1 || $this->user->kind ==4 || $this->user->kind ==3){
+    echo $this->user->company;
+}else{
+    echo $this->user->name.$this->user->name2;
+}?>
+　をログアウト</a></li>
+<?php if($this->Auth <=2 && empty($this->outsource))://管理者以上のみ表示?>
+<li><a href="<?=BASEURL?>/editor/settings/company/"><i class="fa fa-cog"></i>　設定</a></li>
+<li><a href="<?=BASEURL?>/editor/settings/global/"><i class="fa fa-cog"></i>　SMTP設定</a></li>
+<?php endif;?>

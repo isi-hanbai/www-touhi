@@ -1,0 +1,9 @@
+<li><a class="disable"><?php 
+	if($this->user->kind ==1 || $this->user->kind ==4){
+		echo $this->user->company;
+	}else{
+		echo $this->user->name;
+	}
+?>様</a></li>
+<li><a href="<?=BASEURL?>/members/">マイページ</a></li>
+<li><a href="<?=BASEURL?>/signin/index/logout">ログアウト</a></li>

@@ -1,0 +1,1283 @@
+<h2><img src="<?=BASEURL?>/img/cart/new/shopping.jpg" width="159">ショッピングカート　カートの内容の確認と情報入力</h2>
+<section class="row">
+    <div class="col-xs-12">
+      <div class="x_panel">
+        <div class="x_title">
+        	<!--タイトルをH２で定義する"-->
+          <h3>カートの中の商品</h3>
+        	<!--タイトルをH２で定義する"-->
+        </div>
+        <div class="x_content">
+			<!--中身-->
+            <?php if(count($this->item)>0):?>
+                <div class="incart">
+					<?php if($this->t < $this->setting['discount']['shippingDiscountAmount'] &&$this->setting['shippingDiscountUse'] ==0):?>
+                    <div class="alert alert-info">
+                            <p><strong>あと<?=number_format(ceil($this->setting['discount']['shippingDiscountAmount']-$this->t))?>円(税込)のお買物で送料無料になります。</strong></p>
+                    </div>
+                  <?php endif;?>
+                    <ul>
+                    　<?php foreach($this->item as $v):?>
+                        <li>
+                            <div class="clearfix">
+                                <?php if($v['image'][0]['url']):?>
+                                    <img src="<?=BASEURL."/".$v['image'][0]['url']?>" width="120">
+                                <?php endif;?>
+                                <p>【<?=$v['number']?>】 <?=$v['name']?></p>
+                                <p>単価：<?=number_format($v['price'])?>円</p>
+                            </div>
+    
+                            <div class="clearfix updateDelete">
+                            <!--form action="<?=BASEURL?>/order/" method="post" class="delete"-->
+                            <form action="<?=BASEURL?>/order/" method="post" class="delete">
+                                <input type="hidden" name="number" value="<?=$v['number']?>">
+                                <input type="hidden" name="quantity" value="-1">
+                                <button type="submit" class="btn btn-dark">削除</button>
+                            </form>
+                            <form action="<?=BASEURL?>/order/" method="post">
+                                数量：<select name="quantity">
+                                    <?php for($i=1;$i<6;$i++):?>
+                                    <?php if($v['q'] == $i):?>
+                                    <option value="<?=$i?>" selected><?=$i?></option>
+                                    <?php else:?>
+                                    <option value="<?=$i?>"><?=$i?></option>
+                                    <?php endif;?>
+                                    <?php endfor;?>
+                                </select><?=$v['unit']?>
+                                <input type="hidden" name="number" value="<?=$v['number']?>">
+                                <button type="submit" class="btn btn-warning">変更</button>
+                            </form>
+                            <div class="itotal">
+                            	計：<?=number_format(($v['price']*$v['q']))?>円
+                            </div>
+                            </div>
+                        </li>
+                    <?php endforeach;?>
+                    </ul>
+           		 <div class="total clearfix"><span class="tq">商品点数：<?=$this->c?>点</span><span class="tt">小計：<?=number_format($this->t)?>円</span></div>
+           		 <div class="total clearfix"><span class="tt">消費税：<?=number_format($this->tax)?>円</span></div>
+                 </div>
+             <?php else:?>
+             		<p>商品がカートの中に入っていません。</p>
+             <?php endif;?>
+			<!--中身-->
+      </div>
+    </div>
+  </div>
+</section>
+
+<?php if(!$this->errorMsg && count($this->item)>0):?>
+<?php if(!$this->user->id):?>
+<section class="row">
+    <div class="col-xs-12">
+      <div class="x_panel">
+        <div class="x_title">
+        	<!--タイトルをH２で定義する"-->
+          <h3>会員様ログイン</h3>
+        	<!--タイトルをH２で定義する"-->
+          <div class="clearfix"></div>
+        </div>
+        <div class="x_content">
+		<!--中身-->
+            <form action="<?=BASEURL?>/signin/" method="post">
+                <div class="formset">
+                    <div class="line clearfix">
+                    <div class="left"><label>メールアドレス</div>
+                    <div class="right">
+                    <span class="hidden-xs">　　</span><input type="text" name="id" value="" placeholder="メールアドレス" class="email"></div>
+                   </div>
+                    <div class="line clearfix">
+                    <div class="left"><label>パスワード</div>
+                    <div class="right">
+                    <span class="hidden-xs">　　</span><input type="password" name="pw" value="" placeholder="パスワード" class="email"></div>
+                   </div>
+                </div>
+                <input type="hidden" name="place" value="order">
+                    <p class="text-center"><button type="submit" class="btn btn-primary btn-lg">ログイン</button>　　<a href="<?=BASEURL?>/signin/pass/">パスワードを忘れた方</a></p>
+          </form>
+          
+          <!--- 2016.11.20　ログインユーザーではない場合に会員登録を表示 
+          <br><br>
+          <p class="text-center bonus"><a href="http://www.john-mary.com/shopping_guide/bonus/"><img src="http://www.john-mary.com/wp-content/themes/_jm/img/guide/topsign/bonus.jpg"></a><br>会員登録はお済みですか？様々なサービスがあます。</p><br>
+          <p class="text-center">
+            <a href="<?=BASEURL?>/signin/index/agreement/" class="btn btn-primary btn-lg" style="width:214px;">会員登録</a><br class="visible-xs"><br class="visible-xs"><span class="hidden-xs">　</span><a href="#cus" class="btn btn-success btn-lg" style="width:214px;">会員登録しないで購入</a>
+<a id="cus" name="cus"></a>
+          </p>
+          <br>
+          -->
+  		<!--中身-->
+        </div>
+      </div>
+    </div>
+</section>
+<?php endif;?>
+<form action="<?=BASEURL?>/order/confurm" method="post" id="orderForm">
+<?php if($this->user->id):?>
+<!--ポイント情報-->
+<?php if($this->setting['point']['pointuse'] ==0):?>
+<section class="row">
+    <div class="col-xs-12">
+      <div class="x_panel">
+        <div class="x_title">
+        	<!--タイトルをH２で定義する"-->
+          <h3><?=$this->setting['point']['pointname']?>情報</h3>
+        	<!--タイトルをH２で定義する"-->
+        </div>
+        <div class="x_content">
+		<!--中身-->
+        <div class="formset">
+        	<div class="line clearfix">
+           	<div class="left"><label>使用可能<?=$this->setting['point']['pointname']?>残高</label></div>
+           	<div class="right"><span class="hidden-xs">　　</span><input type="text" id="point_balance" value="<?=$this->user->point?>" disabled class=""></div>
+           </div>
+        	<div class="line clearfix">
+           	<div class="left"><label>今回使用<?=$this->setting['point']['pointname']?></label></div>
+           	<div class="right">
+				<?php
+                    if($this->t < $this->user->point){
+                        $p = $this->t;
+                    }else{
+                        $p = $this->user->point;
+                    }
+                    if($this->user->point >0):
+                ?>
+                <span class="hidden-xs">　　</span><input type="text" name="poinAmount" value="<?php /*echo $p*/?>" class=""><?=$this->setting['point']['pointname']?>
+                <?php else:?>
+                <span class="hidden-xs">　　</span><input type="text" name="poinAmount" value="<?php /*echo $p*/?>" class="" disabled><?=$this->setting['point']['pointname']?>
+                <?php endif;?>
+            </div>
+           </div>
+        </div>
+  		<!--中身-->
+        </div>
+      </div>
+    </div>
+</section>
+<?php endif;?>
+<?php endif;?>
+<section class="row">
+    <div class="col-xs-12">
+      <div class="x_panel">
+        <div class="x_title">
+        	<!--タイトルをH２で定義する"-->
+          <h3>注文主様情報</h3>
+        	<!--タイトルをH２で定義する"-->
+        </div>
+        <div class="x_content">
+		<!--中身-->
+        <?php if($this->user->id):?>
+        <input type="hidden" name="member_no" value="<?=$this->user->id?>">
+        <?php endif;?>
+        
+        <div class="formset">
+        	<div class="line clearfix">
+           	<div class="left"><label for="cus_name" class="required clearfix">お名前</label></div>
+           	<div class="right">
+            		姓：<input type="text" name="cus_name" value="<?=$this->detail['cus_name']?>" id="cus_name" class="r name" placeholder="例：東京">
+                  名：<input type="text" name="cus_name2" value="<?=$this->detail['cus_name2']?>" id="cus_name2" class="r name" placeholder="例：梨花">　[全角]
+               </div>
+           </div>
+        	<div class="line clearfix">
+           	<div class="left"><label for="cus_kana" class="required clearfix">フリガナ</label></div>
+           	<div class="right">
+                姓：<input type="text" name="cus_kana" value="<?=$this->detail['cus_kana']?>" id="cus_kana" class="r name" placeholder="例：トウキョウ">
+				 名：<input type="text" name="cus_kana2" value="<?=$this->detail['cus_kana2']?>" id="cus_kana2" class="r name" placeholder="例：リカ"> [全角カナ]
+               </div>
+           </div>
+        	<div class="line clearfix">
+           	<div class="left"><label for="mail" class="required clearfix">メールアドレス</label></div>
+           	<div class="right">
+                <p><span class="hidden-xs">　　</span><input type="text" name="cus_mail" value="<?=$this->detail['cus_mail']?>" id="" class="email r" placeholder="例：sample@john-mary.com">　[半角英数字]<br><br></p>
+                <span class="hidden-xs">　　</span>記入例：abcd@john-mary.com<br>
+                <span class="hidden-xs">　　</span>※当社からのメールを受信できるよう<br>
+                <span class="hidden-xs">　　</span>「@john-mary.com」のドメイン受信設定をお願いします。
+               </div>
+           </div>
+        	<div class="line clearfix">
+           	<div class="left"><label for="mail2" class="required clearfix">メールアドレスの確認</label></div>
+           	<div class="right">
+                <p><span class="hidden-xs">　　</span><input type="text" name="cus_mail2" value="<?=$this->detail['cus_mail']?>" id="" class="email r" placeholder="確認のため再入力してください"></p>
+               </div>
+           </div>
+        	<div class="line clearfix">
+           	<div class="left"><label for="cus_sex" class="required clearfix">性別</label></div>
+           	<div class="right">
+                <span class="hidden-xs">　　</span>
+                <select name="cus_sex" class="r" style="widht:7em;">
+                        <option value="">性別を選択</option>
+                        <?php foreach(array(1=>"女性",2=>"男性") as $k=>$v):?>
+                        <?php if($k== $this->detail['cus_sex']):?>
+                        <option value="<?=$k?>" selected><?=$v?></option>
+                        <?php else:?>
+                        <option value="<?=$k?>"><?=$v?></option>
+                        <?php endif;?>
+                        <?php endforeach;?>
+                    </select>
+               </div>
+           </div>
+        	<div class="line clearfix">
+           	<div class="left"><label for="cus_birthY" class="required clearfix">生年月日</label></div>
+           	<div class="right">
+            		<span class="hiddn-xs">　　</span><select name="cus_birthY" class="num r" style="width:6em;">
+                    	<option value="">年を選択</option>
+                  	<?php for($i=1900;$i<date("Y")+1;$i++):?>
+                    		<?php if($i==$this->detail['cus_birthY']):?>
+                           <option value="<?=$i?>" selected><?=$i?></option>
+                         <?php else:?>
+                           <option value="<?=$i?>"><?=$i?></option>
+                         <?php endif;?>
+                      <?php endfor;?>  
+                  </select> 年
+            		<select name="cus_birthM" class="num r" style="width:6em;">
+                    	<option value="">月を選択</option>
+                  	<?php for($i=0;$i<12;$i++):?>
+                    		<?php if($i+1==$this->detail['cus_birthM']):?>
+                           <option value="<?=($i+1)?>" selected><?=($i+1)?></option>
+                         <?php else:?>
+                           <option value="<?=($i+1)?>"><?=($i+1)?></option>
+                         <?php endif;?>
+                      <?php endfor;?>  
+                  </select>月
+            		<select name="cus_birthD" class="num r" style="width:6em;">
+                    	<option value="">日を選択</option>
+                  	<?php for($i=0;$i<32;$i++):?>
+                    		<?php if($i+1==$this->detail['cus_birthD']):?>
+                           <option value="<?=($i+1)?>" selected><?=($i+1)?></option>
+                         <?php else:?>
+                           <option value="<?=($i+1)?>"><?=($i+1)?></option>
+                         <?php endif;?>
+                      <?php endfor;?>  
+                  </select>日
+               </div>
+           </div>
+        	<div class="line clearfix">
+           	<div class="left"><label for="cus_tel" class="required clearfix">電話番号（携帯可）</label></div>
+           	<div class="right">
+                <span class="hidden-xs">　　</span>
+                <input type="text" name="cus_tel" value="<?=$this->detail['cus_tel']?>" class="num r" placeholder="03" maxlength="5"> - 
+                <input type="text" name="cus_tel2" value="<?=$this->detail['cus_tel2']?>" class="num r" placeholder="3333" maxlength="4"> - 
+                <input type="text" name="cus_tel3" value="<?=$this->detail['cus_tel3']?>" class="num r" placeholder="4444" maxlength="4">　[半角数字]
+               </div>
+           </div>
+        	<div class="line clearfix">
+           	<div class="left"><label for="cus_mtel" class="">緊急連絡先</label></div>
+           	<div class="right">
+                <span class="hidden-xs">　　</span>
+                <input type="text" name="cus_mtel" value="<?=$this->detail['cus_mtel']?>" class="num" placeholder="090" maxlength="3"> - 
+                <input type="text" name="cus_mtel2" value="<?=$this->detail['cus_mtel2']?>" class="num" placeholder="3333" maxlength="4"> - 
+                <input type="text" name="cus_mtel3" value="<?=$this->detail['cus_mtel3']?>" class="num" placeholder="4444" maxlength="4">　[半角数字]
+               </div>
+           </div>
+        	<div class="line clearfix">
+           	<div class="left"><label for="cus_zip" class="required clearfix">郵便番号</label></div>
+           	<div class="right">
+                <span class="hidden-xs">　　</span>
+                <input type="text" name="cus_zip" value="<?=$this->detail['cus_zip']?>" class="num r" placeholder="100" maxlength="3"> - 
+                <input type="text" name="cus_zip2" value="<?=$this->detail['cus_zip2']?>" class="num r" placeholder="0005" maxlength="4"> [半角数字]
+                　<button type="button" id="csearchbtn" class="btn btn-success">住所を検索</button>
+               </div>
+           </div>
+        	<div class="line clearfix">
+           	<div class="left"><label for="cus_pref" class="required clearfix">都道府県</label></div>
+           	<div class="right">
+                <span class="hidden-xs">　　</span>
+                <select name="cus_pref" id="f-014" class="r" style="widht:7em;">
+                        <option value="">都道府県を選択</option>
+                        <?php foreach($this->pref as $v):?>
+                        <?php if($v['id'] == $this->detail['cus_pref']):?>
+                        <option value="<?=$v['id']?>" selected><?=$v['name']?></option>
+                        <?php else:?>
+                        <option value="<?=$v['id']?>"><?=$v['name']?></option>
+                        <?php endif;?>
+                        <?php endforeach;?>
+                    </select>
+               </div>
+           </div>
+        	<div class="line clearfix">
+           	<div class="left"><label for="cus_addr" class="required clearfix">市区町村、番地</label></div>
+           	<div class="right">
+                <p><span class="hidden-xs">　　</span><input type="text" name="cus_addr" value="<?=$this->detail['cus_addr']?>" id="f-008" class="addr r" placeholder="千代田区丸の内1-1-1">　[全角]</p>
+               </div>
+           </div>
+        	<div class="line clearfix">
+           	<div class="left"><label for="cus_addr2" class="">ビル名・マンション名、号室</label></div>
+           	<div class="right">
+                <p><span class="hidden-xs">　　</span><input type="text" name="cus_addr2" value="<?=$this->detail['cus_addr2']?>" class="addr" placeholder="JMビル9F">　[全角]</p>
+               </div>
+           </div>
+        	<div class="line clearfix">
+           	<div class="left"><label for="cus_addr2" class="">お届け先の指定</label></div>
+           	<div class="right"><p><label><input type="checkbox" id="samecus">お届け先がご注文主様と違う場合はここをチェック</label></p>
+               </div>
+           </div>
+        </div>
+  		<!--中身-->
+        </div>
+      </div>
+    </div>
+</section>
+<!--お届け先を選択-->
+<section class="row" id="deliveryDetail" style="display:none;">
+    <div class="col-xs-12">
+      <div class="x_panel">
+        <div class="x_title">
+        	<!--タイトルをH２で定義する"-->
+          <h3>お届け先情報</h3>
+        	<!--タイトルをH２で定義する"-->
+        </div>
+        <div class="x_content">
+		<!--中身-->
+        
+        <div class="formset">
+        	<div class="line clearfix">
+           	<div class="left"><label for="cus_name" class="required clearfix">お名前</label></div>
+           	<div class="right">
+            		姓：<input type="text" name="delivery_name" id="delivery_name" value="<?=$this->detail['delivery_name']?>" class="r name" placeholder="例：東京">
+                  名：<input type="text" name="delivery_name2" id="delivery_name2" value="<?=$this->detail['delivery_name2']?>" class="r name" placeholder="例：梨花">　[全角]
+               </div>
+           </div>
+        	<div class="line clearfix">
+           	<div class="left"><label for="cus_name" class="required clearfix">お名前</label></div>
+           	<div class="right">
+            		姓：<input type="text" name="delivery_kana" id="delivery_kana" value="<?=$this->detail['delivery_kana']?>" class="r name" placeholder="例：トウキョウ">
+                  名：<input type="text" name="delivery_kana2" id="delivery_kana2" value="<?=$this->detail['delivery_kana2']?>" class="r name" placeholder="例：リカ">　[全角]
+               </div>
+           </div>
+        	<div class="line clearfix">
+           	<div class="left"><label for="cus_tel" class="required clearfix">電話番号（携帯可）</label></div>
+           	<div class="right">
+                <span class="hidden-xs">　　</span>
+                <input type="text" name="delivery_tel" value="<?=$this->detail['delivery_tel']?>" class="num r" placeholder="03" maxlength="5"> - 
+                <input type="text" name="delivery_tel2" value="<?=$this->detail['delivery_tel2']?>" class="num r" placeholder="3333" maxlength="4"> - 
+                <input type="text" name="delivery_tel3" value="<?=$this->detail['delivery_tel3']?>" class="num r" placeholder="4444" maxlength="4">　[半角数字]
+               </div>
+           </div>
+        	<div class="line clearfix">
+           	<div class="left"><label for="delivery_zip" class="required clearfix">郵便番号</label></div>
+           	<div class="right">
+                <span class="hidden-xs">　　</span>
+                <input type="text" name="delivery_zip" value="<?=$this->detail['delivery_zip']?>" class="num r" placeholder="100" maxlength="3"> - 
+                <input type="text" name="delivery_zip2" value="<?=$this->detail['delivery_zip2']?>" class="num r" placeholder="0005" maxlength="4"> [半角数字]
+                　<button type="button" id="dsearchbtn" class="btn btn-success">住所を検索</button>
+               </div>
+           </div>
+        	<div class="line clearfix">
+           	<div class="left"><label for="delivery_pref" class="required clearfix">都道府県</label></div>
+           	<div class="right">
+                <span class="hidden-xs">　　</span>
+                <select name="delivery_pref" id="f-014" class="r" style="widht:7em;">
+                        <option value="">都道府県を選択</option>
+                        <?php foreach($this->pref as $v):?>
+                        <?php if($v['id'] == $this->detail['delivery_pref']):?>
+                        <option value="<?=$v['id']?>" selected><?=$v['name']?></option>
+                        <?php else:?>
+                        <option value="<?=$v['id']?>"><?=$v['name']?></option>
+                        <?php endif;?>
+                        <?php endforeach;?>
+                    </select>
+               </div>
+           </div>
+        	<div class="line clearfix">
+           	<div class="left"><label for="delivery_addr" class="required clearfix">市区町村、番地</label></div>
+           	<div class="right">
+                <p><span class="hidden-xs">　　</span><input type="text" name="delivery_addr" value="<?=$this->detail['delivery_addr']?>" id="f-008" class="addr r" placeholder="千代田区丸の内1-1-1">　[全角]</p>
+               </div>
+           </div>
+        	<div class="line clearfix">
+           	<div class="left"><label for="delivery_addr2" class="">ビル名・マンション名、号室</label></div>
+           	<div class="right">
+                <p><span class="hidden-xs">　　</span><input type="text" name="delivery_addr2" value="<?=$this->detail['delivery_addr2']?>" class="addr" placeholder="JMビル9F">　[全角]</p>
+               </div>
+           </div>
+        </div>
+           
+  		<!--中身-->
+        </div>
+      </div>
+    </div>
+</section>
+<!--お届け日時設定-->
+<?php if($this->setting['delivery']['shippingdate'] ==0 || $this->setting['delivery']['shippingtime'] ==0):?>
+<section class="row">
+    <div class="col-xs-12">
+      <div class="x_panel">
+        <div class="x_title">
+        	<!--タイトルをH２で定義する"-->
+          <h3>お届け日時設定</h3>
+        	<!--タイトルをH２で定義する"-->
+        </div>
+        <div class="x_content">
+		<!--中身-->
+        
+        <p>※お届け希望日、希望時間帯は、天候、天災、交通情勢の都合により、ご希望に添えない場合があります。</p>
+        <div class="formset">
+				<?php if($this->setting['delivery']['shippingdate'] ==0):?>
+        	<div class="line clearfix">
+                <div class="left"><label for="delivery_date">お届け希望日</label></div>
+                <div class="right">
+                <p>
+                <span class="hidden-xs">　　</span>
+                <select name="delivery_date" class="">
+                <option value="">指定なし</option>
+                <?php
+                if($this->setting['delivery']['shippingstart']){
+                $s = $this->setting['delivery']['shippingstart'];
+                }else{
+                $s = 0;
+                }
+                if($this->setting['delivery']['shippingend']){
+                $e = $this->setting['delivery']['shippingend'];
+                }else{
+                $e = 30;
+                }
+                for($i=$s;$i<$e;$i++):
+                $d = date("Y-m-d",time()+3600*24*$i);
+                ?>
+                <?php if($d == $this->detail['delivery_date']):?>
+                <option value="<?=$d?>" selected><?=$d?></option>
+                <?php else:?>
+                <option value="<?=$d?>"><?=$d?></option>
+                <?php endif;?>
+                <?php endfor;?>
+                </select>
+                </p>
+                </div>
+                </div>
+                <?php endif;?>
+				<?php if($this->setting['delivery']['shippingtime'] ==0):?>
+                <div class="line clearfix">
+                <div class="left"><label for="delivery_time">お届け希望時間帯</label></div>
+                <div class="right">
+                <p>
+                <span class="hidden-xs">　　</span>
+                <select name="delivery_time" class="">
+                <option value="">指定なし</option>
+                <?php
+                $timezonArr = explode("\n",str_replace("\r","",$this->setting['delivery']['shippingselection']));
+                $timezonArr = str_replace("\n","",$timezonArr);
+                for($i=0;$i<count($timezonArr);$i++):?>
+                <?php if($timezonArr[$i] == $this->detail['delivery_time']):?>
+                <option value="<?=$timezonArr[$i]?>" selected><?=$timezonArr[$i]?></option>
+                <?php else:?>
+                <option value="<?=$timezonArr[$i]?>"><?=$timezonArr[$i]?></option>
+                <?php endif;?>
+                <?php endfor;?>
+                </select>
+                </p>
+                </div>
+                </div>
+                <?php endif;?>
+         </div>
+  		<!--中身-->
+        </div>
+      </div>
+    </div>
+</section>
+<?php endif;?>
+<?php if($this->setting['global']['messageCardUse'] == 0):?>
+<!--メッセージカード設定-->
+<section class="row">
+    <div class="col-xs-12">
+      <div class="x_panel">
+        <div class="x_title">
+        	<!--タイトルをH２で定義する"-->
+          <h3>メッセージカード設定</h3>
+        	<!--タイトルをH２で定義する"-->
+        </div>
+        <div class="x_content">
+		<!--中身-->
+        <div class="formset">
+        	<div class="line clearfix">
+                <div class="left"><label for="delivery_date">用途</label></div>
+                <div class="right">
+                	<span class="hidden-xs">　　</span>
+                  <select name="youto" class="form-control">
+                	<option value="">選択</option>
+                 	<?php
+					$youtoArr = $this->setting['youto'];
+					for($i=0;$i<count($youtoArr);$i++):
+						if($youtoArr[$i]['id'] == $this->data['youto']):?>
+                      <option value="<?=$youtoArr[$i]['id']?>" selected><?=$youtoArr[$i]['name']?></option>
+                      <?php else:?>
+                      <option value="<?=$youtoArr[$i]['id']?>"><?=$youtoArr[$i]['name']?></option>
+                      <?php endif;?>
+                  <?php endfor;?>
+                  </select>
+                </div>
+            </div>
+        	<div class="line clearfix">
+                <div class="left"><label for="delivery_date">メッセージカード種類</label></div>
+                <div class="right">
+                	<span class="hidden-xs">　　</span>
+                  <select name="noshi_kind" class="form-control">
+                	<option value="">選択</option>
+                 	<?php
+					$msgArr = explode("\n",str_replace("\r","",$this->setting['global']['messageCardKind']));
+					$msgArr = str_replace("\n","",$msgArr);
+					for($i=0;$i<count($msgArr);$i++):
+						if($msgArr[$i] == $this->data['noshi_kind']):?>
+                  	<option value="<?=$msgArr[$i]?>" selected><?=$msgArr[$i]?></option>
+                      <?php else:?>
+                  	<option value="<?=$msgArr[$i]?>"><?=$msgArr[$i]?></option>
+                      <?php endif?>
+                  <?php endfor;?>
+                  </select>
+                </div>
+            </div>
+        	<div class="line clearfix">
+                <div class="left"><label for="delivery_date">メッセージカード内容</label></div>
+                <div class="right">
+               <textarea name="message" rows="5" class="form-control"><?=$this->data['message']?></textarea>
+                </div>
+            </div>
+        </div>
+  		<!--中身-->
+        </div>
+      </div>
+    </div>
+</section>
+<?php endif;?>
+<!--決済方法設定-->
+<section class="row">
+    <div class="col-xs-12">
+      <div class="x_panel">
+        <div class="x_title">
+        	<!--タイトルをH２で定義する"-->
+          <h3 id="payment_method"><label class="required" >決済方法設定</label></h3>
+        	<!--タイトルをH２で定義する"-->
+        </div>
+        <div class="x_content">
+		<!--中身-->
+        
+        <div class="formset">
+        	<?php foreach($this->setting['payment'] as $v):?>
+                <div class="line clearfix">
+                    <div class="left">
+                        <div class="form-group">
+                        <label class="checkbox-inline">
+                            <?php if($v['id'] == $this->detail['payment_method']):?>
+                                <input type="radio" id="radio-<?=$v['id']?>" name="payment_method" value="<?=$v['id']?>" checked>
+                          <?php else:?>
+                                <input type="radio" id="radio-<?=$v['id']?>" name="payment_method" value="<?=$v['id']?>">
+                            <?php endif;?>
+                        <?=$v['name']?>
+                        </label>
+                        </div>
+                    </div>
+                <div class="right">
+                            <div><?=str_replace("\n","<br>",$v['description'])?>
+                            	<?php if($v['gmoFlug'] == 1):?>
+                                <p><img class="alignnone wp-image-437 size-full" src="http://www.john-mary.com/wp-content/themes/_jm/img/guide/cresit.png" alt="cresit" width="526" height="96"></p>
+                                <p>ご注文完了と同時にクレジットカード決済が行われます。下記の項目にクレジットカード情報を入力してください。</p>
+                                <div class="data-table">
+                                    <table class="table table-striped table-responcive">
+                                        <tbody>
+                                            <tr>
+                                            	<th>カード番号</th>
+                                            	<td><input type="text" name="CardNo" class=""></td>
+                                            </tr>
+                                            <tr>
+                                            	<th>有効期限</th>
+                                            	<td class="form-inline"><input type="text" name="ExpireMM" class="">月<input type="text" name="ExpireYY" class="">年</td>
+                                            </tr>
+                                            <tr>
+                                            	<th>セキュリティコード</th>
+                                            	<td><input type="text" name="SecurityCode" class=""></td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                <p><img src="<?=BASEURL?>/img/security.gif"><br>※セキュリティコードとは、カード裏面に記載（AmericanExpressは前面）に記載の３桁の数字です。<br>
+									</p>
+                                </div>
+                            	<?php elseif($v['gmoFlug'] == 2):?>
+                                <p><br>
+                	<img src="http://www.john-mary.com/wp-content/themes/_jm/img/guide/cvs/lowson.png" alt="ローソン" width="36" height="36">
+                 	<img src="http://www.john-mary.com/wp-content/themes/_jm/img/guide/cvs/familymart.png" alt="ファミリーマート" width="36" height="36">
+                  <img src="http://www.john-mary.com/wp-content/themes/_jm/img/guide/cvs/sanks.png" alt="サンクス" width="36" height="36">
+                  <img src="http://www.john-mary.com/wp-content/themes/_jm/img/guide/cvs/cerclK.png" alt="サークル" width="36" height="36">
+                  <img src="http://www.john-mary.com/wp-content/themes/_jm/img/guide/cvs/misistop.png" alt="ミニストップ" width="36" height="36">
+                  <img src="http://www.john-mary.com/wp-content/themes/_jm/img/guide/cvs/dayly.png" alt="デイリーヤマザキ" width="36" height="36">
+                  <img src="http://www.john-mary.com/wp-content/themes/_jm/img/guide/cvs/seikomart.png" alt="セイコーマート" width="36" height="36">
+                  <img src="http://www.john-mary.com/wp-content/themes/_jm/img/guide/cvs/threeF.png" alt="スリーエフ" width="36" height="36"></p>
+                                <p>下記のコンビニブランドよりご希望のものをお選びください。</p>
+                                <p>コンビニブランド
+                                    <select name="Convenience" class="">
+                                            <!--option value="00007">セブンイレブン</option-->
+                                            <option value="10001">ローソン</option>
+                                            <option value="10002">ファミリーマート</option>
+                                            <option value="00003">サンクス</option>
+                                            <option value="00004">サークルK</option>
+                                            <option value="10005">ミニストップ</option>
+                                            <option value="00006">デイリーヤマザキ</option>
+                                            <option value="00008">セイコーマート</option>
+                                            <option value="00009">スリーエフ</option>
+                                        </select>
+                                  </p>
+                             <?php endif;?>
+                </div>
+            </div>
+        </div>
+              <?php endforeach;?>
+          </div>
+  		<!--中身-->
+        </div>
+      </div>
+    </div>
+</section>
+
+<!--その他設定-->
+<section class="row">
+    <div class="col-xs-12">
+      <div class="x_panel">
+        <div class="x_title">
+        	<!--タイトルをH２で定義する"-->
+          <h3>その他、備考など</h3>
+        	<!--タイトルをH２で定義する"-->
+        </div>
+        <div class="x_content">
+		<!--中身-->
+        
+        <p><textarea name="order_comment" rows="5" class="form-control"><?=$this->detail['order_comment']?></textarea></p>
+
+  		<!--中身-->
+        </div>
+      </div>
+    </div>
+</section>
+<input type="hidden" name="member_no" value="<?=$this->user->id?>">
+<input type="hidden" name="tax" value="<?=$this->tax?>">
+</form>
+<p class="text-center"><button type="button" class="btn btn-lg btn-success" id="formSubmit">注文内容の確認</button></p>
+
+<script src="<?=BASEURL?>/js/validation.js"></script>
+<script src="<?=BASEURL?>/js/autokana/jquery.autoKana.js"></script>
+<script>
+var error = new Array();
+var sely = 0
+jQuery(function(){
+	$.fn.autoKana('#cus_name', '#cus_kana', {
+		katakana : true  //true：カタカナ、false：ひらがな（デフォルト）
+	});
+	$.fn.autoKana('#cus_name2', '#cus_kana2', {
+		katakana : true  //true：カタカナ、false：ひらがな（デフォルト）
+	});
+	$.fn.autoKana('#delivery_name', '#delivery_kana', {
+		katakana : true  //true：カタカナ、false：ひらがな（デフォルト）
+	});
+	$.fn.autoKana('#delivery_name2', '#delivery_kana2', {
+		katakana : true  //true：カタカナ、false：ひらがな（デフォルト）
+	});
+	//現在日時で35歳の年齢の生まれ年を選択状態にする
+	$("[name='cus_birthY']").on("mousedown",function(){
+		if(sely == 0){
+			var hiduke=new Date();
+			var year = hiduke.getFullYear();
+			var month = hiduke.getMonth()+1;
+			//今日の年を取得
+			year = year-35;
+			$(this).val(year);
+		}
+	});
+	$("[name='cus_birthY']").on("change",function(){
+		$("[name='cus_birthM']").empty();
+		$("[name='cus_birthM']").append($("<option>").val("").text("月を選択"));
+		for(var i =0; i<12; i++){
+			$("[name='cus_birthM']").append($("<option>").val((i+1)).text((i+1)));
+		}
+		getLastDayOfMonth(1);
+		sely = $("[name='cus_birthY']").val();
+		$("[name='cus_birthD']").empty();
+		$("[name='cus_birthD']").append($("<option>").val("").text("日を選択"));
+	});
+	$("[name='cus_birthM']").on("change",function(){
+		getLastDayOfMonth();
+	});
+	
+	
+	
+	<?php if(isset($_GET['order'])){
+		//echo "deliverydate();";
+	}?>
+	//注文主住所を検索
+	jQuery("#csearchbtn").on("click",function(){
+		var d = $("[name=cus_zip]").val()+$("[name=cus_zip2]").val();
+		//var c = $("[name=cus_addr]").val();
+		console.log(d);
+		var key = $("[name=cus_zip]");
+		$.post("<?=BASEURL?>/api/addr/",{"d":d},function(data){
+			if(data == "NotExsist" || data == "AccessDenied"){
+				console.log(data);
+			}else{
+				console.log(data);
+				
+				if($("#searchBox")){
+					$("#searchBox").remove();
+				}
+				//リスト収容用のboxを挿入
+				var searchBox = $("<div>");
+				searchBox.attr("id","searchBox");
+				key.after(searchBox);
+				var ul = $("<ul>");
+				searchBox.append(ul);
+				//リストを挿入
+				var addrs =  JSON.parse(data);
+				if(addrs.length >0 ){
+					for(var i=0;i<addrs.length;i++){
+						var li =$("<li>");
+						ul.append(li);
+						var a = $("<a>");
+						a.attr("href","javascript:void(0)");
+						a.attr("id","cus_"+addrs[i]['id']);
+						a.addClass("cus");
+						a.text("〒"+addrs[i]['zipcode']+" "+addrs[i]['prefName']+addrs[i]['city']+addrs[i]['town']);
+						li.append(a);
+						var index = addrs[i];
+						a.on("click",function(){
+							for(var j =0;j<addrs.length;j++){
+								if(addrs[j]['id'] == $(this).attr("id").substr(4)){
+									//クリックされたら値を挿入
+									$("[name=cus_pref]").val(addrs[j]["pref"]);
+									$("[name=cus_addr]").val(addrs[j]['city']+addrs[j]['town']);
+									$("[name=delivery_pref]").val(addrs[j]["pref"]);
+									$("[name=delivery_addr]").val(addrs[j]['city']+addrs[j]['town']);
+									//検索候補リストを削除
+									$("#searchBox").remove();
+									validEmptyAndZero("cus_zip","ご注文主様の郵便番号");
+									validEmptyAndZip("cus_zip2","ご注文主様の郵便番号","cus_zip");
+									validEmpty("cus_pref","ご注文主様の都道府県");
+									validEmpty("cus_addr","ご注文主様の市区町村、番地");
+									
+									validEmptyAndZero("delivery_zip","お届け先様の郵便番号1");
+									validEmptyAndZip("delivery_zip2","お届け先様の郵便番号","delivery_zip");
+									validEmpty("delivery_pref","お届け先様の都道府県");
+									validEmpty("delivery_addr","お届け先様の市区町村、番地");
+									break;
+								}
+							}
+						});
+					}
+				}
+			}
+		});
+	});
+	//お届け先住所を検索
+	jQuery("#dsearchbtn").on("click",function(){
+		var d = $("[name=delivery_zip]").val()+$("[name=delivery_zip2]").val();
+		//var c = $("[name=delivery_addr]").val();
+		var key = $("[name=delivery_zip]");
+		$.post("<?=BASEURL?>/api/addr/",{"d":d},function(data){
+			if(data == "NotExsist" || data == "AccessDenied"){
+			}else{
+				if($("#searchBox")){
+					$("#searchBox").remove();
+				}
+				//リスト収容用のboxを挿入
+				var searchBox = $("<div>");
+				searchBox.attr("id","searchBox");
+				key.after(searchBox);
+				var ul = $("<ul>");
+				searchBox.append(ul);
+				//リストを挿入
+				var addrs =  JSON.parse(data);
+				if(addrs.length >0 ){
+					for(var i=0;i<addrs.length;i++){
+						var li =$("<li>");
+						ul.append(li);
+						var a = $("<a>");
+						a.attr("href","javascript:void(0)");
+						a.attr("id","cus_"+addrs[i]['id']);
+						a.addClass("cus");
+						a.text("〒"+addrs[i]['zipcode']+" "+addrs[i]['prefName']+addrs[i]['city']+addrs[i]['town']);
+						li.append(a);
+						var index = addrs[i];
+						a.on("click",function(){
+							for(var j =0;j<addrs.length;j++){
+								if(addrs[j]['id'] == $(this).attr("id").substr(4)){
+									//クリックされたら値を挿入
+									$("[name=delivery_pref]").val(addrs[j]["pref"]);
+									$("[name=delivery_addr]").val(addrs[j]['city']+addrs[j]['town']);
+									
+									//検索候補リストを削除
+									$("#searchBox").remove();
+									validEmptyAndZero("delivery_zip","お届け先様の郵便番号1");
+									validEmptyAndZip("delivery_zip2","お届け先様の郵便番号2","delivery_zip");
+									validEmpty("delivery_pref","お届け先様の都道府県");
+									validEmpty("delivery_addr","お届け先様の市区町村、番地");
+									break;
+								}
+							}
+						});
+					}
+				}
+			}
+		});
+	});
+	
+	//ロード時にセッションを持っていた場合は、お届け先の入力補完
+	if($("[name=member_no]").val() !=""){
+		$("[name=delivery_name]").val($("[name=cus_name]").val());
+		$("[name=delivery_kana]").val($("[name=cus_kana]").val());
+		$("[name=delivery_name2]").val($("[name=cus_name2]").val());
+		$("[name=delivery_kana2]").val($("[name=cus_kana2]").val());
+		$("[name=delivery_tel]").val($("[name=cus_tel]").val());
+		$("[name=delivery_tel2]").val($("[name=cus_tel2]").val());
+		$("[name=delivery_tel3]").val($("[name=cus_tel3]").val());
+		$("[name=delivery_zip]").val($("[name=cus_zip]").val());
+		$("[name=delivery_zip2]").val($("[name=cus_zip2]").val());
+		$("[name=delivery_pref]").val($("[name=cus_pref]").val());
+		$("[name=delivery_addr]").val($("[name=cus_addr]").val());
+		$("[name=delivery_addr2]").val($("[name=cus_addr2]").val());
+		
+		validEmpty("cus_name","ご注文主様のお名前：姓");
+		validEmpty("cus_name2","ご注文主様のお名前：名");
+		validEmptyKana("cus_kana","ご注文主様のフリガナ：姓");
+		validEmptyKana("cus_kana2","ご注文主様のフリガナ；名");
+		validEmptyAndMailFormat("cus_mail","ご注文主様のメールアドレス");
+		validEmptyAndMailFormatAndDiff("cus_mail2","ご注文主様のメールアドレスの確認","cus_mail");
+		validEmptyAndZeroZero("cus_tel","ご注文主様の電話番号");
+		validEmptyAndZero("cus_tel2","ご注文主様の電話番号");
+		validEmptyAndTel("cus_tel3","ご注文主様の電話番号","cus_tel","cus_tel2");
+		validEmptyAndZero("cus_zip","ご注文主様の郵便番号");
+		validEmptyAndZip("cus_zip2","ご注文主様の郵便番号","cus_zip");
+		validEmpty("cus_pref","ご注文主様の都道府県");
+		validEmpty("cus_addr","ご注文主様の市区町村、番地");
+		validEmpty("delivery_name","お届け先様のお名前");
+		validEmpty("delivery_name2","お届け先様のお名前");
+		validEmptyKana("delivery_kana","お届け先様のフリガナ");
+		validEmptyKana("delivery_kana2","お届け先様のフリガナ");
+		validEmptyAndZeroZero("delivery_tel","お届け先様の電話番号");
+		validEmptyAndZero("delivery_tel2","お届け先様の電話番号");
+		validEmptyAndTel("delivery_tel3","お届け先様の電話番号","delivery_tel","delivery_tel2");
+		validEmptyAndZero("delivery_zip","お届け先様の郵便番号");
+		validEmptyAndZip("delivery_zip2","お届け先様の郵便番号","delivery_zip");
+		validEmpty("delivery_pref","お届け先様の都道府県");
+		validEmpty("delivery_addr","お届け先様の市区町村、番地");
+		validEmpty("cus_sex","性別");
+		validEmpty("cus_birthY","生年月日：年");
+		validEmpty("cus_birthM","生年月日：月");
+		validEmpty("cus_birthD","生年月日：日");
+	}
+	//お届け先の入力補完
+	
+	$("[name=cus_name]").on("keyup",function(){
+		$("[name=delivery_name]").val($("[name=cus_name]").val());
+		$("[name=delivery_kana]").val($("[name=cus_kana]").val());
+		validEmpty("delivery_name","お届け先様のお名前");
+	});
+	$("[name=cus_name2]").on("keyup",function(){
+		$("[name=delivery_name2]").val($("[name=cus_name2]").val());
+		$("[name=delivery_kana2]").val($("[name=cus_kana2]").val());
+		validEmpty("delivery_name2","お届け先様のお名前2");
+	});
+	$("[name=cus_kana]").on("keyup",function(){
+		$("[name=delivery_kana]").val($("[name=cus_kana]").val());
+		validEmptyKana("delivery_kana","お届け先様のフリガナ");
+	});
+	$("[name=cus_kana2]").on("keyup",function(){
+		$("[name=delivery_kana2]").val($("[name=cus_kana2]").val());
+		validEmptyKana("delivery_kana2","お届け先様のフリガナ2");
+	});
+	$("[name=cus_tel]").on("keyup",function(){
+		$("[name=delivery_tel]").val($("[name=cus_tel]").val());
+			validEmptyAndZeroZero("delivery_tel","お届け先様の電話番号");
+	});
+	$("[name=cus_tel2]").on("keyup",function(){
+		$("[name=delivery_tel2]").val($("[name=cus_tel2]").val());
+			validEmptyAndZero("delivery_tel2","お届け先様の電話番号");
+	});
+	$("[name=cus_tel3]").on("keyup",function(){
+		$("[name=delivery_tel3]").val($("[name=cus_tel3]").val());
+			validEmptyAndTel("delivery_tel3","お届け先様の電話番号","delivery_tel","delivery_tel2");
+	});
+	$("[name=cus_zip]").on("keyup",function(){
+		$("[name=delivery_zip]").val($("[name=cus_zip]").val());
+	});
+	$("[name=cus_zip2]").on("keyup",function(){
+		$("[name=delivery_zip2]").val($("[name=cus_zip2]").val());
+	});
+	$("[name=cus_pref]").on("change",function(){
+		$("[name=delivery_pref]").val($("[name=cus_pref]").val());
+	});
+	$("[name=cus_addr]").on("keyup",function(){
+		$("[name=delivery_addr]").val($("[name=cus_addr]").val());
+	});
+	$("[name=cus_addr2]").on("keyup",function(){
+		$("[name=delivery_addr2]").val($("[name=cus_addr2]").val());
+	});
+	
+	//お届け先が違う場合はチェックに変更
+	jQuery("#samecus").　on("change",function(){
+		if($(this).prop("checked")){
+			$("[name=delivery_campay]").val("");
+			$("[name=de1livery_div]").val("");
+			$("[name=delivery_name]").val("");
+			$("[name=delivery_name2]").val("");
+			$("[name=delivery_kana]").val("");
+			$("[name=delivery_kana2]").val("");
+			$("[name=delivery_tel]").val("");
+			$("[name=delivery_tel2]").val("");
+			$("[name=delivery_tel3]").val("");
+			$("[name=delivery_zip]").val("");
+			$("[name=delivery_zip2]").val("");
+			$("[name=delivery_pref]").val("");
+			$("[name=delivery_addr]").val("");
+			$("[name=delivery_addr2]").val("");
+			
+			validEmpty("delivery_name","お届け先様のお名前");
+			validEmpty("delivery_name2","お届け先様のお名前");
+			validEmptyKana("delivery_kana","お届け先様のフリガナ");
+			validEmptyKana("delivery_kana2","お届け先様のフリガナ");
+			validEmptyAndZeroZero("delivery_tel","お届け先様の電話番号");
+			validEmptyAndZero("delivery_tel2","お届け先様の電話番号");
+			validEmptyAndTel("delivery_tel3","お届け先様の電話番号","delivery_tel","delivery_tel2");
+			validEmptyAndZero("delivery_zip","お届け先様の郵便番号");
+			validEmptyAndZip("delivery_zip2","お届け先様の郵便番号","delivery_zip");
+			validEmpty("delivery_pref","お届け先様の都道府県");
+			validEmpty("delivery_addr","お届け先様の市区町村、番地");
+			$("#deliveryDetail").css("display","block");
+		}else{
+			$("[name=delivery_name]").val($("[name=cus_name]").val());
+			$("[name=delivery_name2]").val($("[name=cus_name2]").val());
+			$("[name=delivery_kana]").val($("[name=cus_kana]").val());
+			$("[name=delivery_kana2]").val($("[name=cus_kana2]").val());
+			$("[name=delivery_tel]").val($("[name=cus_tel]").val());
+			$("[name=delivery_tel2]").val($("[name=cus_tel2]").val());
+			$("[name=delivery_tel3]").val($("[name=cus_tel3]").val());
+			$("[name=delivery_zip]").val($("[name=cus_zip]").val());
+			$("[name=delivery_zip2]").val($("[name=cus_zip2]").val());
+			$("[name=delivery_pref]").val($("[name=cus_pref]").val());
+			$("[name=delivery_addr]").val($("[name=cus_addr]").val());
+			$("[name=delivery_addr2]").val($("[name=cus_addr2]").val());
+			
+			validEmpty("delivery_name","お届け先様のお名前");
+			validEmpty("delivery_name2","お届け先様のお名前");
+			validEmptyKana("delivery_kana","お届け先様のフリガナ");
+			validEmptyKana("delivery_kana2","お届け先様のフリガナ");
+			validEmptyAndZeroZero("delivery_tel","お届け先様の電話番号");
+			validEmptyAndZero("delivery_tel2","お届け先様の電話番号");
+			validEmptyAndTel("delivery_tel3","お届け先様の電話番号","delivery_tel","delivery_tel2");
+			validEmptyAndZero("delivery_zip","お届け先様の郵便番号");
+			validEmptyAndZip("delivery_zip2","お届け先様の郵便番号","delivery_zip");
+			validEmpty("delivery_pref","お届け先様の都道府県");
+			validEmpty("delivery_addr","お届け先様の市区町村、番地");
+			$("#deliveryDetail").css("display","none");
+		}
+	});
+	$("[name=delivery_zip]").on("change",function(){
+		//deliverydate();
+	});
+	
+	
+	
+	//バリデーション
+	$("[name=cus_name]").on("blur",function(){
+		validEmpty("cus_name","ご注文主様のお名前：姓");
+		validEmptyKana("cus_kana","ご注文主様のフリガナ：セイ");
+	});
+	$("[name=cus_name2]").on("blur",function(){
+		validEmpty("cus_name2","ご注文主様のお名前：名");
+		validEmptyKana("cus_kana2","ご注文主様のフリガナ：メイ");
+	});
+	$("[name=cus_kana]").on("blur",function(){
+		validEmptyKana("cus_kana","ご注文主様のフリガナ：セイ");
+	});
+	$("[name=cus_kana2]").on("blur",function(){
+		validEmptyKana("cus_kana2","ご注文主様のフリガナ：メイ");
+	});
+	$("[name=cus_mail]").on("blur",function(){
+		validEmptyAndMailFormat("cus_mail","ご注文主様のメールアドレス");
+	});
+	$("[name=cus_mail2]").on("blur",function(){
+		validEmptyAndMailFormatAndDiff("cus_mail2","ご注文主様のメールアドレスの確認","cus_mail");
+	});
+	$("[name=cus_tel]").on("blur",function(){
+		validEmptyAndZeroZero("cus_tel","ご注文主様の電話番号");
+	});
+	$("[name=cus_tel2]").on("blur",function(){
+		validEmptyAndZero("cus_tel2","ご注文主様の電話番号");
+	});
+	$("[name=cus_tel3]").on("blur",function(){
+		validEmptyAndTel("cus_tel3","ご注文主様の電話番号","cus_tel","cus_tel2");
+	});
+	$("[name=cus_zip]").on("blur",function(){
+		validEmptyAndZero("cus_zip","ご注文主様の郵便番号");
+	})
+	$("[name=cus_zip2]").on("blur",function(){
+		validEmptyAndZip("cus_zip2","ご注文主様の郵便番号","cus_zip");
+	});
+	$("[name=cus_pref]").on("blur",function(){
+		validEmpty("cus_pref","ご注文主様の都道府県");
+	});
+	$("[name=cus_addr]").on("blur",function(){
+		validEmpty("cus_addr","ご注文主様の市区町村、番地");
+	});
+	$("[name=delivery_name]").on("blur",function(){
+		validEmpty("delivery_name","お届け先様のお名前：姓");
+		validEmptyKana("delivery_kana","お届け先様のフリガナ：セイ");
+	});
+	$("[name=delivery_name2]").on("blur",function(){
+		validEmpty("delivery_name2","お届け先様のお名前：名");
+		validEmptyKana("delivery_kana2","お届け先様のフリガナ：メイ");
+	});
+	$("[name=delivery_kana]").on("blur",function(){
+		validEmptyKana("delivery_kana","お届け先様のフリガナ：セイ");
+	});
+	$("[name=delivery_kana2]").on("blur",function(){
+		validEmptyKana("delivery_kana2","お届け先様のフリガナ：メイ");
+	});
+	$("[name=delivery_tel]").on("blur",function(){
+		validEmptyAndZeroZero("delivery_tel","お届け先様の電話番号");
+	});
+	$("[name=delivery_tel2]").on("blur",function(){
+		validEmptyAndZero("delivery_tel2","お届け先様の電話番号");
+	});
+	$("[name=delivery_tel3]").on("blur",function(){
+		validEmptyAndTel("delivery_tel3","お届け先様の電話番号","delivery_tel","delivery_tel2");
+	});
+	$("[name=delivery_zip]").on("blur",function(){
+		validEmptyAndZero("delivery_zip","お届け先様の郵便番号");
+	});
+	$("[name=delivery_zip2]").on("blur",function(){
+		validEmptyAndZip("delivery_zip2","お届け先様の郵便番号","delivery_zip");
+	});
+	$("[name=delivery_pref]").on("blur",function(){
+		validEmpty("delivery_pref","お届け先様の都道府県");
+	});
+	$("[name=delivery_addr]").on("blur",function(){
+		validEmpty("delivery_addr","お届け先様の市区町村、番地");
+	});
+	$("[name=payment_method]").on("blur",function(){
+		validPaymentMethod("payment_method","決済方法");
+	});
+	$("[name=cus_sex]").on("blur",function(){
+		validEmpty("cus_sex","性別");
+	});
+	$("[name=cus_birthY]").on("blur",function(){
+		validEmpty("cus_birthY","生年月日：年");
+	});
+	$("[name=cus_birthM]").on("blur",function(){
+		validEmpty("cus_birthM","生年月日：月");
+	});
+	$("[name=cus_birthD]").on("blur",function(){
+		validEmpty("cus_birthD","生年月日：日");
+	});
+	$("#formSubmit").on("click",function(){
+		error = new Array();
+		validEmpty("cus_name","ご注文主様のお名前：姓");
+		validEmpty("cus_name2","ご注文主様のお名前：名");
+		validEmptyKana("cus_kana","ご注文主様のフリガナ：姓");
+		validEmptyKana("cus_kana2","ご注文主様のフリガナ；名");
+		validEmptyAndMailFormat("cus_mail","ご注文主様のメールアドレス");
+		validEmptyAndMailFormatAndDiff("cus_mail2","ご注文主様のメールアドレスの確認","cus_mail");
+		validEmptyAndZeroZero("cus_tel","ご注文主様の電話番号");
+		validEmptyAndZero("cus_tel2","ご注文主様の電話番号");
+		validEmptyAndTel("cus_tel3","ご注文主様の電話番号","cus_tel","cus_tel2");
+		validEmptyAndZero("cus_zip","ご注文主様の郵便番号");
+		validEmptyAndZip("cus_zip2","ご注文主様の郵便番号","cus_zip");
+		validEmpty("cus_pref","ご注文主様の都道府県");
+		validEmpty("cus_addr","ご注文主様の市区町村、番地");
+		validEmpty("delivery_name","お届け先様のお名前");
+		validEmpty("delivery_name2","お届け先様のお名前");
+		validEmptyKana("delivery_kana","お届け先様のフリガナ");
+		validEmptyKana("delivery_kana2","お届け先様のフリガナ");
+		validEmptyAndZeroZero("delivery_tel","お届け先様の電話番号");
+		validEmptyAndZero("delivery_tel2","お届け先様の電話番号");
+		validEmptyAndTel("delivery_tel3","お届け先様の電話番号","delivery_tel","delivery_tel2");
+		validEmptyAndZero("delivery_zip","お届け先様の郵便番号");
+		validEmptyAndZip("delivery_zip2","お届け先様の郵便番号","delivery_zip");
+		validEmpty("delivery_pref","お届け先様の都道府県");
+		validEmpty("delivery_addr","お届け先様の市区町村、番地");
+		validPaymentMethod("payment_method","決済方法");
+		validEmpty("cus_sex","性別");
+		validEmpty("cus_birthY","生年月日：年");
+		validEmpty("cus_birthM","生年月日：月");
+		validEmpty("cus_birthD","生年月日：日");
+		if(error.length >0){
+			//console.log(error);
+			var str = "";
+			str+= "入力に誤りがあります。下記の項目を修正して再度ボタンを押してください。\n";
+			for(var i =0;i<error.length;i++){
+				if(error[i] =="cus_nameEmpty"){
+					str+="「ご注文主様のお名前：姓」を入力してください。\n";
+				}
+				if(error[i] =="cus_name2Empty"){
+					str+="「ご注文主様のお名前：名」を入力してください。\n";
+				}
+				if(error[i] =="cus_kanaEmpty"){
+					str+="「ご注文主様のフリガナ：姓」を入力してください。\n";
+				}
+				if(error[i] =="cus_kanaNotKana"){
+					str+="「ご注文主様のフリガナ：姓」は全角カタカナで入力してください。\n";
+				}
+				if(error[i] =="cus_kana2Empty"){
+					str+="「ご注文主様のフリガナ：名」を入力してください。\n";
+				}
+				if(error[i] =="cus_kana2NotKana"){
+					str+="「ご注文主様のフリガナ：名」は全角カタカナで入力してください。\n";
+				}
+				if(error[i] =="cus_mailEmpty"){
+					str+="「ご注文主様のメールアドレス」を入力してください。\n";
+				}
+				if(error[i] =="cus_mailMailFormat"){
+					str+="「ご注文主様のメールアドレス」の形式を正しく入力してください。\n";
+				}
+				if(error[i] =="cus_mailMailSame"){
+					str+="この「メールアドレス」はすでに登録されています。\n";
+				}
+				if(error[i] =="cus_mail2Empty"){
+					str+="「ご注文主様のメールアドレス確認用」を入力してください。\n";
+				}
+				if(error[i] =="cus_mail2MailDiff"){
+					str+="「ご注文主様のメールアドレス」と「ご注文主様のメールアドレス確認用」が一致しません\n";
+				}
+				if(error[i] =="cus_mail2MailFormat"){
+					str+="「ご注文主様のメールアドレス確認用」の形式を正しく入力してください。\n";
+				}
+				if(error[i] =="cus_sexEmpty"){
+					str+="「ご注文主様の性別」を選択してください。\n";
+				}
+				if(error[i] =="cus_birthYEmpty"){
+					str+="「ご注文主様の生年月日：年」を入力してください。\n";
+				}
+				if(error[i] =="cus_birthMEmpty"){
+					str+="「ご注文主様の生年月日：月」を入力してください。\n";
+				}
+				if(error[i] =="cus_birthDEmpty"){
+					str+="「ご注文主様の生年月日：日」を入力してください。\n";
+				}
+				if(error[i] =="cus_telEmpty"){
+					str+="「ご注文主様の電話番号」を入力してください。\n";
+				}
+				if(error[i] =="cus_telZero"){
+					str+="「ご注文主様の電話番号」はゼロのみの入力は出来ません。\n";
+				}
+				if(error[i] =="cus_tel2Empty"){
+					str+="「ご注文主様の電話番号」を入力してください。\n";
+				}
+				if(error[i] =="cus_telZero"){
+					str+="「ご注文主様の電話番号」はゼロのみの入力は出来ません。\n";
+				}
+				if(error[i] =="cus_tel3Empty"){
+					str+="「ご注文主様の電話番号」を入力してください。\n";
+				}
+				if(error[i] =="cus_tel3NotTel"){
+					str+="ご注文主様の電話番号として正しくありません\n";
+				}
+				if(error[i] =="cus_tel3Zero"){
+					str+="「ご注文主様の電話番号」はゼロのみの入力は出来ません。\n";
+				}
+				if(error[i] =="cus_zipEmpty"){
+					str+="「ご注文主様の郵便番号」を入力してください。\n";
+				}
+				if(error[i] =="cus_zipZero"){
+					str+="「ご注文主様の郵便番号」はゼロのみの入力は出来ません。\n";
+				}
+				if(error[i] =="cus_zipNumeric"){
+					str+="「ご注文主様の郵便番号」が半角数字ではありません\n";
+				}
+				if(error[i] =="cus_zip2Empty"){
+					str+="「ご注文主様の郵便番号」を入力してください。\n";
+				}
+				if(error[i] =="cus_zip2NotZip"){
+					str+="「ご注文主様の郵便番号」を入力してください。\n";
+				}
+				if(error[i] =="cus_zip2Numeric"){
+					str+="「ご注文主様の郵便番号」が半角数字ではありません\n";
+				}
+				if(error[i] =="cus_prefEmpty"){
+					str+="「ご注文主様の都道府県」を選択してください。\n";
+				}
+				if(error[i] =="addrEmpty"){
+					str+="「ご注文主様の市区町村、番地」を入力してください。\n";
+				}
+				if(error[i] =="delivery_nameEmpty"){
+					str+="「お届け先のお名前：姓」を入力してください。\n";
+				}
+				if(error[i] =="delivery_name2Empty"){
+					str+="「お届け先のお名前：名」を入力してください。\n";
+				}
+				if(error[i] =="delivery_kanaEmpty"){
+					str+="「お届け先のフリガナ：姓」を入力してください。\n";
+				}
+				if(error[i] =="delivery_kanaNotKana"){
+					str+="「お届け先のフリガナ：姓」は全角カタカナで入力してください。\n";
+				}
+				if(error[i] =="delivery_kana2Empty"){
+					str+="「お届け先のフリガナ：名」を入力してください。\n";
+				}
+				if(error[i] =="delivery_kana2NotKana"){
+					str+="「お届け先のフリガナ：名」は全角カタカナで入力してください。\n";
+				}
+				if(error[i] =="delivery_telEmpty"){
+					str+="「お届け先の電話番号1」を入力してください。\n";
+				}
+				if(error[i] =="delivery_telZero"){
+					str+="「お届け先の電話番号」はゼロのみの入力は出来ません。\n";
+				}
+				if(error[i] =="delivery_tel2Empty"){
+					str+="「お届け先の電話番号」を入力してください。\n";
+				}
+				if(error[i] =="delivery_telZero"){
+					str+="「お届け先の電話番号」はゼロのみの入力は出来ません。\n";
+				}
+				if(error[i] =="delivery_tel3Empty"){
+					str+="「お届け先の電話番号」を入力してください。\n";
+				}
+				if(error[i] =="delivery_tel3NotTel"){
+					str+="お届け先の電話番号として正しくありません\n";
+				}
+				if(error[i] =="delivery_tel3Zero"){
+					str+="「お届け先の電話番号」はゼロのみの入力は出来ません。\n";
+				}
+				if(error[i] =="delivery_zipEmpty"){
+					str+="「お届け先の郵便番号」を入力してください。\n";
+				}
+				if(error[i] =="delivery_zipZero"){
+					str+="「お届け先の郵便番号」はゼロのみの入力は出来ません。\n";
+				}
+				if(error[i] =="delivery_zipNumeric"){
+					str+="「お届け先の郵便番号」が半角数字ではありません\n";
+				}
+				if(error[i] =="delivery_zip2Empty"){
+					str+="「お届け先の郵便番号」を入力してください。\n";
+				}
+				if(error[i] =="delivery_zip2NotZip"){
+					str+="「お届け先の郵便番号」を入力してください。\n";
+				}
+				if(error[i] =="delivery_zip2Numeric"){
+					str+="「お届け先の郵便番号」が半角数字ではありません\n";
+				}
+				if(error[i] =="delivery_prefEmpty"){
+					str+="「お届け先の都道府県」を選択してください。\n";
+				}
+				if(error[i] =="delivery_addrEmpty"){
+					str+="「お届け先の市区町村、番地」を入力してください。\n";
+				}
+				if(error[i] =="payment_methodPayment"){
+					str+="「決済方法」を選択してください。\n";
+				}
+			}
+			alert(str);
+		}else{
+			$("#orderForm").submit();
+		}
+	});
+});
+function getLastDayOfMonth(ck) {
+	if($("[name='cus_birthY']").val() ==""){
+	}else{
+		if($("[name='cus_birthM']").val() ==""){
+		}else{
+			//選択された月の月末日を算出
+			var dt = new Date($("[name='cus_birthY']").val()　, ($("[name='cus_birthM']").val() - 1) + 1, 0);
+			var j = dt.getDate(0);
+			$("[name='cus_birthD']").empty();
+			$("[name='cus_birthD']").append($("<option>").val("").text("日を選択"));
+			for(var i =0; i<j;i++){
+				$("[name='cus_birthD']").append($("<option>").val(i+1).text(i+1));
+			}
+		}
+	}
+}
+</script>
+<?php endif;?>

@@ -1,0 +1,79 @@
+<section>
+  <div class="x_panel">
+    <div class="x_title">
+      <h2>お知らせ一覧</h2>
+      <div class="clearfix"></div>
+    </div>
+    <div class="x_content">
+      <!--中身-->
+      <div class="row">
+        <div class="col-sm-6 col-xs-12">
+          <form action="<?=BASEURL?>/editor/content/" method="get">
+            <p class="form-inline">
+              検索：<input type="text" name="keyword" value="<?=$_GET['keyword']?>" class="form-control">
+              <select name="limit" class="form-control">
+                <option value="">件数</option-->
+                <option value="10">10件</option>
+                <option value="25">25件</option>
+                <option value="50">50件</option>
+                <option value="75">75件</option>
+                <option value="100">100件</option>
+              </select>　
+              <button type="submit" class="btn btn-warning btn-sm">検索</button>
+            </p>
+          </form>
+        </div>
+        <p class="col-sm-6 col-xs-12 text-right">
+          <a href="<?=BASEURL?>/editor/content/registrer/" class="btn btn-success">お知らせ登録</a>
+        </p>
+      </div>
+      <?=$this->pager?>
+      <table class="table table-striped responsive-utilities jambo_table bulk_action">
+        <thead>
+          <tr class="headings">
+            <th><input type="checkbox" id="allcheck"></th>
+            <th>ページ名</th>
+            <th class="text-right">詳細</th>
+          </tr>
+        </thead>
+        <tbody>
+          <?php foreach($this->contents as $vv):?>
+          <tr>
+            <td><input type="checkbox" class="ck" name="ck[]" value="<?=$vv['id']?>"></td>
+            <td><?=$vv['name']?></td>
+            <td class="text-right"><a href="<?=BASEURL?>/editor/content/update/?id=<?=$vv['id']?>" class="btn btn-primary">詳細</a></td>
+          </tr>
+        <?php endforeach;?>
+        </tbody>
+      </table>
+      <p>
+        <button class="btn btn-danger" type="button" id="deleteAll">チェックしたものを削除</button>
+      </p>
+      <?=$this->pager?>
+    <!--中身-->
+    </div>
+  </div>
+</section>
+<script>
+//checkboxを全て同時に選択
+$("#allcheck").on("click",function(){
+	if($(this).is(':checked')){
+		$(".ck").prop('checked', true);
+	}else{
+		$(".ck").prop('checked', false);
+	}
+});
+$("#deleteAll").on("click",function(){
+	if(window.confirm("本当に削除してもいいですか？")){
+		var ck = $('[class="ck"]:checked').map(function(){
+			return $(this).val();
+		}).get();
+		var url = "<?=BASEURL?>/api/content/delete/";
+		$.post(url,{ids:ck},function(data){
+			if(data = "OK"){
+				location.href = "<?=BASEURL?>/editor/content/";
+			}
+		});
+	}
+});
+</script>

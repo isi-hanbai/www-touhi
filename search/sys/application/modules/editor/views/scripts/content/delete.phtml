@@ -1,0 +1,41 @@
+<div class="block">
+    <div class="navbar navbar-inner block-header">
+    	<div class="muted pull-left">削除対象商品</div>
+    </div>
+    <div class="block-content collapse in">
+    	 <p>本当に削除してもいいですか？</p>
+        <table class="table table-hover responcive">
+            <thead>
+            <tr>
+                <th><input type="checkbox" id="allcheck"></th>
+                <th>会社名</th>
+                <th>お名前（カナ）</th>
+                <th>メールアドレス</th>
+                <th>権限</th>
+                <th>詳細</th>
+            </tr>
+            </thead>
+            <tbody>
+            <?php foreach($this->users as $vv):?>
+            <tr>
+                <td><input type="checkbox" class="ck" value="<?=$vv['id']?>"></td>
+                <td><?=$vv['company']?></td>
+                <td><?=$vv['name']?>（<?=$vv['kana']?>）</td>
+                <td><a href="mailto:<?=$vv['mail']?>"><?=$vv['mail']?></a></td>
+                <td><?=$vv['kindName']?></td>
+                <td>
+                    <form action="<?=BASEURL?>/admin/user/update/" method="post">
+                        <input type="hidden" name="id" value="<?=$vv['id']?>">
+                        <button type="submit" class="btn btn-primary">編集</button>
+                    </form>
+                </td>
+            </tr>
+            <?php endforeach;?>
+            </tbody>
+        </table>
+        <div class="form-actions">
+            <button class="btn btn-large btn-block btn-danger" id="sub">削除</button>
+        </div>
+    </div>
+    </div>
+</div>

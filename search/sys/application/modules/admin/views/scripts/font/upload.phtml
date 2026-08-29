@@ -1,0 +1,63 @@
+<script>
+<?php if($this->error):?>
+  alert("TRUETYPEフォントではありません。");
+<?php else:?>
+  $("[name=path]",parent.document).val("<?=$this->path?>");
+<?php endif;?>
+  $("#loading",parent.document).css("display","none");
+</script>
+<?php /*
+<script type="text/javascript">
+<?php if($this->error):?>
+console.log("<?=$this->error?>");
+<?php else:?>
+var container = parent.document.getElementById('imageFeild');
+var url = '<?=BASEURL?><?=$this->filename?>';
+//リスト用box
+var items = parent.document.createElement('div');
+items.className = "item col-sm-2 col-xs-6";
+items.id = "<?=$this->id?>";
+container.appendChild(items);
+
+//削除用フォームを生成
+var form = parent.document.createElement('form');
+form.action = "<?=BASEURL?>/admin/item/deleteimage";
+form.method = "post";
+form.name = "delete_image_<?=$this->$id?>";
+form.target ="delete_image_frame";
+form.classList.add('delete_form');
+
+var inptId = parent.document.createElement('input');
+inptId.type = "hidden";
+inptId.name = "id";
+inptId.value = "<?=$this->id?>";
+form.appendChild(inptId);
+
+var inptUrl = parent.document.createElement('input');
+inptUrl.type = "hidden";
+inptUrl.name = "url";
+inptUrl.value = url;
+form.appendChild(inptUrl);
+
+var inputBtn = parent.document.createElement('input');
+inputBtn.type = "submit";
+inputBtn.classList.add("btn");
+inputBtn.classList.add("btn-default");
+inputBtn.classList.add("delete-btn");
+inputBtn.value='削除する';
+form.appendChild(inputBtn);
+items.appendChild(form);
+var span = parent.document.createElement('span');
+items.appendChild(span);
+//画像サムネイルを生成
+var image = parent.document.createElement('img');
+image.src = url;
+image.width = '120';
+image.id = 'image_<?=$this->id?>';
+// image.onclick = function (){parent.deleteImg(<?=$this->id?>)};
+image.onclick = function (){var v = "<?php echo $_FILES['upload_image']['tmp_name'];?>";
+console.log(v);console.log("image_<?=$this->id?>");};
+items.appendChild(image);
+<?php endif;?>
+</script>
+*/?>

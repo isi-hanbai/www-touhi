@@ -1,0 +1,27 @@
+<?php if($this->Msg):?>
+	<div class="alert alert-<?=$this->Msg['color']?>">
+    	<?=$this->Msg['message']?>
+    </div>
+ <?php else:?>
+<?php if($this->isToken):?>
+	<form action="<?=BASEURL?>/login/reset?token=<?=$this->token?>" method="post" class="form-signin">
+		<?php if($this->Msg2):?>
+            <div class="alert alert-<?=$this->Msg2['color']?>">
+                <?=$this->Msg2['message']?>
+            </div>
+        <?php else:?>
+		<?php if($this->Msg3):?>
+            <div class="alert alert-<?=$this->Msg3['color']?>">
+                <?=$this->Msg3['message']?>
+            </div>
+    	<?php endif;?>
+    	<p><input type="password" name="pw" value="" placeholder="パスワード" class="form-control"></p>
+    	<p><input type="password" name="pw2" value="" placeholder="パスワードの確認" class="form-control"></p>
+        <div class="form-actions">
+            <button class="btn btn-large btn-block btn-primary" type="submit">パスワードをリセットする</button>
+        </div>
+    	<?php endif;?>
+		<p><a href="<?=BASEURL?>/login/"><<ログイン画面へ戻る</a></p>
+    </form>
+<?php endif;?>
+<?php endif;?>

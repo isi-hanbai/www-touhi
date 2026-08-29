@@ -1,0 +1,26 @@
+<!-- Form section -->
+<div class="section">
+	<div class="container margin-bottom-40">
+    <div class="padding-30 border-radius-05 margin-bottom-30">
+      <?php if($this->Msg):?>
+        <div class="alert alert-danger">
+          <?=$this->Msg?>
+        </div>
+      <?php endif;?>
+      <form action="<?=BASEURL?>/signin/" method="post">
+        <label for="id">メールアドレス</label>
+        <input type="text" name="id" placeholder="example@touhi.co.jp" required>
+        <label for="pw">パスワード</label>
+        <input type="password" name="pw" placeholder="">
+        <div class="text-center mt-2">
+          <button type="submit" class="button button-lg button-radius button-dark">ログイン</button>
+        </div>
+      </form>
+      <div class="text-center mt-4">
+        <h6><i class="fas fa-exclamation-circle txt_orange"></i> <a class="button-text-1" href="<?=BASEURL?>/signin/pass/">パスワードを忘れた方</a></h6>
+      </div>
+    </div>
+	</div>
+  <!-- end container -->
+</div>
+<!-- end Form section -->

@@ -1,0 +1,36 @@
+<form class="form-signin" action="<?=BASEURL?>/login/<?php if($this->m):?>?m=<?=$this->m?><?php endif;?>" method="post">
+    <h2 class="form-signin-heading">ログインフォーム</h2>
+	<?php if($this->Msg):?>
+    <div class="alert alert-danger">
+    	<?=$this->Msg ?>
+    </div>
+    <?php endif;?>
+    <input type="text" class="input-block-level" placeholder="メールアドレス" name="id">
+    <input type="password" class="input-block-level" placeholder="パスワード" name="pw">
+    <?php if($this->m):?>
+    <input type="hidden" name="m" value="<?=$this->m?>">
+    <?php endif;?>
+    <input type="hidden" name="submit" value="1">
+    <div class="form-actions">
+    	<button class="btn btn-large btn-block btn-primary" type="submit">ログイン</button>
+    </div>
+    <p><a href="<?=BASEURL?>/login/pass/<?php if($this->m):?>?m=<?=$this->m?><?php endif;?>">パスワードを忘れた方</a></p>
+</form>
+
+<div class="x_panel">
+<div class="x_title">
+<h2>ログイン</h2>
+<ul class="nav navbar-right panel_toolbox">
+<li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+</li>
+<li class="dropdown">
+<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-wrench"></i></a>
+</li>
+<li><a class="close-link"><i class="fa fa-close"></i></a>
+</li>
+</ul>
+<div class="clearfix"></div>
+</div>
+<div class="x_content">
+</div>
+</div>

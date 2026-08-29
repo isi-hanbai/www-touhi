@@ -1,0 +1,487 @@
+<div class="shopping">
+<?php if(!empty($this->html[0]['thumb'])):?>
+	<div class="banner">
+	<div class="hidden-xs">
+	<p class="text-center"><img src="<?=BASEURL.$this->html[0]['thumb']?>" alt="<?=$this->html[0]['page']?>"></p>
+	</div>
+<?php endif;?>
+<?php if(!empty($this->html[0]['thumb2'])):?>
+	<div class="visible-xs">
+	<p class="text-center"><img src="<?=BASEURL.$this->html[0]['thumb2']?>" alt="<?=$this->html[0]['page']?>"></p>
+	</div>
+	</div>
+<?php endif;?>
+<?php if(!empty($this->html[0]['html']) || !empty($this->html[0]['thumb']) || !empty($this->html[0]['thumb2'])):?>
+<section class="row">
+    <div class="col-xs-12">
+      <div class="x_panel">
+        <div class="x_content">
+			<!--中身-->
+                <?=htmlspecialchars_decode($this->html[0]['html'])?>
+			<!--中身-->
+        </div>
+      </div>
+    </div>
+</section>
+<?php endif;?>
+<!--会員情報編集フォーム-->
+<section class="row">
+    <div class="col-xs-12">
+      <div class="x_panel">
+        <div class="x_title">
+        	<!--タイトルをH２で定義する"-->
+          <h2>登録フォーム</h2>
+			<!--div id="box">未記入の必須項目が<span>15</span>個あります</div-->
+        	<!--タイトルをH２で定義する"-->
+        </div>
+        <div class="x_content">
+		<!--中身-->
+        <div class="formset">
+           <form action="<?=BASEURL?>/login/index/confurm/" method="post" id="orderForm">
+        	<div class="line clearfix">
+           	<div class="left"><label for="name" class="required clearfix">会社名/部署・役職</label></div>
+           	<div class="right">
+            		会社名：<input type="text" name="company" value="<?=$this->detail['company']?>" id="" class="r name" placeholder="例：ユイモクヤ株式会社">
+                  部署・役職：<input type="text" name="division" value="<?=$this->detail['division']?>" id="" class="r name" placeholder="例：代表">　[全角・半角]
+               </div>
+           </div>
+        	<div class="line clearfix">
+           	<div class="left"><label for="name" class="required clearfix">お名前</label></div>
+           	<div class="right">
+            		姓：<input type="text" name="name" value="<?=$this->detail['name']?>" id="" class="r name" placeholder="例：東京">
+                  名：<input type="text" name="name2" value="<?=$this->detail['name2']?>" id="" class="r name" placeholder="例：梨花">　[全角・半角]
+               </div>
+           </div>
+        	<div class="line clearfix">
+           	<div class="left"><label for="kana" class="required clearfix">フリガナ</label></div>
+           	<div class="right">
+                姓：<input type="text" name="kana" value="<?=$this->detail['kana']?>" id="" class="r name" placeholder="例：トウキョウ">
+			   名：<input type="text" name="kana2" value="<?=$this->detail['kana2']?>" id="" class="r name" placeholder="例：リカ">　[全角カタカナ]
+               </div>
+           </div>
+        	<div class="line clearfix">
+           	<div class="left"><label for="mail" class="required clearfix">メールアドレス</label><label for="mail" class="required clearfix hidden-xs"><br><br><br>メールアドレスの確認</label></div>
+           	<div class="right">
+                <p><span class="hiddn-xs">　　</span><input type="text" name="mail" value="<?=$this->detail['mail']?>" id="" class="email r" placeholder="例：example@example.com">　[半角英数字]</p>
+                <p><span class="hiddn-xs">　　</span>※同じメールアドレスを再度入力してください。</p>
+                <p><span class="hiddn-xs">　　</span><input type="text" name="mail2" value="<?=$this->detail['mail2']?>" id="" class="email r" placeholder="確認のため再入力してください"></p>
+                　　記入例：abcd@example.com<br>
+                　　※当社からのメールを受信できるよう<br>
+                　　「@example.com」のドメイン受信設定をお願いします。
+               </div>
+           </div>
+        	<div class="line clearfix">
+           	<div class="left"><label for="sex" class="required clearfix">性別</label></div>
+           	<div class="right">
+                <span class="hiddn-xs">　　</span><select name="sex" class="r" style="widht:7em;">
+                        <option value="">性別を選択</option>
+                        <?php foreach(array(1=>"女性",2=>"男性") as $k=>$v):?>
+                        <?php if($k== $this->detail['sex']):?>
+                        <option value="<?=$k?>" selected><?=$v?></option>
+                        <?php else:?>
+                        <option value="<?=$k?>"><?=$v?></option>
+                        <?php endif;?>
+                        <?php endforeach;?>
+                    </select>
+               </div>
+           </div>
+        	<div class="line clearfix">
+           	<div class="left"><label for="birthY" class="required clearfix">生年月日</label></div>
+           	<div class="right">
+            		<span class="hiddn-xs">　　</span><select name="birthY" class="num r" style="width:6em;">
+                    	<option value="">年を選択</option>
+                  	<?php for($i=1900;$i<date("Y")+1;$i++):?>
+                           <option value="<?=$i?>"><?=$i?></option>
+                      <?php endfor;?>  
+                  </select> 年　
+            		<select name="birthM" class="num r" style="width:6em;">
+                    	<option value="">月を選択</option>
+                  	<?php for($i=0;$i<12;$i++):?>
+                           <option value="<?=($i+1)?>"><?=($i+1)?></option>
+                      <?php endfor;?>  
+                  </select>月　 
+            		<select name="birthD" class="num r" style="width:6em;">
+                    	<option value="">日を選択</option>
+                  </select>日
+               </div>
+           </div>
+        	<div class="line clearfix">
+           	<div class="left"><label for="tel" class="required clearfix">電話番号</label></div>
+           	<div class="right">
+                <span class="hiddn-xs">　　</span><input type="text" name="tel" value="<?=$this->detail['tel']?>" class="num r" placeholder="03" maxlength="5"> - 
+                <input type="text" name="tel2" value="<?=$this->detail['tel2']?>" class="num r" placeholder="1111" maxlength="4"> - 
+                <input type="text" name="tel3" value="<?=$this->detail['tel3']?>" class="num r" placeholder="2222" maxlength="4">　[半角数字]
+               </div>
+           </div>
+        	<div class="line clearfix">
+           	<div class="left"><label for="mtel" class="">携帯電話番号</label></div>
+           	<div class="right">
+                <span class="hiddn-xs">　　</span><input type="text" name="mtel" value="<?=$this->detail['mtel']?>" class="num" placeholder="03" maxlength="3"> - 
+                <input type="text" name="mtel2" value="<?=$this->detail['mtel2']?>" class="num" placeholder="1111" maxlength="4"> - 
+                <input type="text" name="mtel3" value="<?=$this->detail['mtel3']?>" class="num" placeholder="2222" maxlength="4">　[半角数字]
+               </div>
+           </div>
+        	<div class="line clearfix">
+           	<div class="left"><label for="zip" class="required clearfix">郵便番号</label></div>
+           	<div class="right">
+                <span class="hiddn-xs">　　</span><input type="text" name="zip" value="<?=$this->detail['zip']?>" class="num r" placeholder="100" maxlength="3"> - 
+                <input type="text" name="zip2" value="<?=$this->detail['zip2']?>" class="num r" placeholder="0005" maxlength="4"> [半角数字]
+                　<button type="button" id="csearchbtn" class="btn btn-success">住所を検索</button>
+               </div>
+           </div>
+        	<div class="line clearfix">
+           	<div class="left"><label for="pref" class="required clearfix">都道府県</label></div>
+           	<div class="right"><span class="hiddn-xs">　　</span><select name="pref" id="f-014" class="r" style="widht:7em;">
+                        <option value="">都道府県を選択</option>
+                        <?php foreach($this->pref as $v):?>
+                        <?php if($v['id'] == $this->detail['pref']):?>
+                        <option value="<?=$v['id']?>" selected><?=$v['name']?></option>
+                        <?php else:?>
+                        <option value="<?=$v['id']?>"><?=$v['name']?></option>
+                        <?php endif;?>
+                        <?php endforeach;?>
+                    </select>
+               </div>
+           </div>
+        	<div class="line clearfix">
+           	<div class="left"><label for="addr" class="required clearfix">市区町村、番地</label></div>
+           	<div class="right">
+                <p><span class="hiddn-xs">　　</span><input type="text" name="addr" value="<?=$this->detail['addr']?>" id="f-008" class="addr r" placeholder="千代田区丸の内1-1-1">　[全角・半角]</p>
+               </div>
+           </div>
+        	<div class="line clearfix">
+           	<div class="left"><label for="addr2" class="">ビル名・マンション名、号室</label></div>
+           	<div class="right">
+                <p><span class="hiddn-xs">　　</span><input type="text" name="addr2" value="<?=$this->detail['addr2']?>" class="addr" placeholder="JMビル9F">　[全角・半角]</p>
+               </div>
+           </div>
+        	<div class="line clearfix">
+           	<div class="left"><label for="pw" class="required clearfix">パスワード</label></div>
+           	<div class="right">
+                <p class="form-inline"><span class="hiddn-xs">　　</span><input type="password" name="pw" value="<?=$this->detail['pw']?>" id="" class="r" placeholder="半角英数字で入力" maxlength="20"><br class="visible-xs">　[半角英数字 20文字まで]</p>
+                <p><span class="hiddn-xs">　　</span>※同じパスワードを再度入力してください。</p>
+                <p class="form-inline"><span class="hiddn-xs">　　</span><input type="password" name="pwConfurm" class="r" placeholder="半角英数字で入力" maxlength="20"><br class="visible-xs">　[半角英数字 20文字まで]</p>
+               </div>
+           </div>
+        </form>
+        <div class="form-actions">
+        	<p class="text-center"><button id="subbtn" type="button">確認画面へ</button></p>
+        </div>
+        </div>
+			<!--中身-->
+        </div>
+      </div>
+    </div>
+</section>
+</div>
+<script src="<?=BASEURL?>/js/validation.js"></script>
+<script>
+var error = new Array();
+var sely = 0
+/*途中からついてくるエリア
+var bt = jQuery("#box").offset().top; 
+var ds = 0;
+jQuery(document).scroll(function(){
+    ds = jQuery(this).scrollTop();
+    if (bt <= ds) {
+       jQuery("#box").addClass('follow');
+    } else if (bt >= ds) {
+        jQuery("#box").removeClass('follow');
+    }
+});
+*/
+
+jQuery(function(){
+	//現在日時で35歳の年齢の生まれ年を選択状態にする
+	$("[name='birthY']").on("mousedown",function(){
+		if(sely == 0){
+			var hiduke=new Date();
+			var year = hiduke.getFullYear();
+			var month = hiduke.getMonth()+1;
+			//今日の年を取得
+			year = year-35;
+			$(this).val(year);
+		}
+	});
+	$("[name='birthY']").on("change",function(){
+		$("[name='birthM']").empty();
+		$("[name='birthM']").append($("<option>").val("").text("月を選択"));
+		for(var i =0; i<12; i++){
+			$("[name='birthM']").append($("<option>").val((i+1)).text((i+1)));
+		}
+		getLastDayOfMonth(1);
+		sely = $("[name='birthY']").val();
+		$("[name='birthD']").empty();
+		$("[name='birthD']").append($("<option>").val("").text("日を選択"));
+	});
+	$("[name='birthM']").on("change",function(){
+		getLastDayOfMonth();
+	});
+	//
+	//注文主住所を検索
+	$("#csearchbtn").on("click",function(){
+		var d = jQuery("[name=zip]").val()+$("[name=zip2]").val();
+		var c = jQuery("[name=addr]").val();
+		var key = jQuery("[name=zip]");
+		//jQuery.post("<?=BASEURL?>/api/addr/",{"d":d,"c":c},function(data){
+		jQuery.post("<?=BASEURL?>/api/addr/",{"d":d},function(data){
+			if(data == "NotExsist" || data == "AccessDenied"){
+			}else{
+				if($("#searchBox")){
+					$("#searchBox").remove();
+				}
+				//リスト収容用のboxを挿入
+				var searchBox = $("<div>");
+				searchBox.attr("id","searchBox");
+				key.before(searchBox);
+				var ul = $("<ul>");
+				searchBox.append(ul);
+				//リストを挿入
+				var addrs =  JSON.parse(data);
+				if(addrs.length >0 ){
+					for(var i=0;i<addrs.length;i++){
+						var li =$("<li>");
+						ul.append(li);
+						var a = $("<a>");
+						a.attr("href","javascript:void(0)");
+						a.attr("id","cus_"+addrs[i]['id']);
+						a.addClass("cus");
+						a.text("〒"+addrs[i]['zipcode']+" "+addrs[i]['prefName']+addrs[i]['city']+addrs[i]['town']);
+						li.append(a);
+						var index = addrs[i];
+						a.on("click",function(){
+							for(var j =0;j<addrs.length;j++){
+								if(addrs[j]['id'] == $(this).attr("id").substr(4)){
+									//クリックされたら値を挿入
+									$("[name=pref]").val(addrs[j]["pref"]);
+									$("[name=addr]").val(addrs[j]['city']+addrs[j]['town']);
+									//検索候補リストを削除
+									$("#searchBox").remove();
+									break;
+								}
+							}
+						});
+					}
+				}
+			}
+		});
+	});
+	//バリデーション
+	$("[name=name]").on("blur",function(){
+		validEmpty("name","お名前:姓");
+	});
+	$("[name=name2]").on("blur",function(){
+		validEmpty("name2","お名前：名");
+	});
+	$("[name=kana]").on("blur",function(){
+		validEmptyKana("kana","フリガナ：セイ");
+	});
+	$("[name=kana2]").on("blur",function(){
+		validEmptyKana("kana2","フリガナ：メイ");
+	});
+	$("[name=sex]").on("blur",function(){
+		validEmpty("sex","性別");
+	});
+	$("[name=birthY]").on("blur",function(){
+		validEmptyAndNumeric("birthY","生年月日：年");
+	});
+	$("[name=birthM]").on("blur",function(){
+		validEmptyAndNumeric("birthM","生年月日：月");
+	});
+	$("[name=birthD]").on("blur",function(){
+		validEmptyAndNumeric("birthD","生年月日：日");
+	});
+	$("[name=mail]").on("blur",function(){
+		validEmptyAndMailFormatAndSame("mail","メールアドレス");
+	});
+	$("[name=mail2]").on("blur",function(){
+		validEmptyAndMailFormatAndDiff("mail2","メールアドレス確認用","mail");
+	});
+	$("[name=tel]").on("blur",function(){
+		validEmptyAndZeroZero("tel","電話番号");
+	});
+	$("[name=tel2]").on("blur",function(){
+		validEmptyAndZero("tel2","電話番号2");
+	});
+	$("[name=tel3]").on("blur",function(){
+		validEmptyAndTel("tel3","電話番号3","tel","tel2");
+	});
+	$("[name=zip]").on("blur",function(){
+		validEmptyAndZero("zip","郵便番号");
+	});
+	$("[name=zip2]").on("blur",function(){
+		validEmptyAndZip("zip2","郵便番号2","zip");
+	});
+	$("[name=pref]").on("blur",function(){
+		validEmpty("pref","都道府県");
+	});
+	$("[name=addr]").on("blur",function(){
+		validEmpty("addr","市区町村、番地");
+	});
+	$("[name=pw]").on("blur",function(){
+		validEmpty("pw","パスワード");
+	});
+	$("[name=pwConfurm]").on("blur",function(){
+		validEmptyDiff("pwConfurm","パスワード確認用","pw");
+	});
+	
+	$("#subbtn").on("click",function(){
+		error = new Array();
+		validEmpty("name","お名前：姓");
+		validEmpty("name2","お名前：名");
+		validEmptyKana("kana","フリガナ：セイ");
+		validEmptyKana("kana2","フリガナ：メイ");
+		validEmptyAndMailFormatAndSame("mail","メールアドレス");
+		validEmptyAndMailFormatAndDiff("mail2","メールアドレス確認用","mail");
+		validEmptyAndZeroZero("tel","電話番号1");
+		validEmptyAndZero("tel2","電話番号2");
+		validEmptyAndTel("tel3","電話番号3","tel","tel2");
+		validEmptyAndZero("zip","郵便番号1");
+		validEmptyAndZip("zip2","郵便番号2","zip");
+		validEmpty("pref","都道府県");
+		validEmpty("addr","市区町村、番地");
+		validEmpty("pw","パスワード");
+		validEmptyDiff("pwConfurm","パスワード確認用","pw");
+		validEmptyAndNumeric("birthD","生年月日：日");
+		validEmptyAndNumeric("birthM","生年月日：月");
+		validEmptyAndNumeric("birthY","生年月日：年");
+		validEmpty("sex","性別");
+		if(error.length >0){
+			var str = "";
+			str+= "入力に誤りがあります。下記の項目を修正して再度ボタンを押してください。\n";
+			for(var i =0;i<error.length;i++){
+				if(error[i] =="nameEmpty"){
+					str+="「お名前：姓」を入力してください。\n";
+				}
+				if(error[i] =="name2Empty"){
+					str+="「お名前：名」を入力してください。\n";
+				}
+				if(error[i] =="nameEmpty"){
+					str+="「フリガナ：姓」を入力してください。\n";
+				}
+				if(error[i] =="kanaNotKana"){
+					str+="「フリガナ：姓」は全角カタカナで入力してください。\n";
+				}
+				if(error[i] =="kana2Empty"){
+					str+="「フリガナ：名」を入力してください。\n";
+				}
+				if(error[i] =="kana2NotKana"){
+					str+="「フリガナ：名」は全角カタカナで入力してください。\n";
+				}
+				if(error[i] =="mailEmpty"){
+					str+="「メールアドレス」を入力してください。\n";
+				}
+				if(error[i] =="mailMailFormat"){
+					str+="「メールアドレス」の形式を正しく入力してください。\n";
+				}
+				if(error[i] =="mailMailSame"){
+					str+="この「メールアドレス」はすでに登録されています。\n";
+				}
+				if(error[i] =="mail2Empty"){
+					str+="「メールアドレス確認用」を入力してください。\n";
+				}
+				if(error[i] =="mail2MailDiff"){
+					str+="「メールアドレス」と「メールアドレス確認用」が一致しません\n";
+				}
+				if(error[i] =="mail2MailFormat"){
+					str+="「メールアドレス確認用」の形式を正しく入力してください。\n";
+				}
+				if(error[i] =="sexEmpty"){
+					str+="「性別」を選択してください。\n";
+				}
+				if(error[i] =="birthYEmpty"){
+					str+="「生年月日：年」を入力してください。\n";
+				}
+				if(error[i] =="birthYNumeric"){
+					str+="「生年月日：年」が半角数字ではありません\n";
+				}
+				if(error[i] =="birthMEmpty"){
+					str+="「生年月日：月」を入力してください。\n";
+				}
+				if(error[i] =="birthMNumeric"){
+					str+="「生年月日：月」が半角数字ではありません\n";
+				}
+				if(error[i] =="birthDEmpty"){
+					str+="「生年月日：日」を入力してください。\n";
+				}
+				if(error[i] =="birthDNumeric"){
+					str+="「生年月日：日」が半角数字ではありません\n";
+				}
+				if(error[i] =="telEmpty"){
+					str+="「電話番号1」を入力してください。\n";
+				}
+				if(error[i] =="telZero"){
+					str+="「電話番号1」はゼロのみの入力は出来ません。\n";
+				}
+				if(error[i] =="tel2Empty"){
+					str+="「電話番号2」を入力してください。\n";
+				}
+				if(error[i] =="telZero"){
+					str+="「電話番号1」はゼロのみの入力は出来ません。\n";
+				}
+				if(error[i] =="tel3Empty"){
+					str+="「電話番号3」を入力してください。\n";
+				}
+				if(error[i] =="tel3NotTel"){
+					str+="電話番号として正しくありません\n";
+				}
+				if(error[i] =="tel3Zero"){
+					str+="「電話番号3」はゼロのみの入力は出来ません。\n";
+				}
+				if(error[i] =="zipEmpty"){
+					str+="「郵便番号１」を入力してください。\n";
+				}
+				if(error[i] =="zipZero"){
+					str+="「郵便番号１」はゼロのみの入力は出来ません。\n";
+				}
+				if(error[i] =="zipNumeric"){
+					str+="「郵便番号1」が半角数字ではありません\n";
+				}
+				if(error[i] =="zip2Empty"){
+					str+="「郵便番号2」を入力してください。\n";
+				}
+				if(error[i] =="zip2NotZip"){
+					str+="「郵便番号2」を入力してください。\n";
+				}
+				if(error[i] =="zip2Numeric"){
+					str+="「郵便番号2」が半角数字ではありません\n";
+				}
+				if(error[i] =="prefEmpty"){
+					str+="「都道府県」を選択してください。\n";
+				}
+				if(error[i] =="addrEmpty"){
+					str+="「市区町村、番地」を入力してください。\n";
+				}
+				if(error[i] =="pwEmpty"){
+					str+="「パスワード」を入力してください。\n";
+				}
+				if(error[i] =="pwConfurmEmpty"){
+					str+="「パスワード確認用」を入力してください。\n";
+				}
+				if(error[i] =="pwConfurmDiff"){
+					str+="「パスワード」と「パスワード確認用」が一致しません。\n";
+				}
+			}
+			alert(str);
+		}else{
+			$("#orderForm").submit();
+		}
+	});
+});
+function getLastDayOfMonth(ck) {
+	if($("[name='birthY']").val() ==""){
+	}else{
+		if($("[name='birthM']").val() ==""){
+		}else{
+			//選択された月の月末日を算出
+			var dt = new Date($("[name='birthY']").val()　, ($("[name='birthM']").val() - 1) + 1, 0);
+			var j = dt.getDate(0);
+			$("[name='birthD']").empty();
+			$("[name='birthD']").append($("<option>").val("").text("日を選択"));
+			for(var i =0; i<j;i++){
+				$("[name='birthD']").append($("<option>").val(i+1).text(i+1));
+			}
+		}
+	}
+}
+</script>

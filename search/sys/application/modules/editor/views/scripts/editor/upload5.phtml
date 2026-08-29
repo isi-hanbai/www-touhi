@@ -1,0 +1,15 @@
+<script type="text/javascript">
+<?php if($this->success):?>
+var success = true;
+<?php else:?>
+var success = false;
+<?php endif;?>
+$(function(){
+	if(success){
+		parent.$('#preview').empty().html('<img src="<?=BASEURL?><?=$this->filename?>" style="width:120px">');
+		parent.$('input[name="image"]').val("<?=$this->filename?>");
+	}else{
+    		parent.$('#preview').empty().html("同じ名前のファイルがあります。");
+	}
+});
+</script>

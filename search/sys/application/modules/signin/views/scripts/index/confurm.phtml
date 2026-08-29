@@ -1,0 +1,136 @@
+<div class="shopping">
+<?php if(!empty($this->html[0]['thumb'])):?>
+	<div class="banner">
+	<div class="hidden-xs">
+	<p class="text-center"><img src="<?=BASEURL.$this->html[0]['thumb']?>" alt="<?=$this->html[0]['page']?>"></p>
+	</div>
+<?php endif;?>
+<?php if(!empty($this->html[0]['thumb2'])):?>
+	<div class="visible-xs">
+	<p class="text-center"><img src="<?=BASEURL.$this->html[0]['thumb2']?>" alt="<?=$this->html[0]['page']?>"></p>
+	</div>
+	</div>
+<?php endif;?>
+<?php if(!empty($this->html[0]['html']) || !empty($this->html[0]['thumb']) || !empty($this->html[0]['thumb2'])):?>
+<section class="row">
+    <div class="col-xs-12">
+      <div class="x_panel">
+        <div class="x_content">
+			<!--中身-->
+                <?=htmlspecialchars_decode($this->html[0]['html'])?>
+			<!--中身-->
+        </div>
+      </div>
+    </div>
+</section>
+<?php endif;?>
+<!--会員情報編集フォーム-->
+<section class="row">
+    <div class="col-xs-12">
+      <div class="x_panel">
+        <div class="x_title">
+        	<!--タイトルをH２で定義する"-->
+          <h2><img src="<?=BASEURL?>/img/cart/new/registration.jpg" width="233">会員登録フォーム</h2>
+        	<!--タイトルをH２で定義する"-->
+        </div>
+        <div class="x_content">
+		<!--中身-->
+        <div class="formset">
+           <form action="<?=BASEURL?>/signin/index/finish/" method="post" id="form">
+        	<div class="line clearfix">
+           	<div class="left">お名前</div>
+           	<div class="right">
+            		<?=$this->detail['name']?>　<?=$this->detail['name2']?>
+               </div>
+           </div>
+        	<div class="line clearfix">
+           	<div class="left">フリガナ</div>
+           	<div class="right"><?=$this->detail['kana']?>　<?=$this->detail['kana2']?>
+               </div>
+           </div>
+        	<div class="line clearfix">
+           	<div class="left">メールアドレス</div>
+           	<div class="right"><?=$this->detail['mail']?>
+               </div>
+           </div>
+           
+        	<div class="line clearfix">
+           	<div class="left">性別</div>
+           	<div class="right">
+					<?php foreach(array(1=>"女性",2=>"男性") as $k=>$v):?>
+                    <?php if($k == $this->detail['sex']):?>
+                    <?=$v?>
+                    <?php endif;?>
+                    <?php endforeach;?>
+               </div>
+           </div>
+        	<div class="line clearfix">
+           	<div class="left">生年月日</div>
+           	<div class="right"><?=$this->detail['birthY']?>年<?=$this->detail['birthM']?>月<?=$this->detail['birthD']?>日
+               </div>
+           </div>
+        	<div class="line clearfix">
+           	<div class="left">電話番号</div>
+           	<div class="right"><?=$this->detail['tel']?>-<?=$this->detail['tel2']?>-<?=$this->detail['tel3']?>
+               </div>
+           </div>
+        	<div class="line clearfix">
+           	<div class="left">携帯電話番号</div>
+           	<div class="right"><?=$this->detail['mtel']?>-<?=$this->detail['mtel2']?>-<?=$this->detail['mtel3']?>
+               </div>
+           </div>
+        	<div class="line clearfix">
+           	<div class="left">郵便番号</div>
+           	<div class="right"><?=$this->detail['zip']?>-<?=$this->detail['zip2']?>
+               </div>
+           </div>
+        	<div class="line clearfix">
+           	<div class="left">都道府県</div>
+           	<div class="right">
+                        <?php foreach($this->pref as $v):?>
+                        <?php if($v['id'] == $this->detail['pref']):?>
+                        <?=$v['name']?>
+                        <?php endif;?>
+                        <?php endforeach;?>
+               </div>
+           </div>
+        	<div class="line clearfix">
+           	<div class="left">市区町村、番地</div>
+           	<div class="right"><?=$this->detail['addr']?>
+               </div>
+           </div>
+        	<div class="line clearfix">
+           	<div class="left">ビル名・マンション名、号室</div>
+           	<div class="right"><?=$this->detail['addr2']?>
+               </div>
+           </div>
+        	<div class="line clearfix">
+           	<div class="left">パスワード</div>
+           	<div class="right">ご登録いただいたパスワード（セキュリティのため非表示）
+               </div>
+           </div>
+              <?php
+             	foreach($this->detail as $k=>$v){
+					echo "<input type=\"hidden\" name=\"{$k}\" value=\"{$v}\">";
+				} 
+			  ?>
+        </form>
+        <div class="form-actions">
+        	<p class="text-center"><button id="subbtn" type="button"> 登録する</button></p>
+        </div>
+        </div>
+			<!--中身-->
+        </div>
+      </div>
+    </div>
+</section>
+</div>
+<script>
+jQuery(function(){
+	$("#subbtn").on("click",function(){
+		if(confirm("会員登録を行います。よろしければOKボタンを押してください")){
+			$("#form").submit();
+		}
+	});
+});
+</script>

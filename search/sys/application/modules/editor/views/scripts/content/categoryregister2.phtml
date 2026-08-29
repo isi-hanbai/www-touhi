@@ -1,0 +1,26 @@
+<!-- 商品詳細情報　-->
+<section>
+  <div class="x_panel">
+    <div class="x_title">
+      <h2>お知らせカテゴリ登録完了</h2>
+      <div class="clearfix"></div>
+    </div>
+    <div class="x_content">
+      <!--中身-->
+      <p>下記の内容でお知らせカテゴリ登録を行いました。編集及び削除は、お知らせカテゴリ管理画面より行えます。</p>
+      <p><a href="<?=BASEURL?>/editor/content/category" class="btn btn-primary">お知らせカテゴリ管理画面へ進む</a></p>
+      <p><a href="<?=BASEURL?>/editor/content/categorydetail/?id=<?=$this->data['id']?>" class="btn btn-info">お知らせカテゴリ詳細へ進む</a></p>
+      <p><a href="<?=BASEURL?>/editor/content/categoryregistrer" class="btn btn-success">続けてお知らせカテゴリを登録する</a></p>
+      <br><br>
+      <table class="table table-striped table-responcive">
+        <tbody>
+          <tr>
+            <th>カテゴリ名<span id="l-002"></span></th>
+            <td><?=$this->data['name']?></td>
+          </tr>
+        </tbody>
+      </table>
+      <!--中身-->
+    </div>
+  </div>
+</section>

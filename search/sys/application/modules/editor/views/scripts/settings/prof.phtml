@@ -1,0 +1,161 @@
+<!--依頼主情報-->
+<section class="row">
+    <div class="col-xs-12">
+      <div class="x_panel">
+        <div class="x_title">
+        	<!--タイトルをH２で定義する"-->
+          <h2>登録情報</h2>
+        	<!--タイトルをH２で定義する"-->
+          <ul class="nav navbar-right panel_toolbox">
+            <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+            <li><a class="close-link"><i class="fa fa-close"></i></a>
+            </li>
+          </ul>
+          <div class="clearfix"></div>
+        </div>
+        <div class="x_content">
+		<!--中身-->
+          	<form action="<?=BASEURL?>/merchant/setting/prof" method="post" id="form">
+              <table class="table table-striped table-responcive">
+                <tbody>
+                <tr>
+                    <th style="width:25%;">会社名</th>
+                    <td class="form-inline">
+                    <input type="text" name="company" value="<?=$this->detail['company']?>" class=" form-control">
+                    <input type="text" name="division" value="<?=$this->detail['division']?>" class=" form-control">
+                    </td>
+                 </tr>
+                <tr>
+                    <th style="width:25%;">お名前</th>
+                    <td class="form-inline">
+                    <input type="text" name="name" value="<?=$this->detail['name']?>" class=" form-control" style="width:6em;">
+                    <input type="text" name="name2" value="<?=$this->detail['name2']?>" class=" form-control" style="width:6em;">
+                    </td>
+                 </tr>
+                <tr>
+                    <th>フリガナ</th>
+                    <td class="form-inline">
+                    <input type="text" name="kana" value="<?=$this->detail['kana']?>" class=" form-control kana" style="width:6em;">
+                    <input type="text" name="kana2" value="<?=$this->detail['kana2']?>" class=" form-control kana" style="width:6em;">
+                    </td>
+                 </tr>
+                <tr>
+                    <th>メール</th>
+                    <td><input type="text" name="mail" value="<?=$this->detail['mail']?>" class=" form-control email"></td>
+                 </tr>
+                <tr>
+                    <th>性別</th>
+                    <td class="form-inline">
+                    	<select name="" class="form-control">
+                        <?php foreach(array(1=>"女性",2=>"男性") as $k=>$v):?>
+                        	<?php if($k == $this->detail['sex']):?>
+                        		<option value="<?=$k?>" selected><?=$v?></option>
+                          <?php else:?>
+                        		<option value="<?=$k?>"><?=$v?></option>
+                        	<?php endif;?>
+                        <?php endforeach;?>
+                      </select>
+                    </td>
+                 </tr>
+                <tr>
+                    <th>生年月日</th>
+                    <td class="form-inline">
+                    <select name="birthY"  class=" form-control" style="width:4em;">
+                    	<?php
+                        $y = array("0"=>"選択してください");
+					  for($i = 1900;$i<(date("Y")+1);$i++){
+						$y[] = $i;
+					  }
+					  foreach($y as $v){
+						if($v == $this->detail['birthY']){
+							echo '<option value="'.$v.'" selected>'.$v.'</option>';
+						}elseif($v==date("Y")-36){
+							echo '<option value="'.$v.'" selected>'.$v.'</option>';
+						}else{
+							echo '<option value="'.$v.'">'.$v.'</option>';
+						}
+					  }
+					?>
+                    </select>年
+                    <select name="birthM"  class=" form-control" style="width:4em;">
+                    	<?php
+                        $y = array("0"=>"選択してください");
+					  for($i = 1;$i<13;$i++){
+						$y[$i] = $i;
+					  }
+					  foreach($y as $v){
+						if($v == $this->detail['birthM']){
+							echo '<option value="'.$v.'" selected>'.$v.'</option>';
+						}else{
+							echo '<option value="'.$v.'">'.$v.'</option>';
+						}
+					  }
+					?>
+                    </select>月
+                    <select name="birthD"  class=" form-control" style="width:4em;">
+                    	<?php
+                        $y = array("0"=>"選択してください");
+					  for($i = 1;$i<32;$i++){
+						$y[$i] = $i;
+					  }
+					  foreach($y as $v){
+						if($v == $this->detail['birthD']){
+							echo '<option value="'.$v.'" selected>'.$v.'</option>';
+						}else{
+							echo '<option value="'.$v.'">'.$v.'</option>';
+						}
+					  }
+					?>
+                    </select>日
+                    </td>
+                 </tr>
+                <tr>
+                    <th>電話番号</th>
+                    <td class="form-inline">
+                    <input type="text" name="tel" value="<?=$this->detail['tel']?>" class=" form-control" style="width:4em;">-
+                    <input type="text" name="tel2" value="<?=$this->detail['tel2']?>" class=" form-control" style="width:4em;">-
+                    <input type="text" name="tel3" value="<?=$this->detail['tel3']?>" class=" form-control" style="width:4em;">
+                    </td>
+                 </tr>
+                <tr>
+                    <th>携帯電話</th>
+                    <td class="form-inline">
+                    <input type="text" name="mtel" value="<?=$this->detail['mtel']?>" class=" form-control" style="width:4em;">-
+                    <input type="text" name="mtel2" value="<?=$this->detail['mtel2']?>" class=" form-control" style="width:4em;">-
+                    <input type="text" name="mtel3" value="<?=$this->detail['mtel3']?>" class=" form-control" style="width:4em;">
+                    </td>
+                 </tr>
+                <tr>
+                    <th>住所<span id="l-008"></span></th>
+                    <td>
+                        <p class="form-inline">
+                        〒<input type="text" name="zip" value="<?=$this->detail['zip']?>" id="" class=" form-control" style="width:4em;">-
+                        <input type="text" name="zip2" value="<?=$this->detail['zip2']?>" id="" class=" form-control" style="width:4em;"></p>
+                        <p><select name="pref" id="f-014" class="span3 required form-control">
+                                <option value="">選択</option>
+                            <?php foreach($this->pref as $v):?>
+                            <?php if($v['id'] == $this->detail['pref']):?>
+                                <option value="<?=$v['id']?>" selected><?=$v['name']?></option>
+                            <?php else:?>
+                                <option value="<?=$v['id']?>"><?=$v['name']?></option>
+                            <?php endif;?>
+                            <?php endforeach;?>
+                        </select></p>
+                        <p><input type="text" name="addr" value="<?=$this->detail['addr']?>" id="f-008" class="required form-control"></p>
+                        <p><input type="text" name="addr2" value="<?=$this->detail['addr2']?>" class="form-control"></p>
+                        <input type="hidden" name="demand" value="1" />
+                    </td>
+                 </tr>
+                 
+                </tbody>
+              </table><input type="hidden" name="id" value="<?=$this->detail['id']?>">
+              </form>
+            </div>
+            <div class="form-actions">
+                <button class="btn btn-large btn-block btn-primary" id="sub">編集</button>
+            </div>
+			<!--中身-->
+        </div>
+      </div>
+    </div>
+</section>

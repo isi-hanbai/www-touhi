@@ -1,0 +1,428 @@
+<style>
+textarea.form-control.requid-textarea{
+  height: 56px;
+}
+</style>
+<!-- My data section -->
+<div class="section-sm">
+  <div class="container margin-bottom-40">
+    <?php if($this->userdetail['name']):?>
+      <p class="text-right">
+        最終更新日時：<?php
+        if($this->userdetail['updated'] == "0000-00-00 00:00:00"){
+          echo "更新なし";
+        }else{
+          echo date("Y年m月d日 H時i分",strtotime($this->userdetail['updated']));
+        }
+        ?>
+        <a href="<?=BASEURL?>/signin/index/logout/" class="btn btn-warning">ログアウト</a>
+      </p>
+    <?php endif;?>
+    <div class="text-center">
+      <h3><?=$this->userdetail['name']?>様</h3>
+      <div class="divider-width-70px divider-height-2px margin-bottom-30">
+        <hr class="bg_yellow">
+      </div>
+    </div>
+    <div class="padding-30 border-radius-05 margin-bottom-30 border-all">
+      <div class="text-center">
+        <h4>会員情報</h4>
+      </div>
+      <?php if($this->msg):?>
+        <div class="alert alert-danger">
+          <?=$this->msg?>
+        </div>
+      <?php endif;?>
+      <form action="<?=BASEURL?>/member/" method="post" id="form">
+        <label>施設名</label>
+        <input type="text" name="name" value="<?=$this->userdetail['name']?>">
+        <label>フリガナ</label>
+        <input type="text" name="kana" value="<?=$this->userdetail['kana']?>">
+        <label>分　類</label>
+        <div class="form-row">
+          <div class="col">
+            <select class="custom-select w-100 custom-select-lg" name="class">
+              <?php foreach($this->classes as $v){
+                if($v['id'] == $this->userdetail['class']){
+                  echo '<option value="'.$v['id'].'" selected>'.$v['name'].'</option>';
+                }else{
+                  echo '<option value="'.$v['id'].'">'.$v['name'].'</option>';
+                }
+              }?>
+            </select>
+          </div>
+          <div class="col">
+          </div>
+        </div>
+        <label>メールアドレス</label>
+        <input type="text" name="mail" value="<?=$this->userdetail['mail']?>" required>
+        <label>郵便番号</label>
+        <div class="form-row">
+          <div class="col col-lg-3">
+            <input type="text" name="zip" value="<?=$this->userdetail['zip']?>" style="width:7em;"> - <input type="text" name="zip2" value="<?=$this->userdetail['zip2']?>" style="width:7em;">
+          </div>
+          <div class="col">
+          </div>
+        </div>
+        <label>住　所</label>
+        <div class="form-row">
+          <div class="col col-lg-3">
+            <select class="custom-select w-100 custom-select-lg" name="pref">
+              <?php foreach($this->pref as $v):?>
+                <?php if($v['id'] == $this->userdetail['pref']):?>
+                  <option value="<?=$v['id']?>" selected><?=$v['name']?></option>
+                <?php else:?>
+                  <option value="<?=$v['id']?>"><?=$v['name']?></option>
+                <?php endif?>
+              <?php endforeach;?>
+            </select>
+          </div>
+          <div class="col">
+          </div>
+        </div>
+        <input type="text" name="addr" value="<?=$this->userdetail['addr']?>"><br />
+        <input type="text" name="addr2" value="<?=$this->userdetail['addr2']?>">
+        <label>電話番号</label>
+        <div class="form-row">
+          <div class="col col-lg-5">
+            <input type="text" name="tel" value="<?=$this->userdetail['tel']?>" style="width:7em;">-<input type="text" name="tel2" value="<?=$this->userdetail['tel2']?>" style="width:7em;">-<input type="text" name="tel3" value="<?=$this->userdetail['tel3']?>" style="width:7em;">
+          </div>
+          <div class="col">
+          </div>
+        </div>
+        <label>FAX番号</label>
+        <div class="form-row">
+          <div class="col col-lg-5">
+            <input type="text" name="mtel" value="<?=$this->userdetail['mtel']?>" style="width:7em;">-<input type="text" name="mtel2" value="<?=$this->userdetail['mtel2']?>" style="width:7em;">-<input type="text" name="mtel3" value="<?=$this->userdetail['mtel3']?>" style="width:7em;">
+          </div>
+          <div class="col">
+          </div>
+        </div>
+        <label>資料</label>
+        <div class="form-row">
+          <div class="col col-lg-5">
+            <div id="filesize"></div>
+            <div id="tmp">
+              <?php
+              if($this->userdetail['tmp'] !=""){
+                $tmp = explode(",",$this->userdetail['tmp']);
+              }?>
+              <?php foreach($tmp as $v):?>
+                <p>
+                  <img src="<?=BASEURL?>/image/icon/pdf.png" style="width:30px;height:auto;"> <?=$v?>
+                  <a href="javascript:void(0)" class="btn btn-danger btn-sm deleteFile" style="border-radius:50%;padding:0 0.35em;" data-filename="<?=$v?>"><i class="fa fa-times"></i></a>
+                </p>
+              <?php endforeach;?>
+            </div>
+            <p><button type="button" class="btn btn-success btn-sm" id="uploadBtn"><i class="fa fa-plus"></i> 添付ファイルを追加</button></p>
+            <div id="tmpData">
+              <?php foreach($tmp as $v):?>
+                <input type="hidden" name="tmp[]" value="<?=$v?>">
+              <?php endforeach;?>
+            </div>
+          </div>
+          <div class="col">
+          </div>
+        </div>
+        <label>パスワード</label>
+        <input type="password" name="pw" value="<?=$this->userdetail['pw']?>" disabled>
+        <div class="form-check">
+          <input class="form-check-input margin-top-10" type="checkbox" name="pwactive" id="pwactive" value="1">
+        <label class="form-check-label" for="defaultCheck1">
+        パスワードを編集する場合は、チェックを付けてください。<br>
+        ※パスワードは暗号化されて保存されています。
+        </label>
+        </div>
+        <hr class="margin-bottom-30 margin-top-30">
+        <div id="addfacility"></div>
+
+
+
+
+        <?php /*
+
+        <label>法人名</label>
+        <input type="text" placeholder="株式会社ティエルエス">
+        <label>事業所名</label>
+        <input type="text" placeholder="長崎">
+        <label>事業所番号</label>
+        <input type="text" placeholder="123456">
+        <label>嘱託医（協力医）</label>
+        <input type="text" placeholder="山形薬局">
+        <label>住所</label>
+        <input type="text" placeholder="長崎県長崎市元船町2-7-6F">
+        <label>電話番号</label>
+        <div class="form-row">
+        <div class="col col-lg-3">
+        <input type="text" placeholder="0957-47-0000">
+        </div>
+        <div class="col">
+        </div>
+        </div>
+        <label>FAX番号</label>
+        <div class="form-row">
+        <div class="col col-lg-3">
+        <input type="text" placeholder="0957-47-0000">
+        </div>
+        <div class="col">
+        </div>
+        </div>
+        <label>問合せ窓口</label>
+        <input type="text" placeholder="担当者">
+        <label>ウェブサイトURL</label>
+        <input type="text" placeholder="http://www.aaaaaa.com">
+        <label>メールアドレス</label>
+        <input type="email" placeholder="example@touhi.co.jp" required>
+        <label>規模・定員</label>
+        <div class="form-row">
+        <div class="col col-lg-3">
+        <input type="text" placeholder="00名">
+        </div>
+        <div class="col">
+        </div>
+        </div>
+        <label>短期利用共同生活介護の提供</label>
+        <div class="form-row">
+        <div class="col col-lg-3">
+        <input type="text" placeholder="有">
+        </div>
+        <div class="col">
+        </div>
+        </div>
+        <label>共用型指定認知症対応型通所介護の提供</label>
+        <div class="form-row">
+        <div class="col col-lg-3">
+        <input type="text" placeholder="無">
+        </div>
+        <div class="col">
+        </div>
+        </div>
+        <label>利用料以外にかかる費用</label>
+        <textarea name="message" placeholder="" required></textarea>
+        <label>入所対象</label>
+        <textarea name="message" placeholder="" required></textarea>
+        <label>福祉用具</label>
+        <textarea name="message" placeholder="" required></textarea>
+        <label>算定加算</label>
+        <textarea name="message" placeholder="" required></textarea>
+
+        <div class="form-row">
+        <div class="col col-md-4 col-lg-3 col-xl-3">
+        <label>経管栄養・胃瘻</label>
+        <select class="custom-select w-100 custom-select-lg">
+        <option selected>選択</option>
+        <option value="1">○</option>
+        <option value="2">△</option>
+        <option value="3">×</option>
+        </select>
+        </div>
+        <div class="col col-md-4 col-lg-3 col-xl-3">
+          <label>インスリン注射</label>
+          <select class="custom-select w-100 custom-select-lg">
+            <option selected>選択</option>
+            <option value="1">○</option>
+            <option value="2">△</option>
+            <option value="3">×</option>
+          </select>
+        </div>
+        <div class="col col-md-4 col-lg-3 col-xl-3">
+          <label>中心静脈栄養</label>
+          <select class="custom-select w-100 custom-select-lg">
+            <option selected>選択</option>
+            <option value="1">○</option>
+            <option value="2">△</option>
+            <option value="3">×</option>
+          </select>
+        </div>
+        <div class="col col-md-4 col-lg-3 col-xl-3">                              <label>終末期患者</label>
+        <select class="custom-select w-100 custom-select-lg">
+        <option selected>選択</option>
+        <option value="1">○</option>
+        <option value="2">△</option>
+        <option value="3">×</option>
+        </select>
+        </div>
+        <div class="col col-md-4 col-lg-3 col-xl-3">
+        <label>在宅酸素療法</label>
+        <select class="custom-select w-100 custom-select-lg">
+        <option selected>選択</option>
+        <option value="1">○</option>
+        <option value="2">△</option>
+        <option value="3">×</option>
+        </select>
+        </div>
+        <div class="col col-md-4 col-lg-3 col-xl-3">
+        <label>じょくそう、創処置</label>
+        <select class="custom-select w-100 custom-select-lg">
+        <option selected>選択</option>
+        <option value="1">○</option>
+        <option value="2">△</option>
+        <option value="3">×</option>
+        </select>
+        </div>
+        <div class="col col-md-4 col-lg-3 col-xl-3">                              <label>人工肛門管理</label>
+        <select class="custom-select w-100 custom-select-lg">
+        <option selected>選択</option>
+        <option value="1">○</option>
+        <option value="2">△</option>
+        <option value="3">×</option>
+        </select>
+        </div>
+        <div class="col">
+        <label>気管切開</label>
+        <select class="custom-select w-100 custom-select-lg">
+        <option selected>選択</option>
+        <option value="1">○</option>
+        <option value="2">△</option>
+        <option value="3">×</option>
+        </select>
+        </div>
+        <div class="col col-md-4 col-lg-3 col-xl-3">                              <label>留置カテーテル</label>
+        <select class="custom-select w-100 custom-select-lg">
+        <option selected>選択</option>
+        <option value="1">○</option>
+        <option value="2">△</option>
+        <option value="3">×</option>
+        </select>
+        </div>
+        <div class="col col-md-4 col-lg-3 col-xl-3">
+        <label>痰の吸引</label>
+        <select class="custom-select w-100 custom-select-lg">
+        <option selected>選択</option>
+        <option value="1">○</option>
+        <option value="2">△</option>
+        <option value="3">×</option>
+        </select>
+        </div>
+        <div class="col col-md-4 col-lg-3 col-xl-3">                              <label>人工呼吸器</label>
+        <select class="custom-select w-100 custom-select-lg">
+        <option selected>選択</option>
+        <option value="1">○</option>
+        <option value="2">△</option>
+        <option value="3">×</option>
+        </select>
+        </div>
+        <div class="col col-md-4 col-lg-3 col-xl-3">
+        <label>看取り・看取りケア</label>
+        <select class="custom-select w-100 custom-select-lg">
+        <option selected>選択</option>
+        <option value="1">○</option>
+        <option value="2">△</option>
+        <option value="3">×</option>
+        </select>
+        </div>
+        <div class="col col-md-4 col-lg-3 col-xl-3">
+        <label>視力障害</label>
+        <select class="custom-select w-100 custom-select-lg">
+        <option selected>選択</option>
+        <option value="1">○</option>
+        <option value="2">△</option>
+        <option value="3">×</option>
+        </select>
+        </div>
+        <div class="col col-md-4 col-lg-3 col-xl-3">
+        <label>人工透析</label>
+        <select class="custom-select w-100 custom-select-lg">
+        <option selected>選択</option>
+        <option value="1">○</option>
+        <option value="2">△</option>
+        <option value="3">×</option>
+        </select>
+        </div>
+        </div>
+          */?>
+        <div class="text-center mt-4">
+        <button type="button" id="sub" class="button button-lg button-radius button-dark">登録する</button>
+        </div>
+        <input type="hidden" name="id" value="<?=$this->userdetail['id']?>">
+      </form>
+    </div>
+  </div>
+  <!-- end container -->
+</div>
+<!-- end My data section -->
+<div style="display:none;">
+  <form action="<?=BASEURL?>/member/index/upload" method="post" enctype="multipart/form-data" target="upload" id="imageupload">
+  	<input type="file" name="userfile" id="userfile">
+  </form>
+  <iframe name="upload"></iframe>
+</div>
+
+<?php
+/*
+<!--ユーザー情報の表示-->
+<section class="container">
+  <h3>会員情報</h3>
+  <form action="<?=BASEURL?>/member/" method="post" id="form">
+  <div class="">
+    <div class="">
+      <div class="">施設名</div>
+      <div class=""><input type="text" name="name" value="<?=$this->userdetail['name']?>"></div>
+    </div>
+    <div class="">
+      <div class="">分類</div>
+      <div class="">
+        <select class="form-control" name="class">
+          <?php foreach($this->classes as $v){
+            if($v['id'] == $this->userdetail['class']){
+              echo '<option value="'.$v['id'].'" selected>'.$v['name'].'</option>';
+            }else{
+              echo '<option value="'.$v['id'].'">'.$v['name'].'</option>';
+            }
+          }?>
+        </select>
+      </div>
+    </div>
+    <div class="">
+      <div class="">フリガナ</div>
+      <div class=""><input type="text" name="kana" value="<?=$this->userdetail['kana']?>"></div>
+    </div>
+    <div class="">
+      <div class="">メールアドレス</div>
+      <div class=""><input type="text" name="mail" value="<?=$this->userdetail['mail']?>"></div>
+    </div>
+    <div class="">
+      <div class="">住所</div>
+      <div class="">
+        〒<input type="text" name="zip" value="<?=$this->userdetail['zip']?>" style="width:7em;"> - <input type="text" name="zip2" value="<?=$this->userdetail['zip2']?>" style="width:7em;"><br />
+        <select name="pref">
+          <?php foreach($this->pref as $v):?>
+            <?php if($v['id'] == $this->userdetail['pref']):?>
+              <option value="<?=$v['id']?>" selected><?=$v['name']?></option>
+            <?php else:?>
+              <option value="<?=$v['id']?>"><?=$v['name']?></option>
+            <?php endif?>
+          <?php endforeach;?>
+        </select>
+        <input type="text" name="addr" value="<?=$this->userdetail['addr']?>"><br />
+        <input type="text" name="addr2" value="<?=$this->userdetail['addr2']?>">
+      </div>
+    </div>
+    <div class="">
+      <div class="">電話番号</div>
+      <div class=""><input type="text" name="tel" value="<?=$this->userdetail['tel']?>" style="width:7em;">-<input type="text" name="tel2" value="<?=$this->userdetail['tel2']?>" style="width:7em;">-<input type="text" name="tel3" value="<?=$this->userdetail['tel3']?>" style="width:7em;"></div>
+    </div>
+    <div class="">
+      <div class="">FAX番号</div>
+      <div class=""><input type="text" name="mtel" value="<?=$this->userdetail['mtel']?>" style="width:7em;">-<input type="text" name="mtel2" value="<?=$this->userdetail['mtel2']?>" style="width:7em;">-<input type="text" name="mtel3" value="<?=$this->userdetail['mtel3']?>" style="width:7em;"></div>
+    </div>
+    <div class="">
+      <div class="">パスワード</div>
+      <div class="">
+        <p><input type="password" name="pw" value="<?=$this->userdetail['pw']?>" id="f-013" class="required form-control" disabled></p>
+        <label class="uniform">
+        <div class="checker" id="uniform-optionsCheckbox"><span><input class="uniform_on" type="checkbox" name="pwactive" id="pwactive" value="1"></span>パスワードを編集する場合は、このチェックボックスにチェックしてください。</div>
+        ※パスワードは暗号化されて保存されています。
+        </label>
+      </div>
+    </div>
+    <!--div id="addfacility"></div-->
+  </div>
+  <p>
+    <!--button type="button" id="sub" class="btn btn-lg btn-success">登録</button-->
+  </p>
+  <input type="hidden" name="id" value="<?=$this->userdetail['id']?>">
+  </form>
+</section>
+
+*/?>

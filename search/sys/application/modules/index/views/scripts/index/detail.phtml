@@ -1,0 +1,122 @@
+<!-- Search section -->
+<div class="section contents">
+  <div class="container">
+    <div class="text-center">
+      <?php if($this->detail['name']["v"]):?>
+      <h5 class="margin-0"><?=$this->detail['name']["v"]?></h5>
+      <?php endif;?>
+      <?php if($this->detailU['name']):?>
+      <h2><?=$this->detailU['name']?></h2>
+      <?php endif;?>
+      <div class="divider-width-70px divider-height-2px margin-bottom-30">
+      <hr class="bg_yellow">
+      </div>
+    </div>
+    <?php if($this->detail['added_features']["v"]):?>
+    <div class="bg_lightorange padding-20 border-radius-05">
+    <h5><i class="fab fa-gratipay text-yellow"></i> 特 長</h5>
+    <p><?=$this->detail['added_features']["v"]?></p>
+    </div>
+    <?php endif;?>
+    <div class="table-scroll">
+    <table class="table-bordered search_table margin-top-20">
+    <tbody>
+    <?php foreach($this->detail as $k=>$v):?>
+      <?php if($v['sel'] == 0):?>
+        <?php if($k == "added_name2"):?>
+          <tr id="<?=$k?>">
+          <th>事業所名</th>
+          <td><?=$this->detailU['name']?></td>
+          </tr>
+        <?php elseif($k == "added_addr"):?>
+          <tr id="<?=$k?>">
+          <th>住所</th>
+          <td>〒<?=$this->detailU['zip']?>-<?=$this->detailU['zip2']?><br><?=$this->detailU['addr']?><br><?=$this->detailU['addr2']?></td>
+          </tr>
+        <?php elseif($k == "added_tel"):?>
+          <tr id="<?=$k?>">
+          <th>TEL</th>
+          <td><?=$this->detailU['tel']?>-<?=$this->detailU['tel2']?>-<?=$this->detailU['tel3']?></td>
+          </tr>
+        <?php elseif($k == "added_fax"):?>
+          <tr id="<?=$k?>">
+          <th>FAX</th>
+          <td><?=$this->detailU['mtel']?>-<?=$this->detailU['mtel2']?>-<?=$this->detailU['mtel3']?></td>
+          </tr>
+        <?php elseif($k == "added_mail"):?>
+          <tr id="<?=$k?>">
+          <th>メールアドレス</th>
+          <td><?=$this->detailU['mail']?></td>
+          </tr>
+        <?php elseif($k == "added_addr"):?>
+          <tr id="<?=$k?>">
+          <th>住所</th>
+          <td>〒<?=$this->detailU['zip']?>-<?=$this->detailU['zip2']?><br><?=$this->detailU['addr']?><br><?=$this->detailU['addr2']?></td>
+          </tr>
+        <?php elseif($k == "added_url"):?>
+          <tr id="<?=$k?>">
+          <th>HPアドレス</th>
+          <td><a href="<?=$this->detail['added_url']['v']?>" target="_blank"><?=$this->detail['added_url']['v']?></a></td>
+          </tr>
+          <?php if($this->detailU['tmp']):?>
+          <tr>
+            <th>資料</th>
+            <td>
+              <a href="<?=BASEURL."/catch/".$this->detailU['tmp']?>" target="_blank">
+                <img src="<?=BASEURL?>/image/icon/pdf.png" width="30" height="30" style="width:30px;height:30px;">
+                <?=json_decode($this->detailU['tmp'])[0];?>
+              </a>
+            </td>
+          </tr>
+          <?php endif;?>
+        <?php else:?>
+          <tr id="<?=$k?>">
+          <th><?=$v['label']?></th>
+          <td><?=$v['v']?></td>
+          </tr>
+        <?php endif;?>
+      <?php endif;?>
+    <?php endforeach;?>
+    </tbody>
+    </table>
+    </div>
+    <div class="smf">
+    ※表を横にスクロールしてください。
+    </div>
+
+    <h4 class="margin-top-30">在宅療養者への対応</h4>
+    <div class="table-scroll">
+    <table class="table-bordered search_table margin-top-10">
+    <tbody>
+    <tr>
+    <?php $i=0;foreach($this->detail as $v):?>
+      <?php if($v['sel'] == 1):?>
+        <th nowrap="nowrap"><?=$v['label']?></th>
+        <td>
+          <?php
+          if($v['v'] == 0 || $v['v'] == 1){
+            echo "×";
+          }elseif($v['v'] == 2){
+            echo "△";
+          }elseif($v['v'] == 3){
+            echo "○";
+          }
+          ?>
+        </td>
+        <?php $i++; if($i%3 == 0){echo "</tr><tr>";}?>
+      <?php endif;?>
+    <?php endforeach;?>
+    </tbody>
+    </table>
+    <p class="margin-top-10">受入可：○　　要相談：△　　不可：×</p>
+    </div>
+    <div class="smf">
+      ※表を横にスクロールしてください。
+    </div>
+
+    <div class="margin-top-30">
+      <iframe src="https://maps.google.co.jp/maps?output=embed&q=<?=$this->detailU['addr']?>&z=16" width="100%" height="350" frameborder="0" style="border:0;" allowfullscreen="" aria-hidden="false" tabindex="0"></iframe>
+    </div>
+  </div>
+</div>
+<!-- end:Search section -->

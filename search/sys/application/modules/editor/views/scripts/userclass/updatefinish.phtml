@@ -1,0 +1,70 @@
+<!--依頼主情報-->
+<section>
+    <p>下記の内容で<?=$this->data['name']?>の編集を行いました。編集及び削除は、顧客一覧より行えます。</p>
+    <p><a href="<?=BASEURL?>/merchant/user/detail?id=<?=$this->data['id']?>" class="btn btn-success"><?=$this->data['name']?>様の詳細</a></p>
+    <p><a href="<?=BASEURL?>/merchant/user/" class="btn btn-primary">顧客一覧</a></p>
+    <br><br>
+      <div class="data-table">
+          <table class="table table-striped table-responcive">
+            <tbody>
+            <!--tr>
+                <th>会社名/部署・役職</th>
+                <td><?=$this->data['company']?> <?=$this->data['division']?></td>
+             </tr-->
+            <tr>
+                <th style="width:25%">お名前</th>
+                <td><?=$this->data['name']?> <?=$this->data['name2']?></td>
+             </tr>
+            <tr>
+                <th>フリガナ</th>
+                <td><?=$this->data['kana']?> <?=$this->data['kana2']?></td>
+             </tr>
+            <tr>
+                <th>メール</th>
+                <td><?=$this->data['mail']?></td>
+             </tr>
+            <tr>
+                <th>性別</th>
+                <td><?php foreach(array(1=>"女性",2=>"男性") as $k=>$v){
+          if($this->data['sex'] == $k){
+            echo $v;
+          }
+        }?></td>
+             </tr>
+            <tr>
+                <th>生年月日</th>
+                <td><?=$this->data['birthY']?>年<?=$this->data['birthM']?>月<?=$this->data['birthD']?>日</td>
+             </tr>
+            <tr>
+                <th>電話番号</th>
+                <td><?=$this->data['tel']?>-<?=$this->data['tel2']?>-<?=$this->data['tel3']?></td>
+             </tr>
+            <tr>
+                <th>携帯電話</th>
+                <td><?=$this->data['mtel']?>-<?=$this->data['mtel2']?>-<?=$this->data['mtel3']?></td>
+             </tr>
+            <tr>
+                <th>住所</th>
+                <td>〒<?=$this->data['zip']?>-<?=$this->data['zip2']?><br><?=$this->data['prefName']?><?=$this->data['addr']?><br>
+          <?=$this->data['addr2']?>
+                </td>
+             </tr>
+             <tr>
+               <th>ステータス</th>
+               <td><?php
+               foreach(array(1=>"会員呼びかけ","2"=>"資料持ち帰り",3=>"X",4=>"◯",5=>"検討",6=>"△") as $k=>$v):
+               if($this->data['status'] == $k):?>
+               <?=$v?>
+               <?php endif;endforeach;?>
+               </td>
+             </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="form-actions">
+                <form action="<?=BASEURL?>/merchant/user/update/" method="get">
+                    <input type="hidden" name="id" value="<?=$this->data['id']?>">
+                    <button type="submit" class="btn btn-large btn-block btn-primary">編集</button>
+                </form>
+        </div>
+</section>

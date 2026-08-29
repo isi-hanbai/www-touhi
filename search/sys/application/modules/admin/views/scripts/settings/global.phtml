@@ -1,0 +1,182 @@
+<!--サイト設定-->
+<section class="row">
+    <div class="col-xs-12">
+      <div class="x_panel">
+        <div class="x_title">
+        <h2>サイト設定</h2>
+          <div class="clearfix"></div>
+        </div>
+        <div class="x_content">
+		<!--中身-->
+    <?php if($this->Msg):?>
+    <!--メッセージ表示部-->
+    <div class="alert alert-success">
+    	<?=$this->Msg?>
+    </div>
+    <?php endif;?>
+        <div class="data-table">
+    		<form action="<?=BASEURL?>/admin/settings/global/" method="post">
+
+            <table class="table table-striped table-responcive">
+                <tbody>
+                    <tr>
+                        <!--th>一覧表示件数</th>
+                        <td><input type="text" name="listLimit" value="<?=$this->data['listLimit']?>" class="form-control"></td>
+                    </tr>
+                    <tr>
+                        <th>サイトマップURL数</th>
+                        <td><input type="text" name="sitemapLimit" value="<?=$this->data['sitemapLimit']?>" class="form-control"></td>
+                    </tr>
+                    <tr>
+                        <th>最大購入個数</th>
+                        <td><input type="text" name="maxSale" value="<?=$this->data['maxSale']?>" class="form-control"></td>
+                    </tr-->
+                    <tr>
+                        <th>標準容量</th>
+                        <td class="form-inline"><input type="text" name="defaultSize" value="<?=$this->data['defaultSize']?>" class="form-control">バイト</td>
+                    </tr>
+                    <tr>
+                        <th>試用期間</th>
+                        <td class="form-inline"><input type="text" name="TrialDay" value="<?=$this->data['TrialDay']?>" class="form-control">日間</td>
+                    </tr>
+                    <tr>
+                        <th>強制停止後データ保持期限</th>
+                        <td class="form-inline"><input type="text" name="stopAfter" value="<?=$this->data['stopAfter']?>" class="form-control">日間</td>
+                    </tr>
+                    <tr>
+                        <th>試用期間後データ保持期限</th>
+                        <td class="form-inline"><input type="text" name="trialAfter" value="<?=$this->data['trialAfter']?>" class="form-control">日間<br>
+                        ※試用期間が過ぎて強制停止となった場合のデータの保持期限</td>
+                    </tr>
+                    <tr>
+                        <th>ドメイン名</th>
+                        <td><input type="text" name="domein" value="<?=$this->data['domein']?>" class="form-control"></td>
+                    </tr>
+                    <tr>
+                        <th>ホームURL</th>
+                        <td><input type="text" name="homeUrl" value="<?=$this->data['homeUrl']?>" class="form-control"></td>
+                    </tr>
+                    <!--tr>
+                        <th>SSL使用時URL</th>
+                        <td><input type="text" name="SSLUrl" value="<?=$this->data['SSLUrl']?>" class="form-control"></td>
+                    </tr-->
+                    <tr>
+                        <th>サイト名</th>
+                        <td><input type="text" name="SiteName" value="<?=$this->data['SiteName']?>" class="form-control"></td>
+                    </tr>
+                    <!--tr>
+                        <th>ホームのタイトル</th>
+                        <td><input type="text" name="homeTitle" value="<?=$this->data['homeTitle']?>" class="form-control"></td>
+                    </tr>
+                    <tr>
+                        <th>ホームの要約文</th>
+                        <td>
+                            <textarea name="description" rows="3" class="form-control"><?=$this->data['description']?></textarea><br>
+                            <p>※最大150文字</p>
+            				</td>
+                    </tr-->
+                    <tr>
+                        <th>お問合せ用メール</th>
+                        <td><input type="text" name="infoMail" value="<?=$this->data['infoMail']?>" class="form-control"></td>
+                    </tr>
+                    <!--tr>
+                        <th>注文用メール</th>
+                        <td><input type="text" name="orderMail" value="<?=$this->data['orderMail']?>" class="form-control"></td>
+                    </tr-->
+                    <tr>
+                        <th>お問い合わせ用電話番号</th>
+                        <td><input type="text" name="tel" value="<?=$this->data['tel']?>" class="form-control"></td>
+                    </tr>
+                    <!--tr>
+                        <th>メッセージカードの使用</th>
+                        <td>
+                            <select name="messageCardUse" class="form-control">
+                                <?php foreach(array(0=>"使用する",1=>"使用しない") as $k=>$v):?>
+                                <?php if($k == $this->data['messageCardUse']):?>
+                                    <option value="<?=$k?>" selected><?=$v?></option>
+                                <?php else:?>
+                                    <option value="<?=$k?>"><?=$v?></option>
+                                <?php endif;?>
+                                <?php endforeach;?>
+                            </select>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>メッセージカードの種類</th>
+                        <td>
+                            <textarea name="messageCardKind" rows="3" class="form-control"><?=$this->data['messageCardKind']?></textarea><br>
+                            <p>※1行に1種類の選択項目を記載してください(最低1種類は必要) </p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>メッセージカードの記入</th>
+                        <td>
+                            <select name="messageCardOriginal" class="form-control">
+                                <?php foreach(array(0=>"記入できる",1=>"記入できない") as $k=>$v):?>
+                                <?php if($k == $this->data['messageCardOriginal']):?>
+                                    <option value="<?=$k?>" selected><?=$v?></option>
+                                <?php else:?>
+                                    <option value="<?=$k?>"><?=$v?></option>
+                                <?php endif;?>
+                                <?php endforeach;?>
+                            </select>
+                        </td>
+                    </tr-->
+                    <tr>
+                        <th>GoogleAnalyticsの使用</th>
+                        <td>
+                            <select name="AnalyticsUse" class="form-control">
+                                <?php foreach(array(0=>"使用する",1=>"使用しない") as $k=>$v):?>
+                                <?php if($k == $this->data['AnalyticsUse']):?>
+                                    <option value="<?=$k?>" selected><?=$v?></option>
+                                <?php else:?>
+                                    <option value="<?=$k?>"><?=$v?></option>
+                                <?php endif;?>
+                                <?php endforeach;?>
+                            </select>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>GoogleAnalyticsのID</th>
+                        <td>
+                            <p><input type="text" name="AnalyticsId" value="<?=$this->data['AnalyticsId']?>" class="form-control"></p>
+                            <p>※使用する場合は、上記の入力項目にウェブプロパティID（UA-×××××××-××）</p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>SMTPサーバー</th>
+                        <td><input type="text" name="SMTPhost" value="<?=$this->data['SMTPhost']?>" class="form-control"></td>
+                    </tr>
+                    <tr>
+                        <th>SMTPユーザー名</th>
+                        <td><input type="text" name="SMTPuser" value="<?=$this->data['SMTPuser']?>" class="form-control"></td>
+                    </tr>
+                    <tr>
+                        <th>SMTPパスワード</th>
+                        <td><input type="password" name="SMTPpass" value="<?=$this->data['SMTPpass']?>" class="form-control"></td>
+                    </tr>
+                    <tr>
+                        <th>SMTPポート番号</th>
+                        <td><input type="text" name="SMTPport" value="<?=$this->data['SMTPport']?>" class="form-control"></td>
+                    </tr>
+                    <tr>
+                        <th>SMTPセキュリティ</th>
+                        <td><input type="text" name="SMTPsecur" value="<?=$this->data['SMTPsecur']?>" class="form-control"></td>
+                    </tr>
+                    <tr>
+                        <th>SMTP証明書</th>
+                        <td><input type="text" name="SMTPcertificate" value="<?=$this->data['SMTPcertificate']?>" class="form-control"></td>
+                    </tr>
+                </tbody>
+            </table>
+            <div class="form-actions">
+                <button type="submit" class="btn btn-large btn-block btn-primary" id="submit">編集</button>
+            </div>
+
+            </form>
+        </div>
+		<!--中身-->
+        </div>
+      </div>
+    </div>
+</section>

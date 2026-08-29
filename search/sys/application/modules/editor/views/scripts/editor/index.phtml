@@ -1,0 +1,410 @@
+<div class="" role="tabpanel" data-example-id="togglable-tabs">
+  <ul id="myTab" class="nav nav-tabs bar_tabs" role="tablist">
+    <li role="presentation" class="active">
+      <a href="#tab_content1" role="tab" id="profile-tab1" data-toggle="tab" aria-expanded="true">一覧</a>
+    </li>
+    <!--li role="presentation" class="">
+      <a href="#tab_content2" role="tab" id="profile-tab2" data-toggle="tab" aria-expanded="true">有効性</a>
+    </li>
+    <li role="presentation" class="">
+      <a href="#tab_content3" role="tab" id="profile-tab3" data-toggle="tab" aria-expanded="true">ログ</a>
+    </li-->
+  </ul>
+  <div id="myTabContent" class="tab-content">
+    <div role="tabpanel" class="tab-pane fade active in" id="tab_content1" aria-labelledby="home-tab">
+    <!--リスト表示-->
+      <section>
+        <div class="x_panel">
+          <div class="x_title">
+            <div class="row">
+              <div class="col-xs-8"><h2>スタッフ一覧</h2></div>
+              <p class="col-xs-3 text-right"><a href="<?=BASEURL?>/editor/editor/registrer/" class="btn btn-success">スタッフ登録</a></p>
+            </div>
+
+          <div class="clearfix"></div>
+          </div>
+          <div class="x_content">
+            <!--中身-->
+            <form action="<?=BASEURL?>/editor/editor/" method="get">
+              <div class="row" style="line-height:1em;">
+                <p class="col-sm-2 col-xs-12"><input type="text" name="keyword" value="" class="form-control search_keyword" placeholder=" キーワード"><br></p>
+                <p class="col-xs-1">件数</p>
+                <p class="col-sm-1 col-xs-3">
+                <select name="limit" class="form-control">
+                <option value="10">10件</option>
+                <option value="25">25件</option>
+                <option value="50">50件</option>
+                <option value="75">75件</option>
+                <option value="100">100件</option>
+                </select>
+                </p>
+                <p class="col-sm-1 col-xs-1">権限</p>
+                <p class="col-sm-1 col-xs-3">
+                <select class="form-control" name="Authority">
+                <?php foreach($this->Authority as $v):?>
+                <?php if($_GET['Authority'] == $v['id']):?>
+                <option value="<?=$v['id']?>" selected><?=$v['name']?></option>
+                <?php else:?>
+                <option value="<?=$v['id']?>"><?=$v['name']?></option>
+                <?php endif;?>
+                <?php endforeach;?>
+                </select>
+                </p>
+                <p class="col-sm-1 col-xs-1">部署</p>
+                <p class="col-sm-1 col-xs-3">
+                <select class="form-control" name="division">
+                <?php foreach($this->division as $v):?>
+                <?php if($_GET['division'] == $v['id']):?>
+                <option value="<?=$v['id']?>" selected><?=$v['name']?></option>
+                <?php else:?>
+                <option value="<?=$v['id']?>"><?=$v['name']?></option>
+                <?php endif;?>
+                <?php endforeach;?>
+                </select>
+                </p>
+                <p class="col-sm-1 col-xs-12">
+                <button type="submit" class="btn btn-warning btn-block">検索</button>
+                </p>
+              </div>
+            </form>
+            <?=$this->pager?>
+            <table class="table table-striped responsive-utilities jambo_table bulk_action">
+              <thead>
+              <tr class="headings">
+                <th><input type="checkbox" id="allcheck" class="flat ck"></th>
+                <!--th class="column-title">画像</th>
+                <th class="column-title">入社日(勤続年数)</th-->
+                <th class="column-title">部署</th>
+                <th class="column-title">権限</th>
+                <th class="column-title">お名前（カナ） </th>
+                <th class="column-title">詳細 </th>
+              </tr>
+              </thead>
+              <tbody>
+              <?php foreach($this->users as $vv):?>
+                <tr class="even pointer">
+                  <td class="a-center ">
+                    <input type="checkbox" class="ck" name="ck[]" value="<?=$vv['id']?>">
+                  </td>
+                  <!--td class="a-center ">
+                    <?php if($vv['image']){
+                    echo '<div style="background-image:url('.BASEURL.$vv['image'].');width:75px;height:75px;background-size:cover;background-position:center center;"></div>';
+                    //echo '<img src="'.BASEURL.$vv['image'].'">';
+                    }else{
+                    echo '<div style="background-image:url('.BASEURL.'/image/icon/sekokan_thumb.png);width:75px;height:75px;background-size:cover;background-position:center center;"></div>';
+                    //echo '<img src="'.BASEURL.'/image/icon/sekokan_thumb.png">';
+                    }?>
+                  </td>
+                  <td class=" ">
+                  <?php for($i=50;$i>=0;$i--):?>
+                    <?php if(date('Y')-$i == $vv['joinYear']):?>
+                      <?=(date('Y')-$i)?>
+                    <?php endif;?>
+                  <?php endfor;?>年
+                  <?php for($i=1;$i<=12;$i++):?>
+                    <?php if($i == $vv['joinMonth']):?>
+                      <?=$i?>
+                    <?php endif;?>
+                  <?php endfor;?>月
+                  <?php for($i=1;$i<=31;$i++):?>
+                    <?php if($i == $vv['joinDay']):?>
+                      <?=$i?>
+                    <?php endif;?>
+                  <?php endfor;?>日　(<?php
+                  $join = $vv['joinYear']*12+$vv['joinMonth'];
+                  $now = date("Y")*12+date("n");
+                  $diff = floor(($now-$join)/12);
+                  $diff_ = ($now-$join)%12;
+                  echo $diff."年".$diff_."月";
+                  ?>)
+                </td-->
+                  <td class=" ">
+                    <?php foreach($this->division as $v):?>
+                      <?php if($v['id'] == $vv['division']):?>
+                        <?=$v['name']?>
+                      <?php endif;?>
+                    <?php endforeach;?>
+                  </td>
+                  <td class=" ">
+                    <?php if($vv['Authority'] == 1):?>
+                      <span style="color:red;">特権管理者</span>
+                    <?php else:?>
+                      <?php foreach($this->Authority as $v):?>
+                        <?php if($v['id'] == $vv['Authority']):?>
+                          <?=$v['name']?>
+                        <?php endif;?>
+                      <?php endforeach;?>
+                    <?php endif;?>
+                  </td>
+                  <td class=" "><?=$vv['name']?><?=$vv['name2']?>(<?=$vv['kana']?><?=$vv['kana2']?>)</td>
+                  <td class="a-right a-right ">
+                    <a href="<?=BASEURL?>/editor/editor/update/?id=<?=$vv['id']?>" class="btn btn-primary">詳細</a>
+                  </td>
+                </tr>
+              <?php endforeach;?>
+              </tbody>
+            </table>
+            <div class="profile_title">
+              <div class="row">
+                <div class="col-sm-12">
+                  <button class="btn btn-danger" type="button" id="deleteAll">チェックしたものを削除</button>
+                  <button class="btn btn-danger" type="button" id="special">チェックしたスタッフを特権管理者へ変更</button>
+                </div>
+              </div>
+            </div>
+            <?=$this->pager?>
+            <!--中身-->
+          </div>
+        </div>
+      </section>
+    </div>
+    <div role="tabpanel" class="tab-pane fade" id="tab_content2" aria-labelledby="home-tab">
+      <section class="row">
+        <div class="x_panel">
+          <div class="x_title">
+            <h2>有効化</h2>
+            <div class="clearfix"></div>
+          </div>
+          <div class="x_content">
+            <!--中身-->
+            <div class="row" id="activate">
+              <div class="col-sm-6">
+                <h2>有効</h2>
+                <div id="valid" class="sortable"></div>
+              </div>
+              <div class="col-sm-6">
+                <h2>無効</h2>
+                <div id="invalid" class="sortable"></div>
+              </div>
+            </div>
+            <!--中身-->
+          </div>
+        </div>
+      </section>
+    </div>
+    <div role="tabpanel" class="tab-pane fade" id="tab_content3" aria-labelledby="home-tab">
+      <section class="row">
+        <div class="x_panel">
+          <div class="x_title">
+            <h2>ログ</h2>
+            <div class="clearfix"></div>
+          </div>
+          <div class="x_content">
+            <!--中身-->
+            <div id="log"></div>
+            <!--中身-->
+          </div>
+        </div>
+      </section>
+    </div>
+  </div>
+</div>
+<style>
+  .sortable{
+    background: #fee;
+    padding: 1em;
+  }
+  #valid.sortable{
+    background: #efe;
+  }
+  .sortable2{
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    min-height: 200px;
+  }
+  .sortable2 li{
+    margin-bottom: 5px;
+    border-radius: 5px;
+    border: solid 1px #ccc;
+    padding: 1em;
+    background-color: #fff;
+  }
+  .sortable2 li i{
+    display: table-cell;
+    height: 100%;
+  }
+</style>
+<script>
+var year = new Date().getFullYear();
+var month = new Date().getMonth()+1;
+$(function(){
+  //読み込み時にログを表示
+  displayLog(year,month);
+
+  $("#reload").on("click",function(){
+    location.reload();
+  });
+	$('input[type=checkbox]').click(function() {
+	  var t = $(this).prop;
+		if(t('checked'))
+			t('checked', '');
+		else
+			t('checked', 'checked');
+	});
+
+	$('table tr').click(function() {
+	  var c = $(this).children('td').children('input[type=checkbox]');
+		if(c.prop('checked'))
+			c.prop('checked', '');
+		else
+			c.prop('checked', 'checked');
+	});
+	//checkboxを全て同時に選択
+	$("#allcheck").on("click",function(){
+		if($(this).is(':checked')){
+			$(".ck").prop('checked', true);
+		}else{
+			$(".ck").prop('checked', false);
+		}
+	});
+  //特権管理者を変更
+	$("#special").on("click",function(){
+		var ck = $('[class="ck"]:checked').map(function(){
+			return $(this).val();
+		}).get();
+    var n = Object.keys(ck).length;
+    if(n ==0){
+      alert("スタッフが選択されていません");
+    }else if(n > 1){
+      alert("選択できるスタッフは一人だけです。");
+    }else{
+  		if(window.confirm("特権管理者を変更します。よろしければOKを押してください。")){
+        /*
+                */
+  			var ck = $('[class="ck"]:checked').map(function(){
+  				return $(this).val();
+  			}).get();
+  			var url = "<?=BASEURL?>/api/user/special/";
+        console.log(123);
+  			$.post(url,{ids:ck},function(data){
+          console.log(data);
+  				if(data = "OK"){
+  					location.reload();
+  				}
+  			});
+
+  		}
+    }
+	});
+	$("#deleteAll").on("click",function(){
+		if(window.confirm("本当に削除してもいいですか？")){
+			var ck = $('[class="ck"]:checked').map(function(){
+				return $(this).val();
+			}).get();
+			var url = "<?=BASEURL?>/api/user/delete/";
+			$.post(url,{ids:ck},function(data){
+				if(data = "OK"){
+					location.href = "<?=BASEURL?>/editor/editor/";
+				}
+			});
+		}
+	});
+  //読み込み時に、有効性のリストを表示
+  validDisplay();
+});
+
+function validDisplay(){
+  $.get("<?=BASEURL?>/api/outsource/?outsource=0",function(data){
+    var json = JSON.parse(data);
+    var valid = new Array();
+    var invalid = new Array();
+    for(var i=0;i<json.length;i++){
+      if(json[i]['active'] == 0){
+        invalid.push(json[i]);
+      }else{
+        valid.push(json[i]);
+      }
+    }
+    var str = '<ul class="invalid sortable2">';
+    for(var i=0;i<invalid.length;i++){
+      str+= '<li id="'+invalid[i]['id']+'" data-name="'+invalid[i]['company']+' '+invalid[i]['name']+' '+invalid[i]['name2']+'">';
+      str+= '<i class="fa fa-exchange"></i>';
+
+      //str+= invalid[i]['name']+' '+invalid[i]['name2']+"<br>(";
+      //str+= invalid[i]['tel']+'-'+invalid[i]['tel2']+'-'+invalid[i]['tel3']+")";
+      str+= invalid[i]['name']+' '+invalid[i]['name2'];
+      str+= '</li>';
+    }
+    str+= '</ul>';
+    $("#invalid").html(str);
+    var str = '<ul class="invalid sortable2">';
+    for(var i=0;i<valid.length;i++){
+      str+= '<li id="'+valid[i]['id']+'" data-name="'+valid[i]['company']+' '+valid[i]['name']+' '+valid[i]['name2']+'">';
+      str+= '<i class="fa fa-exchange"></i>';
+      //str+= valid[i]['name']+' '+valid[i]['name2']+"<br>(";
+      //str+= valid[i]['tel']+'-'+valid[i]['tel2']+'-'+valid[i]['tel3']+")";
+      str+= valid[i]['name']+' '+valid[i]['name2'];
+      str+= '</li>';
+    }
+    str+= '</ul>';
+    $("#valid").html(str);
+    //ドラッグされる要素
+    $('.sortable2').sortable( {
+      connectWith: '.sortable2',
+      update: function(ev, ui) {
+        if (this === ui.item.parent()[0]) {
+          if(ui.item.parent().parent().attr("id") == "valid"){
+            var active = 1;
+            var msg = ui.item[0].getAttribute("data-name")+"様を有効化します。有効化すると月額料金が発生します。";
+          }else{
+            var active = 0;
+            var msg = ui.item[0].getAttribute("data-name")+"様を無効化します。無効化すると来月より月額料金が発生しません。";
+          }
+          if(window.confirm(msg)){
+            $.post("<?=BASEURL?>/api/outsource/activate",{id:ui.item[0].id,active:active,outsource:0},function(data){
+              if(data =="OK"){
+                validDisplay();
+                displayLog(year,month);
+              }
+            });
+          }else{
+            $('.sortable2').sortable("cancel");
+          }
+        }
+      }
+    });
+    $('.sortable2').disableSelection();
+  });
+}
+function displayLog(year,month){
+  $.post("<?=BASEURL?>/api/outsource/log",{year:year,month:month,outsource:0},function(data){
+    var log = JSON.parse(data);
+    console.log(log);
+    var str = '';
+    str+='<table class="table table-striped responsive-utilities jambo_table bulk_action">';
+    str+='<thead>';
+    str+='<tr class="headings">';
+    str+='<th class="column-title">名前</th>';
+    str+='<th class="column-title">有効 </th>';
+    str+='<th class="column-title">無効 </th>';
+    str+='</tr>';
+    str+='</thead>';
+    str+='<tbody>';
+    for(var i=0;i<log.length;i++){
+      str+='<tr class="even pointer">';
+      str+='<td>'+log[i]['name']+' '+log[i]['name2']+'</td>';
+      str+='<td>';
+      if(log[i]['in'] != "0000-00-00 00:00:00"){
+        str+=log[i]['in'];
+      }else{
+        str+='-';
+      }
+      str+='</td>';
+      str+='<td>';
+      if(log[i]['out'] != "0000-00-00 00:00:00"){
+        str+=log[i]['out'];
+      }else{
+        str+='-';
+      }
+      str+='</td>';
+      str+='</tr>';
+    }
+    str+='</tbody>';
+    str+='</table>';
+    $("#log").html(str);
+    /*
+    */
+  });
+}
+</script>

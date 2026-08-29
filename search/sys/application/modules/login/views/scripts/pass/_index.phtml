@@ -1,0 +1,39 @@
+<div class="x_panel" style="width:80%;margin-left:auto;margin-right:auto;">
+<div class="x_title">
+<h2>ログインフォーム</h2>
+<ul class="nav navbar-right panel_toolbox">
+<li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+</li>
+<li class="dropdown">
+<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-wrench"></i></a>
+</li>
+<li><a class="close-link"><i class="fa fa-close"></i></a>
+</li>
+</ul>
+<div class="clearfix"></div>
+</div>
+<div class="x_content">
+
+
+  <form class="form-signin" action="<?=BASEURL?>/login/pass<?php if($this->m) echo "?m=".$this->m?>" method="post">
+      <p>パスワードを忘れた方は、下記の項目にご登録のメールアドレスを入力してください。該当するメールアドレス宛にパスワードリセット用のURLが送信されます。</p>
+      <?php if($this->Msg):?>
+      	<div class="alert alert-<?=$this->Msg['color']?>"><?=$this->Msg['message']?></div>
+      <?php endif;?>
+      <div class="row">
+        <div class="col-md-3 col-sm-3 col-xs-12"><strong>メールアドレス</strong></div>
+        <div class="col-md-9 col-sm-9 col-xs-12 form-group has-feedback">
+          <input type="text" class="form-control has-feedback-left" name="mail" placeholder="メールアドレス">
+          <span class="fa fa-user form-control-feedback left" aria-hidden="true"></span>
+        </div>
+      </div>
+      
+      <div class="form-actions">
+      	<p><button class="btn btn-large btn-block btn-primary" type="submit">URLを送信</button></p>
+      </div>
+  	<p><a href="<?=BASEURL?>/login/<?php if($this->m) echo "?m=".$this->m?>"><<ログイン画面へ戻る</a></p>
+  </form>
+
+
+</div>
+</div>

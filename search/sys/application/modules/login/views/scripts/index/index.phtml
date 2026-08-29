@@ -1,0 +1,58 @@
+<style>
+@media screen and (max-width:767px){
+	#login-form input {
+		text-indent:3em;
+	}	
+}
+</style>
+<div class="x_panel" style="margin:5em auto;">
+<div class="x_title">
+<h2>ログインフォーム</h2>
+<ul class="nav navbar-right panel_toolbox">
+<li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+</li>
+<li class="dropdown">
+<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-wrench"></i></a>
+</li>
+<li><a class="close-link"><i class="fa fa-close"></i></a>
+</li>
+</ul>
+<div class="clearfix"></div>
+</div>
+<div class="x_content">
+
+
+  <form class="form-signin" action="<?=BASEURL?>/login/<?php if($this->m):?>?m=<?=$this->m?><?php endif;?>" method="post" id="login-form">
+  	<?php if($this->Msg):?>
+      <div class="alert alert-danger">
+      	<?=$this->Msg ?>
+      </div>
+      <?php endif;?>
+
+      <div class="row">
+        <div class="col-md-3 col-sm-3 col-xs-12"><strong>メールアドレス</strong></div>
+        <div class="col-md-9 col-sm-9 col-xs-12 form-group has-feedback">
+          <input type="text" class="form-control has-feedback-left" name="id" placeholder="メールアドレス">
+          <span class="fa fa-user form-control-feedback left" aria-hidden="true"></span>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-3 col-sm-3 col-xs-12"><strong>パスワード</strong></div>
+        <div class="col-md-9 col-sm-9 col-xs-12 form-group has-feedback">
+          <input type="password" class="form-control has-feedback-left" placeholder="パスワード" name="pw">
+          <span class="fa fa-unlock-alt form-control-feedback left" aria-hidden="true"></span>
+        </div>
+      </div>
+      <?php if($this->m):?>
+      <input type="hidden" name="m" value="<?=$this->m?>">
+      <?php endif;?>
+      <input type="hidden" name="submit" value="1">
+      <div class="form-actions">
+      	<button class="btn btn-large btn-block btn-primary" type="submit">ログイン</button>
+      </div>
+      <p><a href="<?=BASEURL?>/login/pass/<?php if($this->m):?>?m=<?=$this->m?><?php endif;?>">パスワードを忘れた方</a></p>
+  </form>
+
+
+</div>
+</div>

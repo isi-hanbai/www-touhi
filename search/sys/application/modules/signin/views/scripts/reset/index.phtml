@@ -1,0 +1,32 @@
+<!-- Form section -->
+<div class="section">
+	<div class="container margin-bottom-40">
+    <div class="padding-30 border-radius-05 margin-bottom-30 border-all">
+			<?php if($this->Msg):?>
+				<div class="alert alert-<?=$this->Msg['color']?>">
+					<?=$this->Msg['message']?>
+				</div>
+			<?php else:?>
+				<?php if($this->Msg3):?>
+					<div class="alert alert-<?=$this->Msg3['color']?>">
+						<?=$this->Msg3['message']?>
+					</div>
+				<?php endif;?>
+		    <form action="<?=BASEURL?>/signin/reset?token=<?=$this->token?>" method="post" class="form-signin">
+		      <label>新しいパスワード</label>
+		      <input type="password" placeholder="" name="pw">
+		      <label>新しいパスワード（再入力）</label>
+		      <input type="password" placeholder="" name="pw2">
+		      <div class="text-center">
+		      	<button type="submit" class="button button-lg button-radius button-dark">パスワードを再設定する</button>
+		      </div>
+		    </form>
+		    <div class="text-center mt-4">
+		    	<h6><i class="fas fa-arrow-circle-left"></i> <a class="button-text-1" href="<?=BASEURL?>/signin/">ログイン画面へ戻る</a></h6>
+		    </div>
+			<?php endif;?>
+    </div>
+	</div>
+  <!-- end container -->
+</div>
+<!-- end Form section -->

@@ -1,0 +1,83 @@
+<section>
+  <div class="x_panel">
+    <div class="x_content">
+      <!--中身-->
+      <div class="row">
+        <div class="col-sm-8 col-xs-12">
+          <form action="<?=BASEURL?>/editor/content/category" method="get" class="form-inline">
+            検索
+            <input type="text" name="keyword" value="<?=$_GET['keyword']?>" class="form-control">
+            <select name="limit" class="form-control">
+              <?php foreach(array(10,25,50,100,250) as $v):?>
+                <?php if($v == $_GET['limit']):?>
+                  <option value="<?=$v?>" selected><?=$v?>件</option>
+                <?php else:?>
+                  <option value="<?=$v?>"><?=$v?>件</option>
+                <?php endif;?>
+              <?php endforeach;?>
+            </select>
+            <button type="submit" class="btn btn-warning btn-success btn-sm">検索</button>
+          </form>
+        </div>
+          <div class="col-sm-4 col-xs-12 text-right">
+            <a href="<?=BASEURL?>/editor/content/categoryregistrer/" class="btn btn-success">コンテンツカテゴリ登録</a>
+          </div>
+      </div>
+
+      <table class="table table-striped responsive-utilities jambo_table bulk_action">
+        <thead>
+          <tr class="headings">
+            <th><input type="checkbox" id="allcheck"></th>
+            <th>カテゴリ名</th>
+            <th class="text-right">詳細</th>
+          </tr>
+        </thead>
+        <tbody>
+        <?php foreach($this->users as $vv):?>
+        <tr>
+          <td><input type="checkbox" class="ck" name="ck[]" value="<?=$vv['id']?>"></td>
+          <td><?=$vv['name']?></td>
+          <td class="text-right">
+            <a href="<?=BASEURL?>/editor/content/categoryupdate/?id=<?=$vv['id']?>" class="btn btn-default">詳細</a>
+          </td>
+        </tr>
+        <?php endforeach;?>
+        </tbody>
+      </table>
+
+      <div class="row">
+        <div class="col-sm-8 col-xs-12">
+          <button class="btn btn-danger" type="button" id="deleteAll">削除</button>
+        </div>
+        <div class="col-sm-4 col-xs-12 text-right">
+          <?=$this->pager?>
+        </div>
+      </div>
+      <!--中身-->
+    </div>
+  </div>
+</section>
+
+<script>
+	//checkboxを全て同時に選択
+	$("#allcheck").on("click",function(){
+		if($(this).is(':checked')){
+			$(".ck").prop('checked', true);
+		}else{
+			$(".ck").prop('checked', false);
+		}
+	});
+	$("#deleteAll").on("click",function(){
+		if(window.confirm("本当に削除してもいいですか？")){
+			var ck = $('[class="ck"]:checked').map(function(){
+				return $(this).val();
+			}).get();
+			var url = "<?=BASEURL?>/api/content/categorydelete/";
+			$.post(url,{ids:ck},function(data){
+				if(data == "OK"){
+					location.href = "<?=BASEURL?>/editor/content/category";
+				}
+			});
+		}
+	});
+</script>

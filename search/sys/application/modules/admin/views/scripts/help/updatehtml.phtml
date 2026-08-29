@@ -1,0 +1,33 @@
+<!--検索-->
+<section class="row">
+    <div class="col-xs-12">
+      <div class="x_panel">
+        <div class="x_title">
+        	<!--タイトルをH２で定義する"-->
+          <h2>HTMLの追加</h2>
+        	<!--タイトルをH２で定義する"-->
+          <ul class="nav navbar-right panel_toolbox">
+            <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+            <li><a class="close-link"><i class="fa fa-close"></i></a>
+            </li>
+          </ul>
+          <div class="clearfix"></div>
+        </div>
+        <div class="x_content">
+		<!--中身-->
+        
+            <p><a href="<?=BASEURL?>/admin/item/">商品管理画面へ進む</a></p>
+            <?=$this->success?>
+            <?=$this->error?>
+            <div class="form-actions">
+                <form action="<?=BASEURL?>/admin/item/detail/" method="get">
+                    <input type="hidden" name="id" value="<?=$this->data['id']?>">
+                    <button type="submit" class="btn btn-large btn-block btn-info">詳細</button>
+                </form>
+            </div>
+          
+		<!--中身-->
+        </div>
+      </div>
+    </div>
+</section>

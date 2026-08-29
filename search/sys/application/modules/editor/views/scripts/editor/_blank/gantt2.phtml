@@ -1,0 +1,817 @@
+<style>
+td {
+  padding-bottom: 0 !important;
+}
+#fixedTableArea {
+  width: 100%;
+  height: 506px;
+  border:solid 1px #666;
+  margin-bottom:2em;
+}
+#topLeftArea {
+  float: left;
+  width: 100px;
+  overflow: hidden;
+}
+#topRightArea {
+  overflow: hidden;
+}
+#bottomLeftArea {
+  width:100px;
+  float: left;
+  height: 442px;
+  overflow: hidden;
+  clear: both;
+}
+#bottomRightArea {
+  height: 442px;
+  overflow: auto;
+}
+#bottomRightArea::-webkit-scrollbar {
+  display: none;
+}
+#topRightArea .fixedTable td {
+height:30px;
+line-height:30px;
+}
+.fixedTable {
+  border-collapse: collapse;
+}
+.fixedTable td {
+  border: 1px solid #888;
+  white-space: nowrap;
+  min-width:60px;
+  height:60px;
+  line-height:60px;
+  position:relative;
+  text-align: center;
+}
+.tlRow div.timeZone{
+  position: relative;
+  top:0;
+  left:0;
+  z-index: 100;
+  border-left: none;
+}
+.timeZone .popover2{
+  position: absolute;
+  top:0;
+  right:70px;
+  z-index: 10000;
+  background: #e0edff;
+  height: 30px;
+  line-height: 30px;
+  width: 230px;
+  border-radius: 5px;
+  text-align: left;
+  color:#666;
+  margin-top: 15px;
+  padding: 0 0.5em;
+}
+.timeZone .popover2:before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 100%;
+  margin-top: -7px;
+  border: 7px solid transparent;
+  border-left: 7px solid #e0edff;
+}
+.timeZone .popover2 .setupText{
+  color:#f00;
+}
+.timeZone .popover2 .fuka{
+  color:#0a0;
+}
+
+.timeZone span.startTime{
+  position: absolute;
+  color:white;
+}
+.timeZone span.kadou,.timeZone span.setup{
+  background: rgba(0,0,255,0.6);
+  width:60px;
+  height:60px;
+  display: inline-block;
+  /*float:left;*/
+  color:white;
+}
+.timeZone span.kadou{
+  background: rgba(0,0,255,0.6);
+  width:60px;
+  height:60px;
+  display: inline-block;
+  /*float:left;*/
+  color:white;
+}
+.timeZone span.setup{
+  background: rgba(0,0,255,0.3);
+  width:60px;
+  height:60px;
+  display: inline-block;
+  /*float:left;*/
+  color:rgba(0,0,0,0);
+}
+.timeZone span.empty{
+  background: rgba(0,0,0,0);
+  width:60px;
+  height:60px;
+  display: inline-block;
+  /*float:left;*/
+  color:rgba(0,0,0,0);
+}
+.tlWrap{
+  border-top: 1px solid #888;
+  border-right: 1px solid #888;
+  padding:0;
+  margin-bottom: 0;
+  overflow: hidden;
+}
+.tlRow{
+  margin-bottom: 0;
+  white-space: nowrap;
+}
+.tlRow div{
+  border-bottom: 1px solid #888;
+  border-left: 1px solid #888;
+  width:60px;
+  height:61px;
+  line-height:60px;
+  position:relative;
+  text-align: center;
+  float: left;
+}
+.holyday{
+  color:red;
+  background-color: #fcc;
+}
+.pagination>li.holyday>a {
+  position: relative;
+  float: left;
+  /*padding: 6px 12px;*/
+  margin-left: -1px;
+  line-height: 1.42857143;
+    color:red;
+  text-decoration: none;
+  background-color: #fcc;
+  border: 1px solid #ddd;
+}
+</style>
+
+<div class="loading">
+</div>
+<p><a href="<?=BASEURL?>/editor/editor/detail?id=<?=$this->detail['id']?>" class="btn btn-warning"><i class="fa fa-reply-all"></i> <?=$this->detail['name']?><?=$this->detail['name2']?>の詳細へ戻る</a></p>
+<h3 class="text-center"><?=$this->year?>年<?=$this->month?>月</h3>
+<?php
+//月末日を算出
+$last_daty = mktime(0,0,0,$this->month+1,0,$this->year);
+//来月
+$n_year = date("Y",mktime(0,0,0,$this->month+1,1,$this->year));
+$n_month = date("m",mktime(0,0,0,$this->month+1,1,$this->year));
+//前月
+$l_year = date("Y",mktime(0,0,0,$this->month-1,1,$this->year));
+$l_month = date("m",mktime(0,0,0,$this->month-1,1,$this->year));
+//曜日index
+$week = array(1=>"月",2=>"火",3=>"水",4=>"木",5=>"金",6=>"土",7=>"日");
+?>
+<nav style="width:100%;overflow:auto;">
+	<ul class="pagination pagination-sm" style="width:1850px;">
+		<li>
+			<a href="<?=BASEURL?>/editor/sougi/gantt2/?year=<?=$l_year?>&amp;month=<?=$l_month?>&amp;day=<?=$this->day?>&amp;id=<?=$_GET['id']?>" aria-label="Prev">
+			<span aria-hidden="true"><?=$l_year?>年<?=$l_month?>月</span>
+			</a>
+		</li>
+		<?php for($i=0;$i<date("j",$last_daty);$i++):?>
+      <?php $weekday = date("w",strtotime($this->year."-".$this->month."-".$i));?>
+			<li class="calendrDay <?php if($this->day == str_pad(($i+1), 2, 0, STR_PAD_LEFT)) echo ' active'?>" data-year="<?=$this->year?>" data-month="<?=$this->month?>" data-day="<?=$i+1?>" data-date="<?=$weekday?>">
+        <a href="<?=BASEURL?>/editor/sougi/gantt2/?year=<?=$this->year?>&amp;month=<?=$this->month?>&amp;day=<?=str_pad(($i+1), 2, 0, STR_PAD_LEFT)?>&amp;id=<?=$_GET['id']?>">
+          <?=str_pad(($i+1), 2, 0, STR_PAD_LEFT)?>(<?=$week[$weekday+1]?>)
+        </a>
+      </li>
+		<?php endfor;?>
+		<li>
+			<a href="<?=BASEURL?>/editor/sougi/gantt2/?year=<?=$n_year?>&amp;month=<?=$n_month?>&amp;day=<?=$this->day?>&amp;id=<?=$_GET['id']?>" aria-label="Next">
+			<span aria-hidden="true"><?=$n_year?>年<?=$n_month?>月</span>
+		</a>
+		</li>
+	</ul>
+</nav>
+<div id="fixedTableArea">
+  <div id="topLeftArea">
+    <table id="topLeftTable" class="fixedTable">
+      <tbody>
+        <tr>
+          <td>製品</td>
+          <td>工程</td>
+          <td>数</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <div id="topRightArea">
+    <table id="topRightTable" class="fixedTable">
+      <tbody id="hourTabel"></tbody>
+    </table>
+  </div>
+  <div id="bottomLeftArea">
+    <table id="bottomLeftTable" class="fixedTable">
+      <tbody id="item"></tbody>
+    </table>
+  </div>
+  <div id="bottomRightArea">
+    <div class="tlWrap" id="tlWrap">
+    </div>
+  </div>
+</div>
+<div id="overspec"></div>
+<link rel="stylesheet" type="text/css" href="<?=BASEURL?>/theme2/js/jquery-ui/jquery-ui.min.css">
+<script src="<?=BASEURL?>/theme2/js/jquery-ui/jquery-ui.min.js"></script>
+<script src="<?=BASEURL?>/js/jquery-ui-touch-punch-master/jquery.ui.touch-punch.min.js"></script>
+<script>
+var json;
+var data;
+var hiduke;
+var timeMethod;
+var timePiece;
+var mitnitsCnt;
+var holyday = new Array();
+var machine = new Array();
+var machineID = new Array();
+$(function(){
+  $(".loading").css("display","block");
+  $.post("<?=BASEURL?>/api/sougi/staffgantt",{id:getArr()['id']},function(data2){
+    var json2 = JSON.parse(data2);
+    console.log(json2);
+    json = json2[0];
+    //1時間あたりの分割数を定義
+    if(json['timeSetting'] == 1){
+      var timeMethod = 6;
+    }else if(json['timeSetting'] == 2){
+      var timeMethod = 4;
+    }else if(json['timeSetting'] == 3){
+      var timeMethod = 2;
+    }else if(json['timeSetting'] == 4){
+      var timeMethod = 0;
+    }
+    var timePiece = 60/timeMethod;
+
+    //holydaySetting();
+
+    if(falseCheck(getArr()['year']) && falseCheck(getArr()['month']) && falseCheck(getArr()['day'])){
+      hiduke=new Date(getArr()['year'],getArr()['month']-1,getArr()['day']);
+    }else{
+      hiduke=new Date(json['startDateTime'].split(" ")[0].replace(/-/g,"/"));
+    }
+    var year = hiduke.getFullYear();
+    var month = hiduke.getMonth()+1;
+    var week = hiduke.getDay();
+    var day = hiduke.getDate();
+    //営業時間や休日、休憩時間の設定
+    data = json2[1];
+
+    var thisMonth = new Date(year,month,0);
+    var thisMonthLastDay = thisMonth.getDate();
+    //営業時間を取得(見込み残業時間を含む)
+    var DayStart = new Date(year,month-1,day,json['start'],json['startMinits']);
+    var DayEnd = new Date(year,month-1,day,json['end'],json['endMinits']);
+    var moveOfDay = (DayEnd.getHours()*60+DayEnd.getMinutes())-(DayStart.getHours()*60+DayStart.getMinutes())+(json['overtime']*60);
+    for(var i=0;i<json['rest'].length;i++){
+      var restTimeStart = new Date(year,month-1,day,json['rest'][i]['start'],json['rest'][i]['startMinits']);
+      var restTimeEnd = new Date(year,month-1,day,json['rest'][i]['end'],json['rest'][i]['endMinits']);
+      var restTimeStartMinits = (restTimeEnd.getHours()*60+restTimeEnd.getMinutes())-(restTimeStart.getHours()*60+restTimeStart.getMinutes());
+      moveOfDay = moveOfDay-restTimeStartMinits;
+    }
+
+
+    $.get("<?=BASEURL?>/api/holyday/?year="+year+"&month="+month,function(data3){
+      //休日を取得して、上部のカレンダー表示部に休日を適用
+      holyday = JSON.parse(data3);
+      for(var i=0;i<holyday.length;i++){
+        $(".calendrDay").each(function(index,element){
+          if(holyday[i] == $(element).data("year")+"-"+zeroPadding($(element).data("month")*1,2)+"-"+zeroPadding($(element).data("day"),2)){
+            if(!$(element).hasClass("holyday") && !$(element).hasClass("active")){
+              $(element).addClass("holyday");
+						  $(".loading").css("display","none");
+							//当月の稼働日数を取得
+							var thisMonthHolyday = new Array();
+							for(var j=0;j<holyday.length;j++){
+								var hol = new Date(holyday[j].replace(/-/g,"/"));
+								if(month == hol.getMonth()+1){
+									thisMonthHolyday.push(holyday[j]);
+								}
+							}
+							thisMonthMoveDays = thisMonthLastDay-thisMonthHolyday.length;
+            }
+          }
+        });
+      }
+      //月の稼働時間（分）
+      //var thisMonthMoveDaysOfMinits = moveOfDay*thisMonthMoveDays;//本当の数値
+      var thisMonthMoveDaysOfMinits = 10;
+      //読み込み時の設定
+      var n = 0;
+      for(var j=0;j<Object.keys(data).length;j++){
+        for(var l = 0;l<Object.keys(data[j]['hasTimeZone']).length;l++){
+          var timeZone = data[j]['hasTimeZone'][l];
+
+          //console.log(data[j]['hasTimeZone'][l]['start'],data[j]['hasTimeZone'][l]['startMinits'],data[j]['hasTimeZone'][l]['end'],data[j]['hasTimeZone'][l]['endMinits']);
+
+
+          if(timeZone['start'] == 0 && timeZone['end'] == 0){
+            var startDate = new Date(timeZone['startDate'].replace(/-/g,"/"));
+            var power = timeZone['power']*1;
+            var v = timeZone['v']*1;
+            var q = timeZone['quantity']*1;
+            var setup = timeZone['setup']*1;
+            var totalPower = Math.ceil(power*v)*q+setup;
+            //console.log(json);
+            if(j==0){
+              //一番最初の工程
+              var Tstart = json['startH'];
+              var TstartMinits = json['startI'];
+            }else{
+              //２個め以降の工程(分単位)
+              var Tstart = data[n]['hasTimeZone'][l]['end'];
+              var TstartMinits = data[n]['hasTimeZone'][l]['endMinits'];
+            }
+            timeZone['start'] = Tstart;
+            timeZone['startMinits'] = TstartMinits;
+
+            var setupOffsetC = 0;
+    				timeZone['setup'] = timeZone['setup']*1;
+
+
+            //段取り時間が休憩時間にかかる場合開始時間を休憩時間の終了時間に設定
+            if(timeZone['setup']*1 >0){
+              var setupC = Math.ceil(timeZone['setup']/timePiece);
+              loopA:
+              for(var r = 0;r<setupC;r++){
+                //比較するマスのエリアの秒数
+                var setupStart = new Date(year,month-1,day,timeZone['start'],timeZone['startMinits']+r*timePiece);
+                var setupStartS = setupStart.getHours()*3600+setupStart.getMinutes()*60;
+                var setupBlockEnd = new Date(year,month-1,day,timeZone['start'],timeZone['startMinits']+timeZone['setup']);
+                var setupBlockEndS = setupBlockEnd.getHours()*3600+setupBlockEnd.getMinutes()*60;
+                //休憩時間中に段取り時間が何分入っているかを計測
+                for(var s =0;s<Object.keys(json['rest']).length;s++){
+                  //休憩時間の範囲を秒に変換
+                  var restStart = new Date(year,month-1,day,json['rest'][s]['start'],json['rest'][s]['startMinits']);
+                  var restStartS = restStart.getHours()*3600+restStart.getMinutes()*60;
+                  var restEnd = new Date(year,month-1,day,json['rest'][s]['end'],json['rest'][s]['endMinits']);
+                  var restEndS = restEnd.getHours()*3600+restEnd.getMinutes()*60;
+                  //休憩時間が何マスになるかを計算
+                  var rebc = (restEndS-restStartS)/60/timePiece;
+                  for(var a =0;a<rebc;a++){
+                    var rebS = restStartS+timePiece*a;
+                    var rebE = restEndS+timePiece*a;
+                    if((rebS >= setupStartS && rebS <= setupBlockEndS)
+                    || (rebE >= setupStartS && rebE <= setupBlockEndS)
+                    || (rebS >= setupStartS && rebE <= setupBlockEndS)
+                    || (rebS <= setupStartS && rebE >= setupBlockEndS)){
+                      data[j]['hasTimeZone'][l]['start'] = restEnd.getHours();
+                      data[j]['hasTimeZone'][l]['startMinits'] = restEnd.getMinutes();
+                      timeZone['start'] = restEnd.getHours();
+                      timeZone['startMinits'] = restEnd.getMinutes();
+                    }
+                  }
+                }
+              }
+            }
+            //稼働時間に休憩が挟んだ場合は、終了時間に休憩時間の分数を加算
+            var ccc = 0;
+            var Rstart = new Array();
+            var Rend = new Array();
+            var rest = new Array();
+            for(var i=0;i<Object.keys(json['rest']).length;i++){
+              rest[i] = false;
+              Rstart.push(new Date(year,month-1,day,json['rest'][i]['start'],json['rest'][i]['startMinits']));
+              Rend.push(new Date(year,month-1,day,json['rest'][i]['end'],json['rest'][i]['endMinits']));
+            }
+            var totalLength = Math.ceil(timeZone['power']*timeZone['v'])*timeZone['quantity'];
+            var c = Math.ceil(totalLength/timePiece);
+            var ss = 0;
+            var cc = 0;
+            var ck2 =false;
+            var restTotal = 0;
+            for(var m=0;m<c;m++){
+              //休憩時間を挟む場合は、休憩時間分空のマスを挿入
+              var kadouSS = (timeZone['startMinits']*1+timeZone['setup']*1+(m+ccc)*timePiece);
+              var kadou = new Date(year,month-1,day,timeZone['start'],kadouSS,0);
+              var kadouS = kadou.getHours()*3600+kadou.getMinutes()*60;
+              for(var k = 0;k<Rstart.length;k++){
+                if(rest[k]==false){
+                  var startS = Rstart[k].getHours()*3600+Rstart[k].getMinutes()*60;
+                  var endS = Rend[k].getHours()*3600+Rend[k].getMinutes()*60;
+                  if(startS<=kadouS && endS>kadouS){
+                    rest[k] = true;
+                    var restC = Math.floor((endS-startS)/60/timePiece);
+                    ccc = ccc+restC;
+                    restTotal = restTotal+((endS-startS)/60);
+                    data[j]['hasTimeZone'][l]['rest'] = restTotal;
+                  }
+                }
+              }
+            }
+            //終了時間を定義
+            var end = new Date(startDate.getFullYear(),startDate.getMonth(),startDate.getDay(),timeZone['start'],timeZone['startMinits']+totalPower+restTotal,0);
+            data[j]['hasTimeZone'][l]['end'] = end.getHours();
+            data[j]['hasTimeZone'][l]['endMinits'] = end.getMinutes();
+            timeZone['end'] = end.getHours();
+            timeZone['endMinits'] = end.getMinutes();
+            //終了時間が営業時間を超える場合は、翌営業日に繰越
+            var endS = end.getHours()*60+end.getMinutes();
+            var nowEnd = new Date(json['endDateTime'].replace("/-/","/"));
+            var nowEndS = nowEnd.getHours()*60+nowEnd.getMinutes();
+            //console.log(holyday);
+            if(nowEndS < endS){
+              for(var d = 1; d<=31; d++){
+                var nextdate = new Date(startDate.getFullYear(),(startDate.getMonth()),(startDate.getDate()+d));
+                var nextdateStr = nextdate.getFullYear()+"-"+zeroPadding(nextdate.getMonth()+1,2)+"-"+zeroPadding(nextdate.getDate(),2);
+                if($.inArray(nextdateStr,holyday) == -1){
+                  //console.log(data[j]['hasTimeZone'][l]);
+                  var diffMinits = endS-nowEndS;
+                  var next = new Date(nextdate.getFullYear(),nextdate.getMonth(),nextdate.getDate(),json['startH'],json['startI']+diffMinits);
+                  break;
+                }
+              }
+            }
+            n = j;
+            //作業ごとの開始時間と終了時間をDBに保存
+            console.log(data[j]);
+            var timezoneArr = {id:data[j]['hasTimeZone'][l]['id'],start:data[j]['hasTimeZone'][l]['start'],startMinits:data[j]['hasTimeZone'][l]['startMinits'],end:data[j]['hasTimeZone'][l]['end'],endMinits:data[j]['hasTimeZone'][l]['endMinits'],rest:data[j]['hasTimeZone'][l]['rest'],machine:data[j]["machineID"]};
+
+            $.post("<?=BASEURL?>/api/sougi/inserttime",{data:JSON.stringify(timezoneArr)},function(data){
+              foreach()
+            });
+          }
+        }
+
+
+        //この案件に使われる機械をすべて取得
+        if(data[j]['machineID'] !=0){
+          var ck=true;
+          for(var k = 0;k<machine.length;k++){
+            if(machine[k]['id'] == data[j]['machineID']){
+              ck=false;
+            }
+          }
+          if(ck==true){
+            machine.push({id:data[j]['machineID'],name:data[j]['machineName']});
+            machineID.push(data[j]['machineID']);
+          }
+        }
+      }
+      ganttchart();
+      if(machineID.length !=0){
+        var str="";
+        var machineIDStr = machineID.join(",");
+        $.post("<?=BASEURL?>/api/sougi/machine/",{data:machineIDStr,year:year,month:month},function(data){
+          var machineOfMonth = JSON.parse(data);
+          console.log(machineOfMonth);
+          for(var o=0;o<machine.length;o++){
+            for(var p=0;p<machineOfMonth.length;p++){
+              if(machine[o]['id'] == machineOfMonth[p]['id']){
+                if(machineOfMonth[p]['range']>thisMonthMoveDaysOfMinits){
+                  str+='<p class="alert alert-warning">'+machine[o]['name']+'が月の最大負荷を超えています。</p>';
+                }
+              }
+            }
+          }
+          if(str!=""){
+            $("#overspec").html(str);
+          }
+        });
+      }
+    });
+  });
+});
+
+function ganttchart(){
+  //console.log(data);
+  //1時間あたりの分割数を定義
+  if(json['timeSetting'] == 1){
+    var timeMethod = 6;
+  }else if(json['timeSetting'] == 2){
+    var timeMethod = 4;
+  }else if(json['timeSetting'] == 3){
+    var timeMethod = 2;
+  }else if(json['timeSetting'] == 4){
+    var timeMethod = 0;
+  }
+  var timePiece = 60/timeMethod;
+  //日付テーブル
+  if(falseCheck(getArr()['year']) && falseCheck(getArr()['month']) && falseCheck(getArr()['day'])){
+    hiduke=new Date(getArr()['year'],getArr()['month']-1,getArr()['day']);
+  }else{
+    hiduke=new Date(json['startDateTime'].split(" ")[0].replace(/-/g,"/"));
+  }
+  var year = hiduke.getFullYear();
+  var month = hiduke.getMonth()+1;
+  var week = hiduke.getDay();
+  var day = hiduke.getDate();
+  var yobi= new Array("日","月","火","水","木","金","土");
+  $("#date").text(month+"/"+day+"("+yobi[week]+")");
+  if(yobi[week] == "日"){
+    $("#date").addClass("holyday");
+  }
+  //休憩時間をjs日付データに変換
+  var Rstart = new Array();
+  var Rend = new Array();
+  for(var i=0;i<Object.keys(json['rest']).length;i++){
+    Rstart.push(new Date(year,month-1,day,json['rest'][i]['start'],json['rest'][i]['startMinits']));
+    Rend.push(new Date(year,month-1,day,json['rest'][i]['end'],json['rest'][i]['endMinits']));
+  }
+  //時分テーブル
+  var hour = new Array();
+  var mitnitsCnt = (json["end"]-json['start']+1)*timeMethod;
+  if(mitnitsCnt == 0){
+    mitnitsCnt = json["end"]-json['start']+1;
+  }
+  var str = "";
+  str+= "<tr>";
+  for(var i=(json['start']*1);i<=(json['end']*1);i++){
+    str+= "<td";
+    //幅、高さの調整
+    if(timeMethod>0){
+      str+= " colspan=\""+timeMethod+"\"";
+    }else{
+      str+= " style=\"height:30px;line-height:30px;font-size:14px;\"";
+    }
+    str+= ">"+i+"</td>";
+    hour.push(i);
+  }
+  str+= "</tr>";
+  if(timeMethod != 0){
+    str+= "<tr>";
+    for(var i=0;i<mitnitsCnt;i++){
+      var time = timePiece*(i%timeMethod);
+      var h = json['start']+Math.floor(i/timeMethod);
+      str+= "<td style=\"text-align:left;\"";
+      //休み時間の調整
+      var now = new Date(year,month-1,day,h,time);
+      var nowS = now.getHours()*3600+now.getMinutes()*60;
+      for(var k = 0;k<Rstart.length;k++){
+        var startS = Rstart[k].getHours()*3600+Rstart[k].getMinutes()*60;
+        var endS = Rend[k].getHours()*3600+Rend[k].getMinutes()*60;
+        if(startS<=nowS && endS>nowS){
+          str+= " class=\"holyday\"";
+        }
+      }
+      str+= ">";
+      str+= time;
+      str+= "</td>";
+    }
+    str+= "</tr>";
+  }
+  $("#hourTabel").html(str);
+  // 工程項目テーブル
+  var str3 = '';
+  for(var j=0;j<Object.keys(data).length;j++){
+    str3 += '<tr>';
+    str3 += '<td>'+data[j]['id']+'</td>';
+    str3 += '<td>'+data[j]['name']+'</td>';
+    str3 += '<td>'+data[j]['totalQuantity']+data[j]['unit']+'</td>';
+    str3 += '</tr>';
+  }
+  $("#item").html(str3);
+  // 工程タイムラインテーブル
+  var str2= '';
+  var n = 0;
+  for(var j=0;j<Object.keys(data).length;j++){
+    var rest = new Array();
+    for(var i=0;i<Object.keys(json['rest']).length;i++){
+      rest[i] = false;
+    }
+    str2+= '<div class="tlRow clearfix">';
+    for(var i=0;i<mitnitsCnt;i++){
+      var time = timePiece*(i%timeMethod);
+      var h = json['start']*1+Math.floor(i/timeMethod);
+      str2+= '<div class="';
+      //休み時間の調整
+      var now = new Date(year,month-1,day,h,time);
+      var nowS = now.getHours()*3600+now.getMinutes()*60;
+      var ck =false;
+      for(var k = 0;k<Rstart.length;k++){
+        var startS = Rstart[k].getHours()*3600+Rstart[k].getMinutes()*60;
+        var endS = Rend[k].getHours()*3600+Rend[k].getMinutes()*60;
+        if(startS<=nowS && endS>nowS){
+          str2+= "holyday";
+          ck =true;
+        }
+      }
+      if(ck ==false){
+        str2+= "tl";
+      }
+      str2+= '" data-id="'+data[j]['id']+'" data-time="'+h+':'+time+'">';
+      //console.log(data[j]['hasTimeZone']);
+      for(var l = 0;l<Object.keys(data[j]['hasTimeZone']).length;l++){
+        var timeZone = data[j]['hasTimeZone'][l];
+        var ccc = 0;
+        var date = hiduke.getFullYear()+"-"+zeroPadding(hiduke.getMonth()+1,2)+"-"+zeroPadding(hiduke.getDate(),2);
+        if(timeZone['startDate'] == date){
+          if(timeZone['start'] == h){
+            //どこのマスに入るかを計算
+            var nowStart = new Date(year,month-1,day,h,time);
+            var nowStartS = nowStart.getHours()*3600+nowStart.getMinutes()*60;
+            var nowEnd = new Date(year,month-1,day,h,time+timePiece);
+            var nowEndS = nowEnd.getHours()*3600+nowEnd.getMinutes()*60;
+            var timeZoneMitnits = new Date(year,month-1,day,h,timeZone['startMinits']);
+            var timeZoneMitnitsS = timeZoneMitnits.getHours()*3600+timeZoneMitnits.getMinutes()*60;
+            if(nowStartS <=timeZoneMitnitsS && nowEndS>timeZoneMitnitsS){
+              var totalLength = Math.ceil(timeZone['power']*timeZone['v'])*timeZone['quantity'];
+              str2+= '<div class="timeZone clearfix" data-id="'+timeZone['id']+'">';
+              //段取り時間のを描画
+              /*
+              var setupC = Math.ceil(timeZone['setup']/timePiece);
+              for(var m=0;m<setupC;m++){
+                str2+= "<span class=\"setup\">0</span>";
+              }
+              */
+              if(timeZone['setup'] >= timePiece){
+                //１マス分に満たない場合は、切り捨て（描画しない）
+                var setupC = Math.ceil(timeZone['setup']/timePiece);
+                //console.log(setupC);
+                for(var m=0;m<setupC;m++){
+                  str2+= "<span class=\"setup\">0</span>";
+                }
+              }
+              //稼働時間を描画
+              var c = Math.ceil(totalLength/timePiece);
+              var ss = 0;
+              var cc = 0;
+              var ck2 =false;
+              for(var m=0;m<c;m++){
+                //１マスずつに表示する個数の計算
+                var s = (timeZone['quantity']/c)+ss;
+                var ss = parseFloat("0."+(String(s)).split(".")[1]);
+                var sss = Math.floor(s);
+                if(m+1 == Math.ceil(c)){
+                  if(cc+sss > timeZone['quantity']){
+                    sss = timeZone['quantity']-cc;
+                  }
+                }
+                cc = cc+sss;
+                //休憩時間を挟む場合は、休憩時間分空のマスを挿入
+                var kadouSS = (timeZone['startMinits']*1+timeZone['setup']*1+(m+ccc)*timePiece);
+                var kadou = new Date(year,month-1,day,timeZone['start'],kadouSS,0);
+                var kadouS = kadou.getHours()*3600+kadou.getMinutes()*60;
+                for(var k = 0;k<Rstart.length;k++){
+                  if(rest[k]==false){
+                    var startS = Rstart[k].getHours()*3600+Rstart[k].getMinutes()*60;
+                    var endS = Rend[k].getHours()*3600+Rend[k].getMinutes()*60;
+                    if(startS<=kadouS && endS>kadouS){
+                      rest[k] = true;
+                      var restC = Math.floor((endS-startS)/60/timePiece);
+                      ccc = ccc+restC;
+                      for(var o=0;o<restC;o++){
+                        str2+= '<span class="empty">0</span>';
+                      }
+                    }
+                  }
+                }
+                str2+= '<span class="kadou">'+ sss +'</span>';
+              }
+              str2+= '<div class="popover2">';
+              str2+= zeroPadding(timeZone['start'],2)+':'+zeroPadding(timeZone['startMinits'],2)+"〜"+zeroPadding(timeZone['end'],2)+':'+zeroPadding(timeZone['endMinits'],2)+" <span class='setupText'>段取:"+timeZone['setup']+"分</span> <span class='fuka'>加工:"+totalLength+"分</span>";
+              str2+= '</div>';
+              str2+= '</div>';
+            }
+          }
+        }
+      }
+      str2+= '</div>';
+    }
+    str2+= '</div>';
+  }
+  $("#tlWrap").html(str2);
+  $('#bottomRightArea').scroll(function(e) {
+      $('#bottomLeftArea').scrollTop($(this).scrollTop()); // 左下のDIVのスクロール位置を更新
+      $('#topRightArea').scrollLeft($(this).scrollLeft()); // 右上のDIVのスクロール位置を更新
+  });
+  var tw =$("#bottomLeftTable").width();
+  $("#bottomLeftArea").css("width",tw);
+  $("#topLeftArea").css("width",tw);
+  $("#topLeftTable").css("width",tw);
+  var tw2 = $("#topRightTable").width();
+  $(".tlWrap").css("width",tw2);
+  $(".tl").data("id",$(this).offsetLeft);
+  //ドラッグされる要素
+	$(".timeZone").draggable({
+    axis:"x",
+    snap:".tl",
+    containment:"#tlWrap",
+    revert: "invalid",
+    opacity:0.8,
+    scrollSpeed:100,
+		start : function (event , ui){
+      $("#bottomRightArea").css("overflow","hidden");
+		} ,
+		// ドラッグ終了時に呼ばれる
+		stop : function (event , ui){
+      $("#bottomRightArea").css("overflow","auto");
+		}
+  });
+  //ドロップされる要素
+  $(".tl").droppable({
+    drop: function(event, ui) {
+      for(var i=0;i<data.length;i++){
+        if(data[i]['id'] == $(this).data("id")){
+          for(var j=0;j<Object.keys(data[i]['hasTimeZone']).length;j++){
+            if(data[i]['hasTimeZone'][j]['id'] == ui.draggable[0].getAttribute("data-id")){
+              data[i]['hasTimeZone'][j]['start']=$(this).data("time").split(":")[0];
+              data[i]['hasTimeZone'][j]['startMinits']=$(this).data("time").split(":")[1];
+
+
+              var setupOffsetC = 0;
+              var offset = 0;
+              var timeZone = data[i]['hasTimeZone'][j];
+              var startDate = new Date(timeZone['startDate'].replace(/-/g,"/"));
+              var power = timeZone['power']*1;
+              var v = timeZone['v']*1;
+              var q = timeZone['quantity']*1;
+              var setup = timeZone['setup']*1;
+              var totalPower = Math.ceil(power*v)*q+setup;
+
+
+              //稼働時間に休憩が挟んだ場合は、終了時間に休憩時間の分数を加算
+              var ccc = 0;
+              var Rstart = new Array();
+              var Rend = new Array();
+              var rest = new Array();
+              for(var n=0;n<Object.keys(json['rest']).length;n++){
+                rest[n] = false;
+                Rstart.push(new Date(year,month-1,day,json['rest'][n]['start'],json['rest'][n]['startMinits']));
+                Rend.push(new Date(year,month-1,day,json['rest'][n]['end'],json['rest'][n]['endMinits']));
+              }
+              var totalLength = Math.ceil(timeZone['power']*timeZone['v'])*timeZone['quantity'];
+              var c = Math.ceil(totalLength/timePiece);
+              var ss = 0;
+              var cc = 0;
+              var restTotal = 0;
+              var ck2 =false;
+              for(var m=0;m<c;m++){
+                //休憩時間を挟む場合は、休憩時間分空のマスを挿入
+                var kadouSS = (timeZone['startMinits']*1+timeZone['setup']*1+(m+ccc)*timePiece);
+                var kadou = new Date(year,month-1,day,timeZone['start'],kadouSS,0);
+                var kadouS = kadou.getHours()*3600+kadou.getMinutes()*60;
+                for(var k = 0;k<Rstart.length;k++){
+                  if(rest[k]==false){
+                    var startS = Rstart[k].getHours()*3600+Rstart[k].getMinutes()*60;
+                    var endS = Rend[k].getHours()*3600+Rend[k].getMinutes()*60;
+                    if(startS<=kadouS && endS>kadouS){
+                      rest[k] = true;
+                      var restC = Math.floor((endS-startS)/60/timePiece);
+                      ccc = ccc+restC;
+                      restTotal = restTotal+((endS-startS)/60);
+                      data[i]['hasTimeZone'][j]['rest'] = restTotal;
+                    }
+                  }
+                }
+              }
+              //終了時間を定義
+              var M = timeZone['startMinits']*1+totalPower*1+restTotal;
+              //var M = timeZone['startMinits']*1+totalPower*1+offset*1;
+              var end = new Date(startDate.getFullYear(),startDate.getMonth(),startDate.getDay(),timeZone['start'],M,0);
+              data[i]['hasTimeZone'][j]['end'] = end.getHours();
+              data[i]['hasTimeZone'][j]['endMinits'] = end.getMinutes();
+              //作業ごとの開始時間と終了時間をDBに保存
+              var timezoneArr = {id:data[i]['hasTimeZone'][j]['id'],start:data[i]['hasTimeZone'][j]['start'],startMinits:data[i]['hasTimeZone'][j]['startMinits'],end:data[i]['hasTimeZone'][j]['end'],endMinits:data[i]['hasTimeZone'][j]['endMinits'],rest:data[i]['hasTimeZone'][j]['rest']};
+              $.post("<?=BASEURL?>/api/sougi/inserttime",{data:JSON.stringify(timezoneArr)},function(data){
+                console.log(data);
+              });
+
+
+            }
+          }
+        }
+      }
+      ganttchart();
+    }
+  });
+}
+
+function getArr(){
+  var vars = {};
+  var param = location.search.substring(1).split('&');
+  for(var i = 0; i < param.length; i++) {
+      var keySearch = param[i].search(/=/);
+      var key = '';
+      if(keySearch != -1) key = param[i].slice(0, keySearch);
+      var val = param[i].slice(param[i].indexOf('=', 0) + 1);
+      if(key != '') vars[key] = decodeURI(val);
+  }
+  return vars;
+}
+function falseCheck(v){
+  if(v == undefined || v == null || v == false || v == ""){
+    return false;
+  }else{
+    return true;
+  }
+}
+function zeroPadding(num,length){
+    return ('0000000000' + num).slice(-length);
+}
+$(document).on("click",".popover2",function(){
+  $(this).css("display","none");
+});
+</script>

@@ -1,0 +1,103 @@
+
+<section class="row">
+    <div class="col-xs-12">
+      <div class="x_panel">
+        <div class="x_title">
+        	<!--タイトルをH２で定義する"-->
+            <h2><img src="<?=BASEURL?>/img/cart/new/deregistration.jpg" alt="登録解除" width="279">登録解除</h2>
+        	<!--タイトルをH２で定義する"-->
+        </div>
+        <div class="x_content">
+		<!--中身-->
+          <p>登録を解除します。登録を解除すると次回以降のお買物の際に、ご注文主様の情報入力を省略することは出来ません。</p>
+          <?php if($this->setting['point']['pointuse'] == 0):?>
+          <p>また、ポイントは解除した時点で消滅します。</p>
+          <?php endif;?>
+        <div class="formset">
+        	<div class="line clearfix">
+           	<div class="left">お名前</div>
+           	<div class="right">
+            		<?=$this->detail['name']?>　<?=$this->detail['name2']?>
+               </div>
+           </div>
+        	<div class="line clearfix">
+           	<div class="left">フリガナ</div>
+           	<div class="right"><?=$this->detail['kana']?>　<?=$this->detail['kana2']?>
+               </div>
+           </div>
+        	<div class="line clearfix">
+           	<div class="left">メールアドレス</div>
+           	<div class="right"><?=$this->detail['mail']?>
+               </div>
+           </div>
+           
+        	<div class="line clearfix">
+           	<div class="left">性別</div>
+           	<div class="right">
+					<?php foreach(array(1=>"女性",2=>"男性") as $k=>$v):?>
+                    <?php if($k == $this->detail['sex']):?>
+                    <?=$v?>
+                    <?php endif;?>
+                    <?php endforeach;?>
+               </div>
+           </div>
+        	<div class="line clearfix">
+           	<div class="left">生年月日</div>
+           	<div class="right"><?=$this->detail['birthY']?>年<?=$this->detail['birthM']?>月<?=$this->detail['birthD']?>日
+               </div>
+           </div>
+        	<div class="line clearfix">
+           	<div class="left">電話番号</div>
+           	<div class="right"><?=$this->detail['tel']?>-<?=$this->detail['tel2']?>-<?=$this->detail['tel3']?>
+               </div>
+           </div>
+        	<div class="line clearfix">
+           	<div class="left">携帯電話番号</div>
+           	<div class="right"><?=$this->detail['mtel']?>-<?=$this->detail['mtel2']?>-<?=$this->detail['mtel3']?>
+               </div>
+           </div>
+        	<div class="line clearfix">
+           	<div class="left">郵便番号</div>
+           	<div class="right"><?=$this->detail['zip']?>-<?=$this->detail['zip2']?>
+               </div>
+           </div>
+        	<div class="line clearfix">
+           	<div class="left">都道府県</div>
+           	<div class="right">
+                        <?php foreach($this->pref as $v):?>
+                        <?php if($v['id'] == $this->detail['pref']):?>
+                        <?=$v['name']?>
+                        <?php endif;?>
+                        <?php endforeach;?>
+               </div>
+           </div>
+        	<div class="line clearfix">
+           	<div class="left">市区町村、番地</div>
+           	<div class="right"><?=$this->detail['addr']?>
+               </div>
+           </div>
+        	<div class="line clearfix">
+           	<div class="left">ビル名・マンション名、号室</div>
+           	<div class="right"><?=$this->detail['addr2']?>
+               </div>
+           </div>
+        </div>
+         <form action="<?=BASEURL?>/members/deletefinish" method="post" id="form">
+         	<input type="hidden" name="id" value="<?=$this->detail['id']?>">
+         </form>
+         
+         <p class="text-center"><button type="button" class="btn btn-primary" id="sub">登録を解除</button></p>
+		<!--中身-->
+        </div>
+      </div>
+    </div>
+</section>
+<script>
+	jQuery(function(){
+		$("#sub").on('click',function(){
+			if(window.confirm("本当に削除してもいいですか？")){
+				$("#form").submit();
+			}
+		});
+	});
+</script>

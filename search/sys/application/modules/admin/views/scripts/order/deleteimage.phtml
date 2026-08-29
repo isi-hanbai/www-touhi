@@ -1,0 +1,6 @@
+<script type="text/javascript">
+if(confirm("本当に削除しますか。")){
+	var image = parent.document.getElementById('image_<?=$this->id?>');
+	image.parentNode.parentNode.removeChild(image.parentNode);
+}
+</script>

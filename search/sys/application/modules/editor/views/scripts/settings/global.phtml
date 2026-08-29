@@ -1,0 +1,56 @@
+<section class="row">
+  <div class="x_panel">
+    <div class="x_title">
+      <!--タイトルをH２で定義する"-->
+      <h2>SMTP設定</h2>
+      <!--タイトルをH２で定義する"-->
+      <div class="clearfix"></div>
+    </div>
+    <div class="x_content">
+      <!--中身-->
+      <?php if($this->Msg):?>
+        <div class="alert alert-success">
+          <?=$this->Msg?>
+        </div>
+      <?php endif;?>
+      <form action="<?=BASEURL?>/editor/settings/global/" method="post">
+        <table class="table table-striped table-responcive">
+          <tbody>
+            <tr>
+              <th class="required">送信用メール</th>
+              <td><input type="text" name="infoMail" value="<?=$this->data['infoMail']?>" class="form-control"></td>
+            </tr>
+            <tr>
+              <th class="required">SMTPサーバー</th>
+              <td><input type="text" name="SMTPhost" value="<?=$this->data['SMTPhost']?>" class="form-control"></td>
+            </tr>
+            <tr>
+              <th>SMTPユーザー名</th>
+              <td><input type="text" name="SMTPuser" value="<?=$this->data['SMTPuser']?>" class="form-control"></td>
+            </tr>
+            <tr>
+              <th>SMTPパスワード</th>
+              <td><input type="password" name="SMTPpass" value="<?=$this->data['SMTPpass']?>" class="form-control"></td>
+            </tr>
+            <tr>
+              <th class="required">SMTPポート番号</th>
+              <td><input type="text" name="SMTPport" value="<?=$this->data['SMTPport']?>" class="form-control"></td>
+            </tr>
+            <tr>
+              <th class="required">SMTPセキュリティ</th>
+              <td><input type="text" name="SMTPsecur" value="<?=$this->data['SMTPsecur']?>" class="form-control"></td>
+            </tr>
+            <tr>
+              <th class="required">SMTP証明書</th>
+              <td><input type="text" name="SMTPcertificate" value="<?=$this->data['SMTPcertificate']?>" class="form-control"></td>
+            </tr>
+          </tbody>
+        </table>
+        <div class="form-actions">
+          <button type="submit" class="btn btn-large btn-block btn-primary" id="submit">編集</button>
+        </div>
+      </form>
+    <!--中身-->
+    </div>
+  </div>
+</section>

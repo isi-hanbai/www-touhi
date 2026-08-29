@@ -1,0 +1,136 @@
+<!--スタッフ情報-->
+<section class="row">
+    <div class="col-xs-12">
+      <div class="x_panel">
+        <div class="x_title">
+        	<!--タイトルをH２で定義する"-->
+          <h2>編集後のスタッフ情報</h2>
+        	<!--タイトルをH２で定義する"-->
+          <ul class="nav navbar-right panel_toolbox">
+            <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+            <li><a class="close-link"><i class="fa fa-close"></i></a>
+            </li>
+          </ul>
+          <div class="clearfix"></div>
+        </div>
+        <div class="x_content">
+		<!--中身-->
+    		<p>下記の内容でスタッフ情報の編集を行いました。編集及び削除は、スタッフ管理画面より行えます。</p>
+        <p><a href="<?=BASEURL?>/editor/editor/detail?id=<?=$this->data['id']?>" class="btn btn-success"><?=$this->data['name']?>様のスタッフ詳細へ進む</a>　<a href="<?=BASEURL?>/editor/editor/" class="btn btn-primary">スタッフ管理画面へ進む</a></p>
+          <div class="data-table">
+              <table class="table table-striped table-responcive">
+                <tbody>
+                <tr>
+                    <th>入社日</th>
+                    <td class="form-inline">
+                        <?php for($i=50;$i>=0;$i--):?>
+                          <?php if(date('Y')-$i == $this->data['joinYear']):?>
+                            <?=(date('Y')-$i)?>
+                          <?php endif;?>
+                        <?php endfor;?>
+                        年
+                        <?php for($i=1;$i<=12;$i++):?>
+                          <?php if($i == $this->data['joinMonth']):?>
+                            <?=$i?>
+                          <?php endif;?>
+                        <?php endfor;?>
+                        月
+                        <?php for($i=1;$i<=31;$i++):?>
+                          <?php if($i == $this->data['joinDay']):?>
+                            <?=$i?>
+                          <?php endif;?>
+                        <?php endfor;?>
+                        日 (勤続：<?php
+                        $join = $vv['joinYear']*12+$vv['joinMonth'];
+                        $now = date("Y")*12+date("n");
+                        $diff = floor(($now-$join)/12);
+                        $diff_ = ($now-$join)%12;
+                        echo $diff."年".$diff_."月";
+                        ?>)
+                    </td>
+                 </tr>
+                 <tr>
+                     <th>工場/部署</th>
+                     <td class="form-inline">
+                       工場 :
+                         <?php foreach($this->factory as $v):?>
+                           <?php if($v['id'] == $this->data['factory']):?>
+                             <?=$v['name']?>
+                           <?php endif;?>
+                         <?php endforeach;?>
+                       部署 :
+                         <?php foreach($this->division as $v):?>
+                           <?php if($v['id'] == $this->data['division']):?>
+                             <?=$v['name']?>
+                           <?php endif;?>
+                         <?php endforeach;?>
+                     </td>
+                  </tr>
+                <tr>
+                    <th style="width:25%">お名前</th>
+                    <td><?=$this->data['name']?> <?=$this->data['name2']?></td>
+                 </tr>
+                <tr>
+                    <th>フリガナ</th>
+                    <td><?=$this->data['kana']?> <?=$this->data['kana2']?></td>
+                 </tr>
+                <tr>
+                    <th>メール</th>
+                    <td><?=$this->data['mail']?></td>
+                 </tr>
+                <tr>
+                    <th>性別</th>
+                    <td><?php foreach(array(1=>"女性",2=>"男性") as $k=>$v){
+							if($this->data['sex'] == $k){
+								echo $v;
+							}
+						}?></td>
+                 </tr>
+                <tr>
+                    <th>生年月日</th>
+                    <td><?=$this->data['birthY']?>年<?=$this->data['birthM']?>月<?=$this->data['birthD']?>日</td>
+                 </tr>
+                <tr>
+                    <th>電話番号</th>
+                    <td><?=$this->data['tel']?>-<?=$this->data['tel2']?>-<?=$this->data['tel3']?></td>
+                 </tr>
+                <tr>
+                    <th>携帯電話</th>
+                    <td><?=$this->data['mtel']?>-<?=$this->data['mtel2']?>-<?=$this->data['mtel3']?></td>
+                 </tr>
+                <tr>
+                    <th>住所</th>
+                    <td>〒<?=$this->data['zip']?>-<?=$this->data['zip2']?><br><?=$this->data['prefName']?><?=$this->data['addr']?><br>
+							<?=$this->data['addr2']?>
+                    </td>
+                 </tr>
+                </tbody>
+                <tfoot id="skil">
+                  <?php for($i=0;$i<count($this->skil);$i++):?>
+                    <tr>
+                      <th><?=$this->skil[$i]['name']?></th>
+                      <td>
+                        <?php foreach($this->editorSkil as $v):?>
+                          <?php if($v['skil'] == $this->skil[$i]['id']):?>
+                            <?php for($j=0;$j<$v['value'];$j++){
+                              echo "☆";
+                            }?>
+                          <?php endif;?>
+                        <?php endforeach;?>
+                      </td>
+                    </tr>
+                  <?php endfor;?>
+                </tfoot>
+              </table>
+            </div>
+            <div class="form-actions">
+                    <form action="<?=BASEURL?>/editor/editor/update/" method="get">
+                        <input type="hidden" name="id" value="<?=$this->data['id']?>">
+                        <button type="submit" class="btn btn-large btn-block btn-primary">編集</button>
+                    </form>
+            </div>
+			<!--中身-->
+        </div>
+      </div>
+    </div>
+</section>

@@ -1,0 +1,173 @@
+<!--リスト表示-->
+<section class="row">
+    <div class="col-xs-12">
+      <div class="x_panel">
+        <div class="x_title">
+          <div class="row">
+            <div class="col-xs-6">
+              <h2>ユーザー一覧</h2>
+            </div>
+            <div class="col-xs-6 text-right">
+              <a href="<?=BASEURL?>/admin/user/registrer/" class="btn btn-success">ユーザー登録</a>
+            </div>
+          </div>
+          <div class="clearfix"></div>
+        </div>
+        <div class="x_content">
+		<!--中身-->
+        <form action="<?=BASEURL?>/admin/user/" method="get" class="row">
+          <p class="col-sm-4"><input type="text" name="keyword" value="<?=$_GET['keyword']?>" class="form-control" placeholder="キーワード"></p>
+          <p class="col-sm-1">件数：</p>
+          <p class="col-sm-1">
+            <select name="limit" class="form-control">
+              <option value="10">10件</option>
+              <option value="25">25件</option>
+              <option value="50">50件</option>
+              <option value="75">75件</option>
+              <option value="100">100件</option>
+            </select>
+          </p>
+          <p class="col-sm-6 text-right">
+            <button type="submit" class="btn btn-warning">検索</button>
+          </p>
+        </form>
+        <table class="table table-striped responsive-utilities jambo_table bulk_action">
+          <thead>
+            <tr class="headings">
+              <th>
+                <input type="checkbox" id="allcheck" class="flat ck">
+              </th>
+              <th class="column-title">会社名</th>
+              <th class="column-title">容量 </th>
+              <th class="column-title">ステータス </th>
+              <th class="column-title">詳細 </th>
+            </tr>
+          </thead>
+          <tbody>
+            <?php foreach($this->users as $vv):?>
+            <tr class="even pointer">
+              <td class="a-center ">
+                <input type="checkbox" class="ck" name="ck[]" value="<?=$vv['id']?>">
+              </td>
+              <td>
+								<?=$vv['company']?>
+								<?php if($vv['stop'] !="0000-00-00 00:00:00"):?>
+									<span class="label label-danger">停止中</span>
+                <?php elseif($vv['cancellation'] !="0000-00-00 00:00:00"): ?>
+									<span class="label label-danger">解約申請中</span><br><?=$vv['cancellation']?>
+								<?php endif;?>
+							</td>
+              <td>
+                <?php
+                if($vv['size'] <50){
+                  $addClass=" progress-bar-success";
+                }elseif($vv['size'] >50 && $vv['size'] <80){
+                  $addClass=" progress-bar-warning";
+                }elseif($vv['size'] >80){
+                  $addClass=" progress-bar-danger";
+                }
+                ?>
+                <div class="progress">
+                <div class="progress-bar<?=$addClass?>" data-realsize="<?=$vv['realsize']?>" data-transitiongoal="<?=$vv['size']?>" aria-valuenow="<?=$vv['size']?>" style="width: <?=$vv['size']?>%;"></div>
+                <?=$vv['size']?>% (<?php echo round($vv['realsize']/1000000000,2);?>GB)
+                </div>
+								最大<?php echo round($vv['max_size']/1000000000,2);?>GB
+              </td>
+              <td>
+                <?php
+                if($vv['active'] ==1){
+                  echo "有効";
+                }else{
+                  echo "無効";
+                }
+                ?>
+              </td>
+              <td class="a-right a-right ">
+                <a href="<?=BASEURL?>/admin/user/update/?id=<?=$vv['id']?>" class="btn btn-primary">詳細</a>
+              </td>
+            </tr>
+            <?php endforeach;?>
+          </tbody>
+        </table>
+        <div class="profile_title">
+          <button class="btn btn-danger" type="button" id="deleteAll">チェックしたものを削除</button>
+          <button class="btn btn-info" type="button" id="exportAll">チェックしたものをCSV出力</button>
+          <button class="btn btn-primary" type="button" id="postcard">チェックしたものをはがきで出力</button>
+        </div>
+        <?=$this->pager?>
+
+		<!--中身-->
+        </div>
+      </div>
+    </div>
+</section>
+
+
+<form action="<?=BASEURL?>/admin/user/postcard" method="post" id="postcardform" target="_blank">
+<input type="hidden" name="ids" value="">
+</form>
+<script>
+$(function(){
+	$('input[type=checkbox]').click(function() {
+	  var t = $(this).prop;
+		if(t('checked'))
+			t('checked', '');
+		else
+			t('checked', 'checked');
+	});
+
+	$('table tr').click(function() {
+	  var c = $(this).children('td').children('input[type=checkbox]');
+		if(c.prop('checked'))
+			c.prop('checked', '');
+		else
+			c.prop('checked', 'checked');
+	});
+	//checkboxを全て同時に選択
+	$("#allcheck").on("click",function(){
+		if($(this).is(':checked')){
+			$(".ck").prop('checked', true);
+		}else{
+			$(".ck").prop('checked', false);
+		}
+	});
+	$("#deleteAll").on("click",function(){
+		if(window.confirm("本当に削除してもいいですか？")){
+			var ck = $('[class="ck"]:checked').map(function(){
+				return $(this).val();
+			}).get();
+			var url = "<?=BASEURL?>/api/user/delete/";
+			$.post(url,{ids:ck},function(data){
+				if(data = "OK"){
+					location.href = "<?=BASEURL?>/admin/user/";
+				}
+			});
+		}
+	});
+	$("#exportAll").on("click",function(){
+			var ck = $('[class="ck"]:checked').map(function(){
+				return $(this).val();
+			}).get();
+			var str = JSON.stringify(ck);
+
+
+			var url = "<?=BASEURL?>/api/user/export/?ids="+str;
+			location.href = url;
+			/*
+			$.post(url,{ids:ck},function(data){
+				console.log(data);
+			});
+			*/
+	});
+	　$("#postcard").on("click",function(){
+			var ck = $('[class="ck"]:checked').map(function(){
+				return $(this).val();
+			}).get();
+			var str = JSON.stringify(ck);
+			console.log(ck);
+			if($("[name=ids]").val(str)){
+				$("#postcardform").submit();
+			}
+	});
+});
+</script>

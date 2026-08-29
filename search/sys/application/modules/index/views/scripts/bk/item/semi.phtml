@@ -1,0 +1,137 @@
+<?php if(!empty($this->html[0]['html']) || !empty($this->html[0]['thumb']) || !empty($this->html[0]['thumb2'])):?>
+        <?php if(!empty($this->html[0]['thumb'])):?>
+            <div class="banner">
+            <div class="hidden-xs">
+            <p class="text-center"><img src="<?=BASEURL.$this->html[0]['thumb']?>" alt="<?=$this->html[0]['page']?>"></p>
+            </div>
+		<?php endif;?>
+        <?php if(!empty($this->html[0]['thumb2'])):?>
+            <div class="visible-xs">
+            <p class="text-center"><img src="<?=BASEURL.$this->html[0]['thumb2']?>" alt="<?=$this->html[0]['page']?>"></p>
+            </div>
+            </div>
+		<?php endif;?>
+        <?=htmlspecialchars_decode($this->html[0]['html'])?>
+<?php endif;?>
+<section class="row">
+    <div class="col-xs-12">
+      <div class="x_panel">
+        <div class="x_title">
+        	<!--タイトルをH２で定義する"-->
+          <h2>おまかせで注文</h2>
+        	<!--タイトルをH２で定義する"-->
+          <ul class="nav navbar-right panel_toolbox">
+            <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+            <li><a class="close-link"><i class="fa fa-close"></i></a>
+            </li>
+          </ul>
+          <div class="clearfix"></div>
+        </div>
+        <div class="x_content">
+		<!--中身-->
+        <div class="row">
+            <div class="col-sm-2">
+            	<img src="<?=BASEURL?>/img/a.gif" alt="おまかせフラワーアレンジメント">
+            </div>
+            <div class="col-sm-4">
+        		<h3>おまかせアレンジメント</h3>
+                <form action="<?=BASEURL?>/order" method="post">
+                <p class="form-inline"><select name="number" class="form-control">
+                <?php foreach($this->arrange as $v):?>
+                <?php if($v['tax'] == 0):?>
+                <option value="<?=$v['number']?>"><?=$v['price']+($v['price']*$this->setting['tax']['ratio']/100)?></option>
+                <?php else:?>
+                <option value="<?=$v['number']?>"><?=$v['price']?></option>
+                <?php endif;?>
+                <?php endforeach;?>
+                </select>  円(税込)</p>
+                <p class="form-inline">
+                <select name="quantity" class="form-control">
+                <?php for($i=1;$i<101;$i++):?>
+                <option value="<?=$i?>"><?=$i?></option>
+                <?php endfor;?>
+                </select>  個</p>
+                <button type="submit" class="btn btn-success btn-lg">購入する</button>
+                </form>
+            </div>
+            <div class="col-sm-2">
+            	<img src="<?=BASEURL?>/img/h.gif" alt="おまかせ花束">
+            </div>
+            <div class="col-sm-4">
+        			<h3>おまかせ花束</h3>
+                <form action="<?=BASEURL?>/order" method="post">
+                <p class="form-inline"><select name="number" class="form-control">
+                <?php foreach($this->taba as $v):?>
+                <?php if($v['tax'] == 0):?>
+                <option value="<?=$v['number']?>"><?=$v['price']+($v['price']*$this->setting['tax']['ratio']/100)?></option>
+                <?php else:?>
+                <option value="<?=$v['number']?>"><?=$v['price']?></option>
+                <?php endif;?>
+                <?php endforeach;?>
+                </select>  円(税込)</p>
+                <p class="form-inline">
+                <select name="quantity" class="form-control">
+                <?php for($i=1;$i<101;$i++):?>
+                <option value="<?=$i?>"><?=$i?></option>
+                <?php endfor;?>
+                </select>  個</p>
+                <button type="submit" class="btn btn-success btn-lg">購入する</button>
+                </form>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-2">
+            	<img src="<?=BASEURL?>/img/is.gif" alt="お祝いスタンド花">
+            </div>
+            <div class="col-sm-4">
+       		 <h3>おまかせお祝いスタンド花</h3>
+                <form action="<?=BASEURL?>/order" method="post">
+                <p class="form-inline"><select name="number" class="form-control">
+                <?php foreach($this->os as $v):?>
+                <?php if($v['tax'] == 0):?>
+                <option value="<?=$v['number']?>"><?=$v['price']+($v['price']*$this->setting['tax']['ratio']/100)?></option>
+                <?php else:?>
+                <option value="<?=$v['number']?>"><?=$v['price']?></option>
+                <?php endif;?>
+                <?php endforeach;?>
+                </select>  円(税込)</p>
+                <p class="form-inline">
+                <select name="quantity" class="form-control">
+                <?php for($i=1;$i<101;$i++):?>
+                <option value="<?=$i?>"><?=$i?></option>
+                <?php endfor;?>
+                </select>  個</p>
+                <button type="submit" class="btn btn-success btn-lg">購入する</button>
+                </form>
+            </div>
+            <div class="col-sm-2">
+            	<img src="<?=BASEURL?>/img/os.gif" alt="おまかせお供えスタンド花">
+            </div>
+            <div class="col-sm-4">
+        			<h3>おまかせお供えスタンド花</h3>
+                <form action="<?=BASEURL?>/order" method="post">
+                <p class="form-inline"><select name="number" class="form-control">
+                <?php foreach($this->ss as $v):?>
+                <?php if($v['tax'] == 0):?>
+                <option value="<?=$v['number']?>"><?=$v['price']+($v['price']*$this->setting['tax']['ratio']/100)?></option>
+                <?php else:?>
+                <option value="<?=$v['number']?>"><?=$v['price']?></option>
+                <?php endif;?>
+                <?php endforeach;?>
+                </select>  円(税込)</p>
+                <p class="form-inline">
+                <select name="quantity" class="form-control">
+                <?php for($i=1;$i<101;$i++):?>
+                <option value="<?=$i?>"><?=$i?></option>
+                <?php endfor;?>
+                </select>  個</p>
+                <button type="submit" class="btn btn-success btn-lg">購入する</button>
+                </form>
+            </div>
+        </div>
+       
+		<!--中身-->
+        </div>
+      </div>
+    </div>
+</section>

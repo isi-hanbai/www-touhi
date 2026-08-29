@@ -1,0 +1,94 @@
+<input type="hidden" name="base" value="<?=BASEURL?>">
+
+<section class="row">
+  <div class="x_panel">
+    <div class="x_title">
+      <!--タイトルをH２で定義する"-->
+      <h2>会員分類一覧</h2>
+      <!--タイトルをH２で定義する"-->
+      <div class="clearfix"></div>
+    </div>
+    <div class="x_content">
+      <!--中身-->
+      <div class="row">
+        <form action="<?=BASEURL?>/editor/user/" method="get">
+        <p class="col-sm-9 col-xs-9 form-inline">
+            <input type="text" name="keyword" value="<?=$_GET['keyword']?>" class="form-control keyword" placeholder="キーワード">
+            <button type="submit" class="btn btn-default"><i class="fa fa-search"></i> 検索</button>
+        </p>
+        <p class="col-sm-3 col-xs-3 text-right">
+          <a href="<?=BASEURL?>/editor/userclass/registrer/" class="btn btn-success"><i class="fa fa-plus"></i> 登録</a>
+        </p>
+        </form>
+      </div>
+
+        <?=$this->pager?>
+        <table class="table responsive-utilities jambo_table bulk_action">
+          <thead>
+            <tr class="headings">
+              <th class="p">
+                <input type="checkbox" id="allcheck" class="flat ck">
+              </th>
+              <th class="column-title">分類前</th>
+              <th class="column-title text-right">詳細</th>
+            </tr>
+          </thead>
+          <tbody>
+            <?php foreach($this->users as $vv):?>
+            <tr class="even pointer">
+              <td class="a-center p">
+                <input type="checkbox" class="ck" name="ck[]" value="<?=$vv['id']?>">
+              </td>
+              <td class=""><?=$vv['name']?></td>
+              <td class="text-right">
+                <a href="<?=BASEURL?>/editor/userclass/update/?id=<?=$vv['id']?>" class="btn btn-default">詳細</a>
+              </td>
+            </tr>
+            <?php endforeach;?>
+          </tbody>
+        </table>
+        <div class="profile_title p">
+          <div class="row">
+            <div class="col-sm-12">
+              <button class="btn btn-danger" type="button" id="deleteAll">チェックしたものを削除</button>
+            </div>
+          </div>
+        </div>
+        <?=$this->pager?>
+      <!--中身-->
+    </div>
+  </div>
+</section>
+
+<script>
+$(function(){
+	$('input[type=checkbox]').click(function() {
+	  var t = $(this).prop;
+		if(t('checked'))
+			t('checked', '');
+		else
+			t('checked', 'checked');
+	});
+	//checkboxを全て同時に選択
+	$("#allcheck").on("click",function(){
+		if($(this).is(':checked')){
+			$(".ck").prop('checked', true);
+		}else{
+			$(".ck").prop('checked', false);
+		}
+	});
+	$("#deleteAll").on("click",function(){
+		if(window.confirm("本当に削除してもいいですか？")){
+			var ck = $('[class="ck"]:checked').map(function(){
+				return $(this).val();
+			}).get();
+			var url = "<?=BASEURL?>/api/user/delete/";
+			$.post(url,{ids:ck},function(data){
+				if(data = "OK"){
+					location.href = "<?=BASEURL?>/editor/user/";
+				}
+			});
+		}
+	});
+});
+</script>

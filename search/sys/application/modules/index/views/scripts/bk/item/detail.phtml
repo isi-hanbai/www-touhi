@@ -1,0 +1,338 @@
+<div class="details">
+<h2 class="m"><img src="<?=BASEURL?>/img/cart/new/prosuct.jpg" alt="<?=$this->data['name'].$i?>商品詳細" width="145"><?=$this->data['name'].$i?></h2>
+<ul class="breadcrumb"><?=$this->bread?></ul>
+<!--中身-->
+<?php if($this->data['addHtml']):?>
+<?php echo htmlspecialchars_decode($this->data['addHtml']);?>
+<?php endif;?>
+<div class="row">
+	<div class="col-sm-5">
+		<p> <img src="<?=BASEURL?>/img/freeShipping.png"></p>
+    		   <?php if(!empty($this->image)):?>
+            <div class="bimgFrame"><img src="<?=BASEURL."/".$this->image[0]['url']?>" alt="<?=$this->data['name'].$i?>" id="bimg"></div>
+            <div class="thumb row">
+              <?php 
+                $i=1;
+                foreach($this->image as $v):?>
+                    <div class="col-xs-3"><a href="javascript:void(0);" class="thumImage"><img src="<?=BASEURL."/".$v['url']?>" alt="<?=$this->data['name'].$i?>"></a></div>
+                <?php
+                $i++;
+                endforeach;?>
+            </div>
+    		   <?php endif;?>
+                	<div class="detail">
+                   <div class="hidden-xs">
+                	<dl>
+                   	<dt style="background-color:white;color:black;">内容量</dt> 
+                        <?php if($_GET['id'] =="1901" || $_GET['id'] =="1902" || $_GET['id'] =="1903"):?>
+                    	<dd><?=$this->data["ryou"]?>g</dd>
+						   <?php else:?>
+                    	<dd><?=$this->data["ryou"]?>mL</dd>
+                            <?php endif;?>
+                   	<dt style="background-color:white;color:black;">生産国</dt> 
+                    	<dd><?=$this->data["country"]?></dd>
+                   </dl>
+                   </div>
+                  </div>
+	</div>
+	<div class="col-sm-7">
+        <!--詳細情報-->
+        <section class="row">
+            <div class="col-xs-12">
+              <div class="x_panel">
+                <div class="x_content">
+                	<div class="detail">
+                    <?php if($this->data["level"] == 0):?>
+                    <div class="ol995">
+                   <?php else:?>
+                    <div class="ol100">
+                    <?php endif;?>
+                        <p><span class="cate"><?=$this->data["categoryName"]?></span></p>
+                        <h2><?=$this->data["name"]?></h2>
+                        <?php if($_GET['id'] =="1901" || $_GET['id'] =="1902" || $_GET['id'] =="1903"):?>
+                        <?php elseif($_GET['id'] =="1897" || $_GET['id'] =="1898"):?>
+                        <div class="specialicon">
+                            <ul class="clearfix">
+                                <li>無添加</li>
+                                <li>ほんのり甘い</li>
+                                <li>ウォーターベース</li>
+                            </ul>
+                        </div>
+                        <?php else:?>
+                        <div class="specialicon">
+                            <ul class="clearfix">
+                                <li>サラサラ</li>
+                                <li>保湿</li>
+                                <li>ウォーターベース</li>
+                            </ul>
+                        </div>
+                        <?php endif;?>
+                    </div>
+                    <p class="subtitle"><?=nl2br($this->data["subtitle"])?></p>
+                	  <p class="description"><?=nl2br(strip_tags(htmlspecialchars_decode($this->data["description"])))?></p>
+                    <div class="atention"><?=htmlspecialchars_decode($this->data["atention"])?></div>
+                   <hr class="dottid">
+                	<dl>
+                   	<dt>価格</dt> 
+                    	<dd class="price"><?=number_format($this->data["price"])?>円<span>(税込:<?=number_format($this->data["taxprice"])?>円)</span>　</dd>
+                   </dl>
+                  <?php
+				  		$ck = true;
+						//リアルタイム商品の販売終了日経過商品の販売中止の販売を停止。
+                  	if($this->data['realtimeFlug'] == 0&& time()>strtotime($this->data['created'])+60*60*24*$this->data['endOfSale']){
+							$ck = false;
+						}
+						//販売中止の販売を停止
+                  	if($this->data['active'] == 0){
+							$ck = false;
+						}
+						//非表示商品の販売を停止
+                  	if($this->data['display'] == 0){
+							$ck = false;
+						}
+						
+						/*
+						//季節ごとのフラグに応じて販売を停止
+						$season = explode(",",$this->data['season'] );
+						foreach($season as $k=>$v){
+							if($k+1 == date("n") && $v==""){
+									$ck = false;
+							}
+						}
+						*/
+				  	?>
+                    <?php if($ck == false):?>
+                    <p class="stopSales">申し訳ございません。現在販売中止中です。</p>
+                    <?php else:?>
+                    
+                    <form action="<?=BASEURL?>/order/" method="post" id="tocart">
+                        <dl>
+                        <dt>購入数</dt> 
+                            <dd class="form-inline">
+                            	<select name="quantity">
+                                <option value="1">1<?=$this->data["unit"]?></option>
+                                <option value="2">2<?=$this->data["unit"]?></option>
+                                <option value="3">3<?=$this->data["unit"]?></option>
+                                <option value="4">4<?=$this->data["unit"]?></option>
+                                <option value="5">5<?=$this->data["unit"]?></option>
+                    			</select>
+                   
+                        <?php if($_GET['id'] =="1901" || $_GET['id'] =="1902" || $_GET['id'] =="1903"):?>
+                                内容量：<?=$this->data["ryou"]?>g
+						   <?php else:?>
+                                内容量：<?=$this->data["ryou"]?>mL
+                            <?php endif;?>
+                           </dd>
+                       </dl>
+                        <input type="hidden" name="number" value="<?=$this->data['number']?>">
+                    </form>
+                    <div class="text-center">
+                        <p>
+                            <a href="javascript:void(0)" id="subbtn">カートに入れる</a>
+                        </p>
+                        <!--p>
+                            <a href="javascript:void(0)" id="bmrk">
+                                <img src="<?=BASEURL?>/jm/static/wp-content/themes/jm/img/bookmark.jpg"
+                                    alt="購入する"
+                                    onMouseOver="this.src='<?=BASEURL?>/jm/static/wp-content/themes/jm/img/bookmark_o.jpg'"
+                                    onMouseOut="this.src='<?=BASEURL?>/jm/static/wp-content/themes/jm/img/bookmark.jpg'">
+                           </a>
+                        </p-->
+                    </div>
+                    <?php endif;?>
+							<ul class="row" style="margin-bottom:1em;">
+                            <li class="col-xs-4"><img src="<?=BASEURL?>/img/icons/noIcon.png" style="width:25px;height:auto;"> パラベン</li>
+                            <li class="col-xs-4"><img src="<?=BASEURL?>/img/icons/noIcon.png" style="width:25px;height:auto;"> 防腐剤<br></li>
+                            <li class="col-xs-4"><img src="<?=BASEURL?>/img/icons/noIcon.png" style="width:25px;height:auto;"> 色素<br></li>
+                         </ul>
+							<ul class="row" style="margin-bottom:1em;">
+                            <li class="col-xs-4" style="white-space:nowrap"><img src="<?=BASEURL?>/img/icons/noIcon.png" style="width:25px;height:auto;"> アルコール</li>
+                            <li class="col-xs-4"><img src="<?=BASEURL?>/img/icons/noIcon.png" style="width:25px;height:auto;"> 合成香料</li>
+                            <li class="col-xs-4"><img src="<?=BASEURL?>/img/icons/noIcon.png" style="width:25px;height:auto;"> DEA</li>
+                         </ul>
+                         
+							<ul class="row" style="margin-bottom:1em;">
+                            <li class="col-xs-5" style="white-space:nowrap"><img src="<?=BASEURL?>/img/icons/ANIMAL.png" style="width:25px;height:auto;"> No Animal TEST</li>
+                            <li class="col-xs-7"><img src="<?=BASEURL?>/img/icons/VEAGAN.png" style="width:25px;height:auto;"> Veagan Friendly</li>
+                            </ul>
+                <!--中身-->
+                </div>
+              </div>
+            </div>
+    </div>
+        </section>
+</div>
+</div>
+
+
+<section class="row">
+    <div class="col-xs-12">
+      <div class="x_panel">
+        <div class="x_content">
+        <!--中身-->
+        <h3><img src="<?=BASEURL?>/static/wp-content/themes/jm/img/cart/review.png" alt="お客様の感想" width="94">お客様の感想</h3>
+         <div id="review" class="review">
+         <div class="more2">
+         		<p style="margin-top:2.5em;"><a href="javascript:void(0);" id="more2">もっと見る</a></p>
+         </div>
+         
+        <?php if($this->review):?>
+        <?php foreach($this->review as $v):?>
+        	<h4><?=$v['title']?></h4>
+            <??>
+        	<p>投稿者：<?=$v['name']?></p>
+            <p><?=nl2br($v['body'])?></p>
+        <?php endforeach;?>
+        <?php else:?>
+        <p>まだ、レビューがありません。是非ご使用になられた感想をお待ちしております。</p>
+        <?php endif;?>
+        </div>
+        <!--中身-->
+        </div>
+      </div>
+    </div>
+</section>
+
+<section class="row">
+    <div class="col-xs-12">
+      <div class="x_panel">
+        <div class="x_content">
+        <!--中身-->
+        
+        
+        <h3 class="clickToOpenSwitch"><img src="<?=BASEURL?>/static/wp-content/themes/jm/img/cart/howtouse.png" alt="ご使用方法" width="134">ご使用方法</h3>
+        <?php if($_GET['id'] =="1901" || $_GET['id'] =="1902" || $_GET['id'] =="1903"):?>
+         <p>泡立てネットなどでたっぷりの泡を立てていきます。</p>
+         <p>ボディだけでなく、洗顔としても使う事が出来ます。たっぷりと立てた泡で全身を優しく洗っていきます。臭いや黒ずみの気になる部分には、たっぷり立てた泡を3分程のせて流すだけの泡パックを行うのもおすすめです。</p>
+         <?php else:?>
+       	 <p>お好みで500円玉大くらいを手に取って、パートナーが喜ぶ身体のポイントを指や手のひらでマッサージしてください. </p>
+         <p>◆手先、足先、胸や背中などから、段々と敏感な部分へ伸ばしていくと、ラブローションの滑る感覚が気持ちよく、ラブタイムのムードを盛り上げる事が出来ます。<br>
+                ◆お互いにマッサージをし合うと、愛しい気持ちがもっと高まります。<br>
+                ◆セルフラブ（ひとりHの時）、自分の手や指に付けて使う他、ラブグッズにローションを垂らして使うのもオススメです。</p>
+         <?php endif;?>
+         <br>
+         <h3>成分について</h3>
+		 <p><?=str_replace("\n","、",$this->data["seibun"])?><br></p>
+         <div id="seibun">
+         <div class="more">
+         		<p style="margin-top:2.5em;"><a href="javascript:void(0);" id="more">もっと見る</a></p>
+         </div>
+         <?php
+         $seibunArr = explode("\n",$this->data["seibun"]);
+		 foreach($this->seibun as $v){
+			 foreach($seibunArr as $vv){
+				 if(trim($vv) ==$v['name'] && $v['description']){
+					 echo "<div class=\"seibun clearfix\">\n";
+					 echo "<p><strong>".$v['name']."</strong></p>\n";
+					 if($v['thumbB']){
+					 echo "<p><img src=\"".BASEURL."/".$v['thumbB']."\">\n";
+					 }
+					 echo "<p class=\"descripton\">".nl2br($v['description'])."</p>\n";
+					 echo "</div>\n";
+				}
+			 }
+		 }
+		 ?> 
+         
+         </div>
+         <br>
+            <h3 class="clickToOpenSwitch2">【使用上の注意】</h3>
+            <p>・お肌に異常が生じていないかよく注意してご使用ください。</p>
+            <p>・傷やはれもの・湿疹などの異常が現れた場合は、お使いにならないでください。</p>
+            <p>・乳幼児の手の届かないところに保管してください。</p>
+        <!--中身-->
+        </div>
+      </div>
+    </div>
+</section>
+
+
+<section class="row">
+    <div class="col-xs-12">
+      <div class="x_panel">
+        <div class="x_content">
+        <!--中身-->
+        <h3 class="ranking"><img src="http://john-mary.com/wp-content/themes/_jm/img/top/ranking.jpg" alt="ランキング" width="300"> </h3>
+        <div class="rankingWrapper">
+        <div class="ranking5 clearfix">
+        	<div class="products">
+            <p class="image">
+            	<img src="<?=BASEURL?>/img/cart/ranking/no1.png" class="crown" alt="人気商品ランキング第1位">
+               <a href="<?=BASEURL?>/item/detail/?id=1895"><img src="<?=BASEURL?>/img/1895_20160906191404.jpg"></a>
+            </p>
+            <p class="name"><a href="<?=BASEURL?>/item/detail/?id=1895">ローズローション</a></p>
+            <p class="price">2,800円</p>
+           </div>
+        	<div class="products">
+            <p class="image">
+            	<img src="<?=BASEURL?>/img/cart/ranking/no2.png" class="crown" alt="人気商品ランキング第2位">
+               <a href="<?=BASEURL?>/item/detail/?id=1899"><img src="<?=BASEURL?>/img/1899_20160906191306.jpg"></a>
+            </p>
+            <p class="name"><a href="<?=BASEURL?>/item/detail/?id=1899">ファーストラブローション</a></p>
+            <p class="price">3,000円</p>
+           </div>
+        	<div class="products">
+            <p class="image">
+            	<img src="<?=BASEURL?>/img/cart/ranking/no3.png" class="crown" alt="人気商品ランキング第3位">
+               <a href="<?=BASEURL?>/item/detail/?id=1901"><img src="<?=BASEURL?>/img/1901_20160906191222.jpg"></a>
+            </p>
+            <p class="name"><a href="<?=BASEURL?>/item/detail/?id=1901">酵素玄米ジャムウソープ</a></p>
+            <p class="price">1,800円</p>
+           </div>
+        	<div class="products">
+            <p class="image">
+            	<img src="<?=BASEURL?>/img/cart/ranking/no4.png" class="crown" alt="人気商品ランキング第4位">
+               <a href="<?=BASEURL?>/item/detail/?id=1898"><img src="<?=BASEURL?>/img/1898_20160906191322.jpg"></a>
+            </p>
+            <p class="name" style="white-space:nowrap"><a href="<?=BASEURL?>/item/detail/?id=1898">グレープシュガーローション</a></p>
+            <p class="price">3,200円</p>
+           </div>
+        	<div class="products">
+            <p class="image">
+            	<img src="<?=BASEURL?>/img/cart/ranking/no5.png" class="crown" alt="人気商品ランキング第5位">
+               <a href="<?=BASEURL?>/item/detail/?id=1900"><img src="<?=BASEURL?>/img/1900_20160906191244.jpg"></a>
+            </p>
+            <p class="name"><a href="<?=BASEURL?>/item/detail/?id=1900">セクシャルーローション</a></p>
+            <p class="price">3,000円</p>
+           </div>
+        </div>
+        </div>
+        <!--中身-->
+        </div>
+      </div>
+    </div>
+</section>
+
+</div>
+<script>
+	jQuery(function(){
+		//サムネイルをクリック、マウスオーバーで切り替え
+		$(".thumImage").on("click touchstart mouseover",function(){
+			var src = $("img",this).attr("src");
+			$("#bimg").attr("src",src);
+		});
+		//かごに入れるボタン
+		$("#subbtn").on("click",function(){
+			$("#tocart").submit();
+		});
+		//かごに入れるボタン
+		$("#more").on("click",function(){
+			$("#seibun").css("height","auto").css("overflow","visible");
+			$(".more").css("display","none");
+		});
+		//かごに入れるボタン
+		$("#more2").on("click",function(){
+			$("#review").css("height","auto").css("overflow","visible");
+			$(".more2").css("display","none");
+		});
+		//かごに入れるボタン
+		//$(".clickToOpen p").css("display","none");
+		
+		$(".clickToOpenSwitch").on("click",function(){
+			$(".clickToOpen").slideToggle();
+		});
+		$(".clickToOpenSwitch2").on("click",function(){
+			$(".clickToOpen2").slideToggle();
+		});
+	});
+</script>

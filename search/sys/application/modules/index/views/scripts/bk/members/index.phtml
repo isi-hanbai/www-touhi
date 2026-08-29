@@ -1,0 +1,267 @@
+<h2><img src="<?=BASEURL?>/img/cart/new/myPage.jpg" alt="マイページ" width="135">マイページ</h2>
+<p><a href="<?=BASEURL?>/signin/index/logout" class="btn btn-primary btn-lg">ログアウト</a></p>
+<?php if($this->setting['point']['pointuse'] == 0):?>
+<section class="row">
+    <div class="col-xs-12">
+      <div class="x_panel">
+        <div class="x_title">
+        	<!--タイトルをH２で定義する"-->
+          <h3><?=$this->setting['point']['pointname']?>情報</h3>
+        	<!--タイトルをH２で定義する"-->
+        </div>
+        <div class="x_content">
+		<!--中身-->
+          
+        <div class="data-table">      
+        <table class="table table-striped table-responcive">
+        <tbody>
+            <tr>
+            <th><?=$this->setting['point']['pointname']?>残高</th>
+            <td><?=$this->point['p']?><?=$this->setting['point']['pointname']?></td>
+            </tr>
+            <tr>
+            <th><?=$this->setting['point']['pointname']?>有効期限</th>
+            <td><?=date("Y年m月d日",strtotime($this->point['limit_date']))?>まで</td>
+            </tr>
+         </tbody>
+         </table>
+		<!--中身-->
+        </div>
+      </div>
+    </div>
+</section>
+<?php endif;?>
+<section class="row">
+    <div class="col-xs-12">
+      <div class="x_panel">
+        <div class="x_title">
+        	<!--タイトルをH２で定義する"-->
+          <h3>登録情報</h3>
+        	<!--タイトルをH２で定義する"-->
+        </div>
+        <div class="x_content">
+		<!--中身-->
+          
+        <div class="formset">
+        	<div class="line clearfix">
+           	<div class="left">お名前</div>
+           	<div class="right">
+            		<?=$this->detail['name']?>　<?=$this->detail['name2']?>
+               </div>
+           </div>
+        	<div class="line clearfix">
+           	<div class="left">フリガナ</div>
+           	<div class="right"><?=$this->detail['kana']?>　<?=$this->detail['kana2']?>
+               </div>
+           </div>
+        	<div class="line clearfix">
+           	<div class="left">メールアドレス</div>
+           	<div class="right"><?=$this->detail['mail']?>
+               </div>
+           </div>
+           
+        	<div class="line clearfix">
+           	<div class="left">性別</div>
+           	<div class="right">
+					<?php foreach(array(1=>"女性",2=>"男性") as $k=>$v):?>
+                    <?php if($k == $this->detail['sex']):?>
+                    <?=$v?>
+                    <?php endif;?>
+                    <?php endforeach;?>
+               </div>
+           </div>
+        	<div class="line clearfix">
+           	<div class="left">生年月日</div>
+           	<div class="right"><?=$this->detail['birthY']?>年<?=$this->detail['birthM']?>月<?=$this->detail['birthD']?>日
+               </div>
+           </div>
+        	<div class="line clearfix">
+           	<div class="left">電話番号（携帯可）</div>
+           	<div class="right"><?=$this->detail['tel']?>-<?=$this->detail['tel2']?>-<?=$this->detail['tel3']?>
+               </div>
+           </div>
+        	<div class="line clearfix">
+           	<div class="left">緊急連絡先</div>
+           	<div class="right"><?=$this->detail['mtel']?>-<?=$this->detail['mtel2']?>-<?=$this->detail['mtel3']?>
+               </div>
+           </div>
+        	<div class="line clearfix">
+           	<div class="left">郵便番号</div>
+           	<div class="right"><?=$this->detail['zip']?>-<?=$this->detail['zip2']?>
+               </div>
+           </div>
+        	<div class="line clearfix">
+           	<div class="left">都道府県</div>
+           	<div class="right">
+                        <?php foreach($this->pref as $v):?>
+                        <?php if($v['id'] == $this->detail['pref']):?>
+                        <?=$v['name']?>
+                        <?php endif;?>
+                        <?php endforeach;?>
+               </div>
+           </div>
+        	<div class="line clearfix">
+           	<div class="left">市区町村、番地</div>
+           	<div class="right"><?=$this->detail['addr']?>
+               </div>
+           </div>
+        	<div class="line clearfix">
+           	<div class="left">ビル名・マンション名、号室</div>
+           	<div class="right"><?=$this->detail['addr2']?>
+               </div>
+           </div>
+        </div>
+        
+        
+         <div class="row">
+         	<div class="col-xs-6 text-center">
+            	<a href="<?=BASEURL?>/members/update/?id=<?=$this->user->id?>" class="btn btn-success btn-lg">編集する</a>
+            </div>
+         	<div class="col-xs-6 text-center">
+            	<a href="<?=BASEURL?>/members/delete/?id=<?=$this->user->id?>" class="btn btn-primary btn-lg">登録を解除</a>
+            </div>
+         	<div class="col-sm-4"></div>
+         </div>
+		<!--中身-->
+        </div>
+      </div>
+    </div>
+</section>
+<section class="row">
+    <div class="col-xs-12">
+      <div class="x_panel">
+        <div class="x_title">
+        	<!--タイトルをH２で定義する"-->
+          <h3>ご注文履歴</h3>
+        	<!--タイトルをH２で定義する"-->
+        </div>
+        <div class="x_content">
+		<!--中身-->
+        <!--サムネイルつき矢印リスト-->
+       <section class="list3 visible-xs">
+              <ul>
+                <?php foreach($this->order as $vv):
+                $status = "";?>
+                <?php if(date("Ymd",strtotime($vv['delivery_date'])) == date("Ymd")){
+                    $status = " style=\"background-color:#ff9999;\" class=\"today\"";
+                    
+                }elseif(strtotime($vv['delivery_date']) <time()+60*60*24){
+                    $status = " style=\"background-color:#f2dede;\"";
+                }elseif(strtotime($vv['delivery_date']) <time()+60*60*24*3){
+                    $status = " style=\"background-color:#fcf8e3;\"";
+                }?>
+              <li<?=$status?>>
+                        <form action="<?=BASEURL?>/order/" method="get" style="float:right;margin-top:15px;">
+                            <input type="hidden" name="order" value="<?=$vv['id']?>">
+                            <button type="submit" class="btn btn-primary">注文</button>
+                        </form>
+                    <a href="javascript:void(0);">
+                        <?php
+                        $c = count($vv['item']);
+                        $i=0;
+                         foreach($vv['item'] as $vvv):?>
+                        <img src="<?=BASEURL."/".$vvv['image']?>">
+                       <?php
+                       break;
+                       endforeach;?>
+                       <?php if($c >1):?>
+                       <span class="badge badge-important"><?=$c?></span>
+                       <?php endif;?>
+                      <strong>配達日：<?=date('Y年m月d日',strtotime($vv['delivery_date']))?><?=$vv['delivery_time']?><br></strong>
+                        <?=$vv['delivery_campay']?><?=$vv['delivery_name']?>様
+                    </a>
+             </li>
+                <?php endforeach;?>
+              </ul>
+       </section>
+        <!--/サムネイルつき矢印リスト-->
+        <table class="table table-striped responsive-utilities jambo_table bulk_action hidden-xs">
+            <thead>
+            <tr class="headings">
+                <th>注文日/配達日</th>
+                <th>商品</th>
+                <th>お届け先</th>
+                <th>合計金額</th>
+                <th>詳細</th>
+            </tr>
+            </thead>
+            <tbody>
+            <?php foreach($this->order as $vv):
+			$status = "";?>
+            <?php if(strtotime($vv['delivery_date']) <time()+60*60*24){
+				$status = " class=\"danger\"";
+			}elseif(strtotime($vv['delivery_date']) <time()+60*60*24*3){
+				$status = " class=\"warning\"";
+			}?>
+            <tr<?=$status?>>
+                <td style="word-break: break-all;"><?=date('Y年m月d日',strtotime($vv['order_date']))?><br>
+                	<?=date('Y年m月d日',strtotime($vv['delivery_date']))?>
+				</td>
+                <td>
+				<?php foreach($vv['item'] as $vvv):?>
+                		<?=str_replace("【花の南福花園オリジナル】","",str_replace("送料無料！","",str_replace("即日出荷対応！","",$vvv['name'])))?><br><?=number_format($vvv[price])?>円☓<?=$vvv[quantity]?><?=$vvv[unit]?>
+                  <?php endforeach;?>
+                </td>
+                <td><?=$vv['delivery_campay']?><br><?=$vv['delivery_name']?>様</td>
+                <td class="text-right"><?=number_format($vv['seikyu_cost'])?>円</td>
+                <td>
+                        <form action="<?=BASEURL?>/order/" method="get">
+                            <input type="hidden" name="order" value="<?=$vv['id']?>">
+                            <button type="submit" class="btn btn-primary">注文</button>
+                        </form>
+                </td>
+            </tr>
+            <?php endforeach;?>
+            </tbody>
+        </table>
+			<!--中身-->
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+/* サムネイルつき矢印リスト */
+.list3 ul{
+ border-bottom: 1px solid #ccc;
+ margin-left:0 ;
+ padding-left:0 ;
+ list-style:none;
+ }
+ .list3 ul li{
+ border-top: 1px solid #ccc;
+ /*height: 70px;*/
+ margin: 0px;
+ padding: 0px;
+ }
+ .list3 ul li a{
+ color: #666;
+ display: block;
+ /*height: 70px;*/
+ margin: 0;
+ padding: 0 20px 0 0;
+ overflow: hidden;
+ white-space: nowrap;
+ text-overflow: ellipsis;
+ text-decoration: none;
+ }
+ .list3 ul li.today a{
+ color: #fff;
+ }
+ .list3 ul li img{
+ float: left;
+ height: 70px;
+ width: 70px;
+ margin-right: 10px;
+ }
+ .list3 ul li a strong{
+ color: #000;
+ display: block;
+ font-weight: bold;
+ padding-top: 5px;
+ text-overflow: ellipsis;
+ }
+ .list3 ul li.today a strong{
+ color: #fff;
+ }
+</style>
