@@ -1,3 +1,24 @@
+<?php
+$auth = Zend_Auth::getInstance();
+$hitokuchiMemoCategoryId = null;
+if($auth->hasIdentity()){
+    try {
+        $db = new Model_Indexgeneral();
+        $category = $db->fetchAll(
+            $db->select()
+                ->from("content_category")
+                ->where("parent=?", 2998)
+                ->where("name=?", "健康一口メモ")
+                ->limit(1)
+        );
+        if(!empty($category)){
+            $hitokuchiMemoCategoryId = (int)$category[0]['id'];
+        }
+    } catch (Exception $e) {
+        $hitokuchiMemoCategoryId = null;
+    }
+}
+?>
 <!DOCTYPE html>
 <html lang="ja">
 	<head>
@@ -46,7 +67,15 @@
 						</div>
 						<div class="col-6 text-right">
 							<ul class="list-inline">
-								<li><i class="fas fa-user margin-right-10"></i><a href="<?=BASEURL?>/signin/">ログイン</a></li>
+								<?php if($auth->hasIdentity()): ?>
+									<?php if($hitokuchiMemoCategoryId): ?>
+										<li><i class="fas fa-comment-dots margin-right-10"></i><a href="<?=BASEURL?>/member/index/hitokuchimemo">一口メモ</a></li>
+									<?php endif; ?>
+									<li><i class="fas fa-user margin-right-10"></i><a href="<?=BASEURL?>/member/">マイページ</a></li>
+									<li><i class="fas fa-sign-out-alt margin-right-10"></i><a href="<?=BASEURL?>/signin/index/logout/">ログアウト</a></li>
+								<?php else: ?>
+									<li><i class="fas fa-user margin-right-10"></i><a href="<?=BASEURL?>/signin/">ログイン</a></li>
+								<?php endif; ?>
 							</ul>
 						</div>
 					</div><!-- end row -->

@@ -10,12 +10,26 @@ class ContentController extends Common_IndexController {
 		$setting = new Model_Indexsettings;
 		$this->_setting = $setting->setting("88");
 	}
+	private function resolveCategoryIdByName($name, $parent = 2998) {
+		$db = new Model_Indexgeneral();
+		$result = $db->fetchAll(
+			$db->select()
+				->from("content_category")
+				->where("parent=?", $parent)
+				->where("name=?", $name)
+				->limit(1)
+		);
+		return !empty($result) ? (int)$result[0]['id'] : null;
+	}
 	public function indexAction() {
 		//GETパラメータを取得
 		$postArr = $this->_db->getArray();
 		$p = $postArr["p"];
 		$limit = $postArr["limit"];
 		$category = $postArr["category"];
+		if(empty($category)){
+			$category = $this->resolveCategoryIdByName("健康一口メモ");
+		}
 		if($limit<1){
 			$limit = 12;
 		}

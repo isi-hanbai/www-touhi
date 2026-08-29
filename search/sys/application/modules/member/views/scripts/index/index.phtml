@@ -8,6 +8,9 @@ textarea.form-control.requid-textarea{
   <div class="container margin-bottom-40">
     <?php if($this->userdetail['name']):?>
       <p class="text-right">
+        <?php if($hitokuchiMemoCategoryId): ?>
+          <a href="<?=BASEURL?>/member/index/hitokuchimemo" class="btn btn-warning" style="float:left; margin-right:10px;">一口メモを見る</a>
+        <?php endif; ?>
         最終更新日時：<?php
         if($this->userdetail['updated'] == "0000-00-00 00:00:00"){
           echo "更新なし";

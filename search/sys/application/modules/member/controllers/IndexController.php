@@ -35,8 +35,32 @@ class Member_IndexController extends Common_MemberController {
 		array_unshift($this->classes,array("id"=>0,"name"=>"指定なし"));
 		$this->view->classes  = $this->classes;
 	}
+	public function hitokuchimemoAction() {
+		$this->view->title = "健康一口メモ";
+
+		$db = new Model_Indexgeneral();
+		$category = $db->fetchAll(
+			$db->select()
+				->from("content_category")
+				->where("parent=?", 2998)
+				->where("name=?", "健康一口メモ")
+				->limit(1)
+		);
+		$this->view->hitokuchiMemoCategoryId = !empty($category) ? (int)$category[0]['id'] : null;
+	}
 	public function indexAction() {
 		$this->view->title = "マイページ";
+
+		$db = new Model_Indexgeneral();
+		$category = $db->fetchAll(
+			$db->select()
+				->from("content_category")
+				->where("parent=?", 2998)
+				->where("name=?", "健康一口メモ")
+				->limit(1)
+		);
+		$this->view->hitokuchiMemoCategoryId = !empty($category) ? (int)$category[0]['id'] : null;
+
 		//ページ独自のスクリプトを読み込み
 		$this->view->add_script = '<script src="'.BASEURL.'/js/validation.js"></script>\n<script src="'.BASEURL.'/js/member/member.js"></script>';
 
